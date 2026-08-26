@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Giáo Dục Kỹ Năng Phẩm Chất 5 — PL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .lms-content img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+    .lms-content iframe { max-width: 100%; }
+    .lms-content a { color: #4f46e5; text-decoration: underline; }
+    .lms-content p { margin: 0.5rem 0; }
+    .lms-content ul, .lms-content ol { margin: 0.5rem 0 0.5rem 1.5rem; list-style: revert; }
+    .lms-content table { border-collapse: collapse; margin: 0.5rem 0; }
+    .lms-content td, .lms-content th { border: 1px solid #e2e8f0; padding: 0.375rem 0.625rem; }
+    .lms-content h1, .lms-content h2, .lms-content h3, .lms-content h4 { font-weight: 700; margin: 0.75rem 0 0.375rem; }
+  </style>
+  <script>
+    // Tìm kiếm không phân biệt dấu tiếng Việt
+    function vnorm(s) {
+      return (s || '').toLowerCase().normalize('NFD')
+        .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+    }
+    // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
+    function typeOk(el, f) {
+      if (f.hw && el.dataset.hw !== '1') return false;
+      if (f.todo && f.done[el.dataset.pkey]) return false;
+      return !f.types.length || f.types.includes(el.dataset.type);
+    }
+    function itemMatches(el, f) {
+      return typeOk(el, f) && (!f.q || vnorm(el.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
+    function headingMatches(el, f) {
+      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      const box = el.closest('[data-module]');
+      if (!box) return true;
+      return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
+        .some(c => itemMatches(c, f));
+    }
+    function moduleMatches(el, f) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      const pass = items.filter(c => typeOk(c, f));
+      if (!pass.length) return false;
+      if (!f.q) return true;
+      if (vnorm(el.dataset.title).includes(vnorm(f.q))) return true;
+      return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đếm số mục đã học trong một tuần/bài
+    function moduleDone(el, done) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      return items.filter(c => done[c.dataset.pkey]).length;
+    }
+
+    // ---- Tiến độ học tập ----------------------------------------------------
+    // Đọc/ghi qua /api/progress (Cloudflare Pages Function + Workers KV).
+    // Mã bí mật chỉ cần khi GHI, lưu trong localStorage của trình duyệt.
+    // Nếu không có backend (mở file cục bộ, hoặc bản trên GitHub Pages) thì
+    // trang vẫn xem được bình thường, chỉ tắt phần đánh dấu.
+    function progressStore() {
+      return {
+        done: {}, ready: false, online: false, saving: 0, err: '',
+        secret: localStorage.getItem('lms_key') || '',
+
+        async init() {
+          try {
+            const r = await fetch('/api/progress', { headers: { accept: 'application/json' } });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const d = await r.json();
+            this.done = Object.fromEntries(Object.keys(d.items || {}).map(k => [k, true]));
+            this.online = true;
+          } catch (e) {
+            this.online = false;   // không có backend → chế độ chỉ đọc
+          }
+          this.ready = true;
+        },
+
+        async toggle(key) {
+          if (!this.online) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const next = !this.done[key];
+          next ? (this.done[key] = true) : delete this.done[key];
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ key, done: next }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            next ? delete this.done[key] : (this.done[key] = true);  // hoàn tác
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        async askSecret() {
+          const v = (prompt('Nhập mã bí mật để đánh dấu tiến độ:') || '').trim();
+          if (!v) return false;
+          try {
+            const r = await fetch('/api/progress?check=1', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': v },
+              body: '{}',
+            });
+            if (!r.ok) { alert('Mã không đúng.'); return false; }
+          } catch { alert('Không kết nối được máy chủ.'); return false; }
+          this.secret = v; localStorage.setItem('lms_key', v);
+          return true;
+        },
+      };
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen"
+      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+                toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
+                get filtering() { return this.types.length > 0 || this.hw || this.todo },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+      x-init="p.init()">
+
+  <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
+  <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+      <div class="flex items-center gap-3 flex-wrap">
+        <a href="../index.html" class="shrink-0 text-slate-500 hover:text-indigo-600" title="Về trang chủ">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg font-bold text-slate-900 truncate">Giáo Dục Kỹ Năng Phẩm Chất 5</h1>
+          <p class="text-xs text-slate-500">PL · 1 tuần/bài · cập nhật 2026-08-26 08:34</p>
+        </div>
+      </div>
+      <div class="mt-2 flex items-center gap-2">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+          <input type="search" x-model="q" placeholder="Tìm bài học nhanh..."
+                 class="w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <button @click="$dispatch('expand-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 whitespace-nowrap">
+          Mở rộng hết
+        </button>
+        <button @click="$dispatch('collapse-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap">
+          Thu gọn hết
+        </button>
+      </div>
+
+      <!-- Bộ lọc: Homework (lọc riêng) + loại nội dung -->
+      <div class="mt-2 flex items-center gap-1.5 flex-wrap">
+        
+        
+        <button @click="toggle('discussion')"
+                :class="types.includes('discussion') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          💬 thảo luận
+        </button>
+        
+        <button @click="toggle('external')"
+                :class="types.includes('external') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          🔗 liên kết ngoài
+        </button>
+        
+        <template x-if="p.online">
+          <button @click="todo = !todo"
+                  :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
+                  class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+            ○ Chưa học
+          </button>
+        </template>
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+                class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
+          Bỏ lọc
+        </button>
+      </div>
+
+      <!-- Tiến độ toàn môn + trạng thái lưu -->
+      <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-emerald-500 transition-all duration-300"
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80100/')).length / 4 * 100) + '%'"></div>
+        </div>
+        <span class="text-slate-500 whitespace-nowrap"
+              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/80100/')).length + '/4 đã học'"></span>
+        <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
+        <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 space-y-4">
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: true }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="CLISE_UNIT 1: HỌC TẬP HIỆU QUẢ (15/8 - 19/9)"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">CLISE_UNIT 1: HỌC TẬP HIỆU QUẢ (15/8 - 19/9)</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 4
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/4'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">5 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-title="Lesson 1.1 Mục tiêu của em (13.8 - 28.8)" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          Lesson 1.1 Mục tiêu của em (13.8 - 28.8)
+        </div>
+        
+        
+        
+        <div data-item data-title="Vì sao phải có mục tiêu?" data-type="external" data-sec="1"
+             data-pkey="pl/80100/7773572"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80100/7773572'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80100/7773572']"
+                     @change="await p.toggle('pl/80100/7773572'); $el.checked = !!p.done['pl/80100/7773572']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://www.youtube.com/watch?v=VoWxyVs5wmA" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Vì sao phải có mục tiêu?
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Mục tiêu SMART là gì?" data-type="external" data-sec="1"
+             data-pkey="pl/80100/7773573"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80100/7773573'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80100/7773573']"
+                     @change="await p.toggle('pl/80100/7773573'); $el.checked = !!p.done['pl/80100/7773573']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://www.youtube.com/watch?v=1-SvuFIQjK8&amp;t=2s" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Mục tiêu SMART là gì?
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Điểm mạnh, điểm yếu của bản thân" data-type="external" data-sec="1"
+             data-pkey="pl/80100/7773574"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80100/7773574'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80100/7773574']"
+                     @change="await p.toggle('pl/80100/7773574'); $el.checked = !!p.done['pl/80100/7773574']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://vtv.vn/video/qua-tang-cuoc-song-diem-manh-diem-yeu-273674.htm" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Điểm mạnh, điểm yếu của bản thân
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="💌 Thảo luận về điểm mạnh và điểm yếu của bản thân" data-type="discussion" data-sec="1"
+             data-pkey="pl/80100/7773575"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80100/7773575'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80100/7773575']"
+                     @change="await p.toggle('pl/80100/7773575'); $el.checked = !!p.done['pl/80100/7773575']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">💌 Thảo luận về điểm mạnh và điểm yếu của bản thân</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 15/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80100/discussion_topics/618933" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Các con thân mến,</p>
+<p>Mỗi chúng ta đều độc đáo và duy nhất. Ai cũng có những điểm mạnh và điểm yếu riêng. Hãy suy nghĩ về quá trình học tập, rèn luyện, vui chơi, tương tác ... của em trong thời gian vừa qua và chia sẻ ít nhất 1 điểm mạnh và 1 điểm cần cải thiện của em nhé!</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+
+  </main>
+
+  <footer class="max-w-4xl mx-auto px-4 pb-8 text-center text-xs text-slate-400">
+    Cập nhật tự động · bản lưu offline
+  </footer>
+</body>
+</html>

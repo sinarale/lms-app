@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Công Nghệ Thông Tin 1 — MK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .lms-content img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+    .lms-content iframe { max-width: 100%; }
+    .lms-content a { color: #4f46e5; text-decoration: underline; }
+    .lms-content p { margin: 0.5rem 0; }
+    .lms-content ul, .lms-content ol { margin: 0.5rem 0 0.5rem 1.5rem; list-style: revert; }
+    .lms-content table { border-collapse: collapse; margin: 0.5rem 0; }
+    .lms-content td, .lms-content th { border: 1px solid #e2e8f0; padding: 0.375rem 0.625rem; }
+    .lms-content h1, .lms-content h2, .lms-content h3, .lms-content h4 { font-weight: 700; margin: 0.75rem 0 0.375rem; }
+  </style>
+  <script>
+    // Tìm kiếm không phân biệt dấu tiếng Việt
+    function vnorm(s) {
+      return (s || '').toLowerCase().normalize('NFD')
+        .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+    }
+    // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
+    function typeOk(el, f) {
+      if (f.hw && el.dataset.hw !== '1') return false;
+      if (f.todo && f.done[el.dataset.pkey]) return false;
+      return !f.types.length || f.types.includes(el.dataset.type);
+    }
+    function itemMatches(el, f) {
+      return typeOk(el, f) && (!f.q || vnorm(el.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
+    function headingMatches(el, f) {
+      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      const box = el.closest('[data-module]');
+      if (!box) return true;
+      return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
+        .some(c => itemMatches(c, f));
+    }
+    function moduleMatches(el, f) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      const pass = items.filter(c => typeOk(c, f));
+      if (!pass.length) return false;
+      if (!f.q) return true;
+      if (vnorm(el.dataset.title).includes(vnorm(f.q))) return true;
+      return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đếm số mục đã học trong một tuần/bài
+    function moduleDone(el, done) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      return items.filter(c => done[c.dataset.pkey]).length;
+    }
+
+    // ---- Tiến độ học tập ----------------------------------------------------
+    // Đọc/ghi qua /api/progress (Cloudflare Pages Function + Workers KV).
+    // Mã bí mật chỉ cần khi GHI, lưu trong localStorage của trình duyệt.
+    // Nếu không có backend (mở file cục bộ, hoặc bản trên GitHub Pages) thì
+    // trang vẫn xem được bình thường, chỉ tắt phần đánh dấu.
+    function progressStore() {
+      return {
+        done: {}, ready: false, online: false, saving: 0, err: '',
+        secret: localStorage.getItem('lms_key') || '',
+
+        async init() {
+          try {
+            const r = await fetch('/api/progress', { headers: { accept: 'application/json' } });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const d = await r.json();
+            this.done = Object.fromEntries(Object.keys(d.items || {}).map(k => [k, true]));
+            this.online = true;
+          } catch (e) {
+            this.online = false;   // không có backend → chế độ chỉ đọc
+          }
+          this.ready = true;
+        },
+
+        async toggle(key) {
+          if (!this.online) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const next = !this.done[key];
+          next ? (this.done[key] = true) : delete this.done[key];
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ key, done: next }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            next ? delete this.done[key] : (this.done[key] = true);  // hoàn tác
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        async askSecret() {
+          const v = (prompt('Nhập mã bí mật để đánh dấu tiến độ:') || '').trim();
+          if (!v) return false;
+          try {
+            const r = await fetch('/api/progress?check=1', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': v },
+              body: '{}',
+            });
+            if (!r.ok) { alert('Mã không đúng.'); return false; }
+          } catch { alert('Không kết nối được máy chủ.'); return false; }
+          this.secret = v; localStorage.setItem('lms_key', v);
+          return true;
+        },
+      };
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen"
+      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+                toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
+                get filtering() { return this.types.length > 0 || this.hw || this.todo },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+      x-init="p.init()">
+
+  <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
+  <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+      <div class="flex items-center gap-3 flex-wrap">
+        <a href="../index.html" class="shrink-0 text-slate-500 hover:text-indigo-600" title="Về trang chủ">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg font-bold text-slate-900 truncate">Công Nghệ Thông Tin 1</h1>
+          <p class="text-xs text-slate-500">MK · 1 tuần/bài · cập nhật 2026-08-26 08:34</p>
+        </div>
+      </div>
+      <div class="mt-2 flex items-center gap-2">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+          <input type="search" x-model="q" placeholder="Tìm bài học nhanh..."
+                 class="w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <button @click="$dispatch('expand-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 whitespace-nowrap">
+          Mở rộng hết
+        </button>
+        <button @click="$dispatch('collapse-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap">
+          Thu gọn hết
+        </button>
+      </div>
+
+      <!-- Bộ lọc: Homework (lọc riêng) + loại nội dung -->
+      <div class="mt-2 flex items-center gap-1.5 flex-wrap">
+        
+        
+        <button @click="toggle('page')"
+                :class="types.includes('page') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          📄 văn bản
+        </button>
+        
+        <button @click="toggle('assignment')"
+                :class="types.includes('assignment') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          📝 bài tập
+        </button>
+        
+        <button @click="toggle('quiz')"
+                :class="types.includes('quiz') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          🧪 bài kiểm tra
+        </button>
+        
+        <button @click="toggle('discussion')"
+                :class="types.includes('discussion') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          💬 thảo luận
+        </button>
+        
+        <template x-if="p.online">
+          <button @click="todo = !todo"
+                  :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
+                  class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+            ○ Chưa học
+          </button>
+        </template>
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+                class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
+          Bỏ lọc
+        </button>
+      </div>
+
+      <!-- Tiến độ toàn môn + trạng thái lưu -->
+      <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-emerald-500 transition-all duration-300"
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/79967/')).length / 7 * 100) + '%'"></div>
+        </div>
+        <span class="text-slate-500 whitespace-nowrap"
+              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/79967/')).length + '/7 đã học'"></span>
+        <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
+        <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 space-y-4">
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: true }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="UNIT 1: EM VÀ TRỢ LÝ AI (Từ 13/08/2026 đến 13/11/2026)"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">UNIT 1: EM VÀ TRỢ LÝ AI (Từ 13/08/2026 đến 13/11/2026)</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 7
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/7'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">9 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-title="1. Tài liệu hướng dẫn học" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          1. Tài liệu hướng dẫn học
+        </div>
+        
+        
+        
+        <div data-item data-title="Gặp gỡ những người bạn thông minh" data-type="assignment" data-sec="1"
+             data-pkey="mk/79967/8312113"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312113'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312113']"
+                     @change="await p.toggle('mk/79967/8312113'); $el.checked = !!p.done['mk/79967/8312113']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Gặp gỡ những người bạn thông minh</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                  <span>10 điểm</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 22/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/assignments/2870429" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong><img alt="Muc_tieu.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Muc_tieu-1.png" width="50"/><span> </span>Mục tiêu bài học: <br/></strong>1. Học sinh nhận diện được các thiết bị, ứng dụng có sử dụng AI trong các bối cảnh quen thuộc (gia đình, lớp học). <br/>2. Học sinh mô tả được chức năng chính của một công cụ AI bằng ngôn ngữ đơn giản (ví dụ: "Robot hút bụi giúp lau nhà sạch sẽ"). <br/>3. Học sinh phân biệt được đâu là một hành động do AI thực hiện và đâu là hành động do con người thực hiện trong các tình huống cho trước. </p>
+<p>4. Học sinh giải thích được rằng các "bạn AI" cần năng lượng (điện) để hoạt động. </p>
+<p><strong><img alt="Videos.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Videos-1.png" width="50"/>Video:</strong></p>
+<p><iframe allowfullscreen="allowfullscreen" height="569" loading="lazy" mozallowfullscreen="mozallowfullscreen" src="https://docs.google.com/presentation/d/e/2PACX-1vS1_VbV5hNcYYCT0OrZODsnZuzITChTxkvTkQEsCjCkcft1TmlBNWiZxTWeiWPpXA/pubembed?start=false&amp;loop=false&amp;delayms=3000" title="embedded content" webkitallowfullscreen="webkitallowfullscreen" width="960"></iframe></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="2. Video hướng dẫn: Sử dụng máy tính" data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          2. Video hướng dẫn: Sử dụng máy tính
+        </div>
+        
+        
+        
+        <div data-item data-title="Vai trò của máy tính điện tử" data-type="page" data-sec="2"
+             data-pkey="mk/79967/8312116"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312116'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312116']"
+                     @change="await p.toggle('mk/79967/8312116'); $el.checked = !!p.done['mk/79967/8312116']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Vai trò của máy tính điện tử</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 19/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/pages/vai-tro-cua-may-tinh-dien-tu" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong><img alt="Videos.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Videos-1.png" width="50"/>Video:</strong></p>
+<p><strong>1. Làm quen với máy tính và các bộ phận chính của máy tính</strong></p>
+<p>                                         <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" height="315" loading="lazy" src="https://www.youtube.com/embed/z6oBUxyEBpY?si=w3m6qu9NvRo3sTyM" title="YouTube video player" width="560"></iframe></p>
+<p> </p>
+<p style="text-align: center;"><iframe allowfullscreen="allowfullscreen" height="314" loading="lazy" src="https://www.youtube.com/embed/n4soziazw00" width="560"></iframe></p>
+<p><strong>2. Vai trò của máy tính điện tử</strong></p>
+<p style="text-align: center;"><iframe allowfullscreen="allowfullscreen" height="314" loading="lazy" src="https://www.youtube.com/embed/HWdttfBXr7k" width="560"></iframe></p>
+<p style="text-align: center;">(Trích nguồn các Video: Kênh YouTube của thầy Nguyễn Hải Ninh giáo viên Tin học trường Tiểu học Vinschool Gardenia)</p>
+<p><strong><img alt="homework.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/homework.png" width="50"/>  Các thao tác tắt máy tính:</strong></p>
+<p>Bước 1. Ấn biểu tượng cửa sổ <strong>Windowns </strong> <img alt="Windows 10 Icon Logo Vector (.EPS) Free Download" height="55" loading="lazy" src="https://seeklogo.com/images/W/windows-10-icon-logo-5BC5C69712-seeklogo.com.png" width="55"/></p>
+<p>Bước 2. Chọn nút <strong>Power</strong></p>
+<p>Bước 3. Chọn <strong>Shut down </strong></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Giới thiệu Chuột máy tính" data-type="page" data-sec="2"
+             data-pkey="mk/79967/8312117"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312117'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312117']"
+                     @change="await p.toggle('mk/79967/8312117'); $el.checked = !!p.done['mk/79967/8312117']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Giới thiệu Chuột máy tính</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 19/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/pages/gioi-thieu-chuot-may-tinh" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p style="text-align: left;"><img alt="Muc_tieu.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Muc_tieu-5.png" width="50"/> <strong>Mục tiêu: </strong></p>
+<ul>
+<li><span>Học sinh gọi tên được 3 nút chính của chuột</span></li>
+<li><span>Học sinh mô phỏng được thao tác cầm chuột đúng cách </span></li>
+<li><span>Học sinh thực hiện được cách thực hiện các thao tác chuột: </span><span>single click, double click, drag and drop</span></li>
+</ul>
+<p><img alt="Videos.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Videos-5.png" width="50"/><strong>Video: Giới thiệu Chuột máy tính </strong></p>
+<p>Trong video này các con sẽ được giới thiệu:</p>
+<p>1. Cấu tạo của chuột máy tính</p>
+<p>2. Cách cầm chuột đúng cách</p>
+<p>3. Các thao tác với chuột máy tính</p>
+<p style="text-align: center;"><strong><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen" height="315" loading="lazy" src="https://www.youtube.com/embed/61POUbuKEzM" title="YouTube video player" width="560"></iframe></strong></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Nguyên tắc sử dụng Internet an toàn và hiệu quả" data-type="page" data-sec="2"
+             data-pkey="mk/79967/8312118"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312118'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312118']"
+                     @change="await p.toggle('mk/79967/8312118'); $el.checked = !!p.done['mk/79967/8312118']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Nguyên tắc sử dụng Internet an toàn và hiệu quả</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 19/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/pages/nguyen-tac-su-dung-internet-an-toan-va-hieu-qua" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong><img alt="Muc_tieu.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Muc_tieu-1.png" width="50"/><span> </span>Mục tiêu bài học: <br/></strong>1. Nêu được vai trò của Internet<br/>2. Nhận diện được trình duyệt web thông dụng<br/>3. Kể tên được ít nhất 2 điều nên làm và 2 điều không nên làm khi sử dụng Internet</p>
+<p><strong><img alt="Videos.png" height="50" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/cong-nghe-thong-tin-1/unit-1-em-va-tro-ly-ai-tu-13-08-2026-den-13-11-2026/Videos-1.png" width="50"/>Video:</strong></p>
+<p style="text-align: center;"><iframe allowfullscreen="allowfullscreen" height="314" loading="lazy" src="https://www.youtube.com/embed/0woYsUsBvA4" width="560"></iframe></p>
+<p style="text-align: center;">(Trích nguồn Video: Kênh YouTube của cô <span>Nguyễn Bảo Ngọc giáo viên Tin học trường Tiểu học Vinschool TimesCity)</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="[Quiz] Vai trò của máy tính" data-type="quiz" data-sec="2"
+             data-pkey="mk/79967/8312122"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312122'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312122']"
+                     @change="await p.toggle('mk/79967/8312122'); $el.checked = !!p.done['mk/79967/8312122']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/79967/quizzes/2087677" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                [Quiz] Vai trò của máy tính
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                
+                
+                  <span>5 câu hỏi</span>
+                  <span>10 điểm</span>
+                  <span>20 phút</span>
+                  <span>3 lượt làm</span>
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/quizzes/2087677" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="[Quiz] Làm quen với Internet" data-type="quiz" data-sec="2"
+             data-pkey="mk/79967/8312124"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312124'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312124']"
+                     @change="await p.toggle('mk/79967/8312124'); $el.checked = !!p.done['mk/79967/8312124']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/79967/quizzes/2087755" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                [Quiz] Làm quen với Internet
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                
+                
+                  <span>2 câu hỏi</span>
+                  <span>10 điểm</span>
+                  <span>20 phút</span>
+                  <span>15 lượt làm</span>
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/quizzes/2087755" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Thảo luận - Con hãy kể tên một số thiết bị AI?" data-type="discussion" data-sec="2"
+             data-pkey="mk/79967/8312125"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/79967/8312125'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/79967/8312125']"
+                     @change="await p.toggle('mk/79967/8312125'); $el.checked = !!p.done['mk/79967/8312125']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Thảo luận - Con hãy kể tên một số thiết bị AI?</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 23/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79967/discussion_topics/664692" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong><span><span style="color: #ff0000;">Lưu ý:</span> </span>Học sinh thảo luận đưa ra đáp án bằng cách nhấn vào Reply và viết câu trả lời.</strong></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+
+  </main>
+
+  <footer class="max-w-4xl mx-auto px-4 pb-8 text-center text-xs text-slate-400">
+    Cập nhật tự động · bản lưu offline
+  </footer>
+</body>
+</html>

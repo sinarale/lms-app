@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Tiếng Việt 5 — PL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .lms-content img { max-width: 100%; height: auto; border-radius: 0.5rem; }
+    .lms-content iframe { max-width: 100%; }
+    .lms-content a { color: #4f46e5; text-decoration: underline; }
+    .lms-content p { margin: 0.5rem 0; }
+    .lms-content ul, .lms-content ol { margin: 0.5rem 0 0.5rem 1.5rem; list-style: revert; }
+    .lms-content table { border-collapse: collapse; margin: 0.5rem 0; }
+    .lms-content td, .lms-content th { border: 1px solid #e2e8f0; padding: 0.375rem 0.625rem; }
+    .lms-content h1, .lms-content h2, .lms-content h3, .lms-content h4 { font-weight: 700; margin: 0.75rem 0 0.375rem; }
+  </style>
+  <script>
+    // Tìm kiếm không phân biệt dấu tiếng Việt
+    function vnorm(s) {
+      return (s || '').toLowerCase().normalize('NFD')
+        .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+    }
+    // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
+    function typeOk(el, f) {
+      if (f.hw && el.dataset.hw !== '1') return false;
+      if (f.todo && f.done[el.dataset.pkey]) return false;
+      return !f.types.length || f.types.includes(el.dataset.type);
+    }
+    function itemMatches(el, f) {
+      return typeOk(el, f) && (!f.q || vnorm(el.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
+    function headingMatches(el, f) {
+      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      const box = el.closest('[data-module]');
+      if (!box) return true;
+      return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
+        .some(c => itemMatches(c, f));
+    }
+    function moduleMatches(el, f) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      const pass = items.filter(c => typeOk(c, f));
+      if (!pass.length) return false;
+      if (!f.q) return true;
+      if (vnorm(el.dataset.title).includes(vnorm(f.q))) return true;
+      return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
+    }
+    // Đếm số mục đã học trong một tuần/bài
+    function moduleDone(el, done) {
+      const items = Array.from(el.querySelectorAll('[data-item]'));
+      return items.filter(c => done[c.dataset.pkey]).length;
+    }
+
+    // ---- Tiến độ học tập ----------------------------------------------------
+    // Đọc/ghi qua /api/progress (Cloudflare Pages Function + Workers KV).
+    // Mã bí mật chỉ cần khi GHI, lưu trong localStorage của trình duyệt.
+    // Nếu không có backend (mở file cục bộ, hoặc bản trên GitHub Pages) thì
+    // trang vẫn xem được bình thường, chỉ tắt phần đánh dấu.
+    function progressStore() {
+      return {
+        done: {}, ready: false, online: false, saving: 0, err: '',
+        secret: localStorage.getItem('lms_key') || '',
+
+        async init() {
+          try {
+            const r = await fetch('/api/progress', { headers: { accept: 'application/json' } });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const d = await r.json();
+            this.done = Object.fromEntries(Object.keys(d.items || {}).map(k => [k, true]));
+            this.online = true;
+          } catch (e) {
+            this.online = false;   // không có backend → chế độ chỉ đọc
+          }
+          this.ready = true;
+        },
+
+        async toggle(key) {
+          if (!this.online) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const next = !this.done[key];
+          next ? (this.done[key] = true) : delete this.done[key];
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ key, done: next }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            next ? delete this.done[key] : (this.done[key] = true);  // hoàn tác
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        async askSecret() {
+          const v = (prompt('Nhập mã bí mật để đánh dấu tiến độ:') || '').trim();
+          if (!v) return false;
+          try {
+            const r = await fetch('/api/progress?check=1', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': v },
+              body: '{}',
+            });
+            if (!r.ok) { alert('Mã không đúng.'); return false; }
+          } catch { alert('Không kết nối được máy chủ.'); return false; }
+          this.secret = v; localStorage.setItem('lms_key', v);
+          return true;
+        },
+      };
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen"
+      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+                toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
+                get filtering() { return this.types.length > 0 || this.hw || this.todo },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+      x-init="p.init()">
+
+  <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
+  <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+      <div class="flex items-center gap-3 flex-wrap">
+        <a href="../index.html" class="shrink-0 text-slate-500 hover:text-indigo-600" title="Về trang chủ">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg font-bold text-slate-900 truncate">Tiếng Việt 5</h1>
+          <p class="text-xs text-slate-500">PL · 3 tuần/bài · cập nhật 2026-08-26 08:34</p>
+        </div>
+      </div>
+      <div class="mt-2 flex items-center gap-2">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+          <input type="search" x-model="q" placeholder="Tìm bài học nhanh..."
+                 class="w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <button @click="$dispatch('expand-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 whitespace-nowrap">
+          Mở rộng hết
+        </button>
+        <button @click="$dispatch('collapse-all')"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap">
+          Thu gọn hết
+        </button>
+      </div>
+
+      <!-- Bộ lọc: Homework (lọc riêng) + loại nội dung -->
+      <div class="mt-2 flex items-center gap-1.5 flex-wrap">
+        
+        
+        <button @click="toggle('page')"
+                :class="types.includes('page') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          📄 văn bản
+        </button>
+        
+        <button @click="toggle('file')"
+                :class="types.includes('file') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          📎 tài liệu
+        </button>
+        
+        <button @click="toggle('assignment')"
+                :class="types.includes('assignment') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          📝 bài tập
+        </button>
+        
+        <button @click="toggle('quiz')"
+                :class="types.includes('quiz') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          🧪 bài kiểm tra
+        </button>
+        
+        <button @click="toggle('discussion')"
+                :class="types.includes('discussion') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-2 py-1 text-xs rounded-full border transition-colors">
+          💬 thảo luận
+        </button>
+        
+        <template x-if="p.online">
+          <button @click="todo = !todo"
+                  :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
+                  class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+            ○ Chưa học
+          </button>
+        </template>
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+                class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
+          Bỏ lọc
+        </button>
+      </div>
+
+      <!-- Tiến độ toàn môn + trạng thái lưu -->
+      <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-emerald-500 transition-all duration-300"
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80102/')).length / 18 * 100) + '%'"></div>
+        </div>
+        <span class="text-slate-500 whitespace-nowrap"
+              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/80102/')).length + '/18 đã học'"></span>
+        <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
+        <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 space-y-4">
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: true }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="1.3 + 1.4: Công viên Thống Nhất+Thả diều- Trò chơi dân gian gắn với tuổi thơ"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">1.3 + 1.4: Công viên Thống Nhất+Thả diều- Trò chơi dân gian gắn với tuổi thơ</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 7
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/7'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">10 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-title="1.3_CÔNG VIÊN THỐNG NHẤT" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          1.3_CÔNG VIÊN THỐNG NHẤT
+        </div>
+        
+        
+        
+        <div data-item data-title="Tự học - Công viên Thống Nhất" data-type="assignment" data-sec="1"
+             data-pkey="pl/80102/8489683"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489683'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489683']"
+                     @change="await p.toggle('pl/80102/8489683'); $el.checked = !!p.done['pl/80102/8489683']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tự học - Công viên Thống Nhất</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 21/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/assignments/2939016" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong>1. Mục tiêu bài học</strong></p>
+<p>MTB 1.3.a: Đọc được lưu loát, diễn cảm văn bản<br/>MTB 1.3.b: Trích dẫn được chính xác các bằng chứng trong văn bản để minh họa cho thông tin trực tiếp và suy luận<br/>MTB 1.3.c: Giải thích được nghĩa của các thuật ngữ trong văn bản<br/>MTB 1.3.d: Phân tích được mối liên hệ giữa ý chính và các chi tiết hỗ trợ trong từng đoạn hoặc toàn bài<br/>MTB 1.3.e: Giải thích được cách tác giả sử dụng bằng chứng và lập luận để làm rõ và củng cố các luận điểm cụ thể trong văn bản</p>
+<p><strong>2. Chuẩn bị</strong></p>
+<p><span>+ Chuẩn bị đầy đủ vở viết, đồ dùng<br/>+ Lưu ý tư thế khi ngồi học</span></p>
+<p><strong>3. Nhiệm vụ: </strong></p>
+<p>Đọc văn bản sau: </p>
+<p><strong>                                                           <span style="color: #000000;"><span style="color: #0e68b3;"><span style="color: #c71f23;">  CÔNG VIÊN THỐNG NHẤT</span></span></span></strong></p>
+<p><span style="color: #000000;">(1) Công viên Thống Nhất nằm giữa bốn phố: Trần Nhân Tông, Lê Duẩn, Đại Cồ Việt, Nguyễn Đình Chiểu, có diện tích trên 50 ha. Năm 1958, Uỷ ban Hành chính Thành phố quyết định xây dựng nơi này thành công viên để làm nơi giải trí cho nhân dân Thủ đô. Hồi ấy toàn thể sinh viên, học sinh, nhân dân thành phố đã lao động công ích cho công trình này. Năm 1960 công trình hoàn thành. Ngày 11/1/1960, Chủ tịch Hồ Chí Minh đã tới đây trồng một cây đa lưu niệm. Đất nước còn bị chia cắt nên công viên mang tên Thống Nhất để biểu lộ tình cảm của nhân dân Thủ đô.</span></p>
+<p><span style="color: #000000;">(2) Năm 1975, đất nước đã nối liền một dải. Ngày 19/4/1980 nhân dịp kỷ niệm 110 năm ngày sinh của Lê-nin, Uỷ ban Nhân dân Thành phố quyết định đổi tên nơi này thành công viên Lê-nin. Năm 2003, Uỷ ban Nhân dân Thành phố đổi tên công viên Chi Lăng là công viên Lê-nin, và nơi đây trở lại tên công viên Thống Nhất.</span></p>
+<p><span style="color: #000000;">(3) Công viên có hai cửa lớn, mở ra phố Trần Nhân Tông và đường Lê Duẩn, hai cửa nhỏ hơn ở đường Đại Cồ Việt và phố Nguyễn Đình Chiểu, có nhiều cây cối và bồn hoa, có hồ rộng và đảo xanh, khu vui chơi cho trẻ em, nơi yên tĩnh cho người già cả. Sáng sớm dân chúng khắp vùng xung quanh đến đây tập thể dục, hít thở khí trời trong lành. Hàng năm vào mùa xuân có mở hội Hoa Xuân, tụ hội tài hoa khắp nước. Những loài hoa cỏ đẹp, những cây cảnh uốn lượn độc đáo, những cách trình bày tinh tế đã làm cho công viên đẹp lộng lẫy và tấp nập hàng vạn người.</span></p>
+<p><span style="color: #000000;"><em>                                                                                   (Theo Hà Nội Danh thắng và Di tích tập 01)</em></span></p>
+<p><em><strong>Giải nghĩa từ:</strong></em></p>
+<p><em>ha (héc-ta): đơn vị đo diện tích</em></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Thảo luận: Công viên thống nhất" data-type="discussion" data-sec="1"
+             data-pkey="pl/80102/8489684"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489684'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489684']"
+                     @change="await p.toggle('pl/80102/8489684'); $el.checked = !!p.done['pl/80102/8489684']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Thảo luận: Công viên thống nhất</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 25/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/discussion_topics/678611" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Nhiệm vụ: Trả lời câu hỏi sau:</p>
+<p>1. Hãy chia sẻ với cô và các bạn những địa điểm mà con thích hoặc có kỉ niệm ( ở đâu, cảnh vật như thế nào, có kỉ niệm gì,...)</p>
+<p>2. Công viên Thống Nhất đã trải qua mấy lần đổi tên, tính cho đến hiện tại?</p>
+<p>3. <span>Tượng đài Bác Hồ và Bác Tôn được xây dựng trang trọng tại đảo Hòa Bình trong khu vực Công viên Thống Nhất, nhân dịp nào?</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Đại từ_Kiến thức cần nhớ.png" data-type="file" data-sec="1"
+             data-pkey="pl/80102/8489685"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489685'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489685']"
+                     @change="await p.toggle('pl/80102/8489685'); $el.checked = !!p.done['pl/80102/8489685']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/1-3-1-4-cong-vien-thong-nhat-tha-dieu-tro-choi-dan-gian-gan-voi-tuoi-tho/Đại từ_Kiến thức cần nhớ.png" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Đại từ_Kiến thức cần nhớ.png
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <span>161.9 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 21/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Quiz_Đại từ" data-type="quiz" data-sec="1"
+             data-pkey="pl/80102/8489686"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489686'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489686']"
+                     @change="await p.toggle('pl/80102/8489686'); $el.checked = !!p.done['pl/80102/8489686']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Quiz_Đại từ</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                
+                
+                  <span>5 câu hỏi</span>
+                  <span>10 điểm</span>
+                  
+                  
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/quizzes/2136495" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Đọc và chọn đáp án đúng cho các câu hỏi sau:</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="1.4_THẢ DIỀU - TRÒ CHƠI DÂN GIAN GẮN VỚI TUỔI THƠ" data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          1.4_THẢ DIỀU - TRÒ CHƠI DÂN GIAN GẮN VỚI TUỔI THƠ
+        </div>
+        
+        
+        
+        <div data-item data-title="Tự học - Thả diều – Trò chơi dân gian gắn với tuổi thơ" data-type="assignment" data-sec="2"
+             data-pkey="pl/80102/8489688"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489688'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489688']"
+                     @change="await p.toggle('pl/80102/8489688'); $el.checked = !!p.done['pl/80102/8489688']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tự học - Thả diều – Trò chơi dân gian gắn với tuổi thơ</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 21/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/assignments/2939017" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><strong>1. Mục tiêu tiết học</strong></p>
+<p>MTB 1.4.a: Đọc được lưu loát, diễn cảm văn bản<br/>MTB 1.4.b: Trích dẫn được chính xác các bằng chứng trong văn bản để minh họa cho thông tin trực tiếp và suy luận<br/>MTB 1.4.c: Giải thích được nghĩa của các thuật ngữ trong văn bản<br/>MTB 1.4.d: So sánh để chỉ ra điểm giống và khác nhau về kiểu cấu trúc tổng thể được sử dụng giữa 2 văn bản<br/>MTB 1.4.e: Giải thích được cách tác giả sử dụng bằng chứng và lập luận để làm rõ và củng cố các luận điểm cụ thể trong văn bản</p>
+<p><strong>2. Chuẩn bị</strong></p>
+<p><span>+ Chuẩn bị đầy đủ vở viết, đồ dùng<br/>+ Lưu ý tư thế khi ngồi học</span></p>
+<p><strong>3. Nhiệm vụ:</strong></p>
+<p>Đọc văn bản sau:</p>
+<p><strong>         <span style="color: #c71f23;">                          THẢ </span></strong><span style="color: #c71f23;"><strong>DIỀU – TRÒ CHƠI DÂN GIAN GẮN VỚI TUỔI THƠ</strong></span></p>
+<p>(1) Thả diều là một trong những trò chơi dân gian lâu đời và được nhiều thế hệ trẻ em Việt Nam yêu thích, đặc biệt ở những vùng quê. Những buổi chiều hè, trên cánh đồng lộng gió, hình ảnh cánh diều bay cao trên bầu trời xanh đã trở thành biểu tượng đẹp của tuổi thơ thanh bình. Trò chơi không chỉ mang lại niềm vui mà còn giúp rèn luyện sự khéo léo, kiên nhẫn và óc quan sát cho người chơi.</p>
+<p>(2) Để chơi thả diều, cần có một cánh diều làm bằng tre và giấy hoặc ni-lông, cùng với một cuộn dây chắc chắn. Người chơi chọn nơi rộng rãi, thoáng đãng như đồng ruộng, bãi đất trống hoặc công viên, tránh xa cây cao và đường điện. Khi có gió nhẹ, người chơi chạy ngược chiều gió, thả dây từ từ để diều bay lên. Khi diều đã ổn định trên cao, việc điều khiển bằng cách kéo nhẹ hoặc thả dây sẽ giúp diều giữ thăng bằng.</p>
+<p>(3) Thả diều không chỉ là trò chơi đơn thuần mà còn là nét đẹp văn hóa truyền thống. Ngày nay, dù không gian vui chơi ngoài trời bị thu hẹp, nhiều địa phương vẫn tổ chức lễ hội thả diều nhằm bảo tồn và phát huy giá trị của trò chơi này. Cánh diều bay lượn giữa trời cao như mang theo ước mơ, khát vọng và tuổi thơ của bao thế hệ, gợi nhắc mỗi người về vẻ đẹp bình dị mà sâu sắc của làng quê Việt Nam.</p>
+<p>                                                                        <em>(Trích Những trò chơi dân gian Việt Nam)</em></p>
+<ul>
+<li><strong><em>Giải nghĩa từ:</em></strong></li>
+</ul>
+<h5>-       <em>Bảo tồn: gìn giữ (cái có ý nghĩa lịch sử thuộc tài sản chung), không để bị mất mát, tổn thất</em>
+</h5>
+<h5>-       <em>Đơn thuần: hoàn toàn chỉ có một mặt nào đó</em>
+</h5>
+<h5>-       <em>Ni-lông: chất dẻo dễ kéo sợi, dùng để dệt vải, dệt lưới, làm chỉ khâu vết thương,…</em>
+</h5>
+<h5>-       <em>Bình dị: giản dị, khiêm tốn</em>
+</h5>
+<ul>
+<li>
+<strong><em>Nhiệm vụ sau khi đọc:</em></strong><em> Hãy gạch chân các từ con thấy khó hiểu và giải nghĩa chúng (có thể sử dụng 1 trong các cách sau: dùng từ điển, đặt câu, dùng từ cùng nghĩa, trái nghĩa,…)</em>
+</li>
+</ul>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Thảo luận: Thả diều – Trò chơi dân gian gắn với tuổi thơ" data-type="discussion" data-sec="2"
+             data-pkey="pl/80102/8489689"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489689'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489689']"
+                     @change="await p.toggle('pl/80102/8489689'); $el.checked = !!p.done['pl/80102/8489689']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Thảo luận: Thả diều – Trò chơi dân gian gắn với tuổi thơ</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 25/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/discussion_topics/678612" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Thảo luận: Con hãy trả lời các câu hỏi sau:</p>
+<p>1. Con hãy chia sẻ về một trò chơi dân gian mà con biết hoặc con đã trực tiếp tham gia chơi ( trò chơi gì, cách chơi, số lượng người chơi,...)</p>
+<p>2. Trò chơi thả diều là trò chơi trong nhà hay ngoài trời?</p>
+<p>3. Có nên chơi thả diều ở những nơi đông người qua lại và có nhiều đường dây điện hay không?</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Quiz_ Thả diều- Trò chơi dân gian gắn với tuổi thơ" data-type="quiz" data-sec="2"
+             data-pkey="pl/80102/8489690"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489690'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489690']"
+                     @change="await p.toggle('pl/80102/8489690'); $el.checked = !!p.done['pl/80102/8489690']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/80102/quizzes/2136496" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Quiz_ Thả diều- Trò chơi dân gian gắn với tuổi thơ
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                
+                
+                  <span>6 câu hỏi</span>
+                  <span>10 điểm</span>
+                  <span>10 phút</span>
+                  <span>1 lượt làm</span>
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/quizzes/2136496" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="🏡 Nhiệm vụ sau tiết học" data-sec="3"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          🏡 Nhiệm vụ sau tiết học
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="1.1.+ 1.2: Thanh âm của gió + Cánh đồng hoa"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">1.1.+ 1.2: Thanh âm của gió + Cánh đồng hoa</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 8
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/8'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">11 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-title="🌞 1.1: THANH ÂM CỦA GIÓ" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          🌞 1.1: THANH ÂM CỦA GIÓ
+        </div>
+        
+        
+        
+        <div data-item data-title="Bài giảng_Thanh âm của gió" data-type="assignment" data-sec="1"
+             data-pkey="pl/80102/7758756"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/7758756'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/7758756']"
+                     @change="await p.toggle('pl/80102/7758756'); $el.checked = !!p.done['pl/80102/7758756']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Bài giảng_Thanh âm của gió</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/assignments/2650926" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><span><strong>1. Mục tiêu bài học:</strong></span></p>
+<ul>
+<li>MTB 1.1.a: Đọc được lưu loát, diễn cảm văn bản</li>
+<li>MTB 1.1.b: Trích dẫn được chính xác các bằng chứng trong câu chuyện để minh họa cho thông tin trực tiếp và suy luận.</li>
+<li>MTB 1.1.c: Xác định được chủ đề của văn bản</li>
+<li>MTB 1.1.d: Chỉ ra được điểm giống và khác nhau giữa các nhân vật trong văn bản</li>
+<li>MTB 1.1.e: Phân tích được các từ ngữ có giá trị trong văn bản</li>
+<li>MTB 1.1.f: Phân tích tác dụng ngôi kể trong văn bản</li>
+</ul>
+<p><span><strong>2. Chuẩn bị: </strong></span><span> Sách giáo khoa Tiếng Việt 5 tập 1.<br/></span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Ngữ liệu đọc: Thanh âm của gió" data-type="page" data-sec="1"
+             data-pkey="pl/80102/8312038"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8312038'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8312038']"
+                     @change="await p.toggle('pl/80102/8312038'); $el.checked = !!p.done['pl/80102/8312038']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Ngữ liệu đọc: Thanh âm của gió</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/pages/ngu-lieu-doc-thanh-am-cua-gio" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p style="text-align: center;"><strong>Văn bản: Thanh âm của gió</strong></p>
+<p><span>Chúng tôi đi chăn trâu, ngày nào cũng qua suối. Cỏ gần nước tươi tốt nên trâu ăn cỏ men theo bờ suối, rồi mới lên đồi, lên núi. Suối nhỏ, nước trong vắt, nắng chiều xuống đáy làm cát, sỏi ánh lên lấp lánh. Một bên suối là đồng cỏ rộng, tha hồ cho gió rong chơi. Thỉnh thoảng gió lại vút qua tại chúng tôi như đùa nghịch.</span></p>
+<p><span>Chiều về, đàn trâu no cỏ đằm mình dưới suối, chúng tôi tha thẩn tìm những viên đá đẹp cho mình.</span></p>
+<p><span>Bỗng em Bống nói:</span></p>
+<p><span>– Ơ, em bịt tai lại nghe tiếng gió lạ lắm.</span></p>
+<p><span>– Bịt tai thì nghe được gì? – Tôi hỏi Bống.</span></p>
+<p><span>– Bịt tai lại rồi mở ra và cứ lặp lại như thế. Anh thử xem,</span></p>
+<p><span>– Đúng rồi, tớ cũng nghe thấy tiếng gió thổi hay lắm. – Điệp reo lên. Vừa nói, nó vừa lấy tay bịt hai tai rồi mở ra như Bống chỉ. Cả hội tụ lại, lần lượt đưa hai bàn tay lên bịt tai.</span></p>
+<p><span>– Nghe “u... u... u...” – Văn cười.</span></p>
+<p><span>– Không, phải thật im lặng, đầu mình nghĩ gì sẽ nghe tiếng gió nói ra như thế. – Thành nhíu mày như đang tập trung lắm.</span></p>
+<p><span>– Đúng rồi, tớ nghe thấy “vui, vui, vui, vui...”.</span></p>
+<p><span>– Còn tớ nghe thấy “cười, cười, cười, cười...”.</span></p>
+<p><span>Mỗi đứa nghe thấy một thanh âm. Cứ thể, gió chiều thổi từ thung lũng dọc theo suối mang theo tiếng nói trong đầu mỗi đứa bay xa. Đứa nào cũng mê mải theo tiếng gió cho đến khi Văn la lên:</span></p>
+<p><span>– Gió nói “đói, đói, đói... rồi”.</span></p>
+<p><span>Cả hội giật mình. Chiều đã muộn, mặt trời xuống thật thấp. Chúng tôi lùa trâu về, không quên đưa hai tay lên giữ tại để vẫn nghe tiếng gió.</span></p>
+<p><span>Tối đó, tôi và Bống kể cho bố mẹ nghe về trò chơi bịt tai nghe tiếng gió. Bố bảo mới nghe chúng tôi kể thôi mà bố đã thích trò chơi ấy rồi. Bố còn nói nhất định sáng mai bố sẽ thử ngay xem gió nói điều gì.</span></p>
+<p style="text-align: right;"><span>(<em>Theo</em> Văn Thành Lê)</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Thảo luận: Thanh âm của gió" data-type="discussion" data-sec="1"
+             data-pkey="pl/80102/8312389"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8312389'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8312389']"
+                     @change="await p.toggle('pl/80102/8312389'); $el.checked = !!p.done['pl/80102/8312389']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Thảo luận: Thanh âm của gió</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/discussion_topics/664736" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><span style="font-size: 14pt;"><em><strong>Đọc văn bản Thanh âm của gió và trả lời các câu hỏi:</strong></em></span></p>
+<p><span style="font-size: 14pt;">Câu 1: Tìm những chi tiết miêu tả khung cảnh thiên nhiên khi các bạn nhỏ đi chăn trâu.</span></p>
+<p><span style="font-size: 14pt;">Câu 2: Em Bống đã phát hiện ra trò chơi gì?</span></p>
+<p><span style="font-size: 14pt;">Câu 3: Cảm xúc của mỗi bạn nhỏ với trò chơi đó thế nào? Tìm những chi tiết cho thấy điều đó.</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="🌞 1.2: CÁNH ĐỒNG HOA" data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          🌞 1.2: CÁNH ĐỒNG HOA
+        </div>
+        
+        
+        
+        <div data-item data-title="Bài giảng_Cánh đồng hoa" data-type="assignment" data-sec="2"
+             data-pkey="pl/80102/7758757"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/7758757'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/7758757']"
+                     @change="await p.toggle('pl/80102/7758757'); $el.checked = !!p.done['pl/80102/7758757']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Bài giảng_Cánh đồng hoa</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/assignments/2650924" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><span><strong>1. Mục tiêu bài học</strong></span></p>
+<ul>
+<li>MTB 1.2.a: Đọc được lưu loát, diễn cảm văn bản</li>
+<li>MTB 1.2.b: Trích dẫn được chính xác các bằng chứng trong câu chuyện để minh họa cho thông tin trực tiếp và suy luận</li>
+<li>MTB 1.2.c: Tóm tắt được nội dung của văn bản</li>
+<li>MTB 1.2.d: Chỉ ra được điểm giống và khác nhau giữa các sự việc trong văn bản</li>
+<li>MTB 1.2.e: Phân tích được các từ ngữ có giá trị trong văn bản</li>
+<li>MTB 1.2.f: Phân tích được ảnh hưởng của các yếu tố phi ngôn ngữ trong việc thể hiện nội dung văn bản</li>
+</ul>
+<p><span><strong>2. Chuẩn bị</strong></span></p>
+<ul>
+<li><span>Sách giáo khoa Tiếng Việt 5 tập 1.</span></li>
+</ul>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Ngữ liệu đọc: Cánh đồng hoa" data-type="page" data-sec="2"
+             data-pkey="pl/80102/8312058"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8312058'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8312058']"
+                     @change="await p.toggle('pl/80102/8312058'); $el.checked = !!p.done['pl/80102/8312058']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Ngữ liệu đọc: Cánh đồng hoa</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/pages/ngu-lieu-doc-canh-dong-hoa" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p style="text-align: center;"><strong>Văn bản: Cánh đồng hoa</strong></p>
+<p><span>Ở đầu làng, có một đồng cỏ khá rộng. Ja Ka, Mư Hoa, Ja Prok và Mư Nhơ thường rủ nhau tới đó vui chơi. Ja Ka luôn mang theo chiếc trống nhỏ. Cậu vỗ trống rất hay. Mỗi lần Ja Ka vỗ trống, các bạn lại cùng múa hát tưng bừng.</span></p>
+<p><span>Thế nhưng gần đây, trên đồng cỏ, một bãi rác xuất hiện và cứ lớn dần lên, bốc mùi khó chịu. Các bạn nhỏ chẳng nô đùa, hò hét như mọi ngày.</span></p>
+<p><span>– Cứ thế này, đồng cỏ sẽ thành bãi rác mất thôi! – Mư Nhơ thở dài.</span></p>
+<p><span>Mư Hoa quay mặt đi, giấu những giọt nước mắt:</span></p>
+<p><span>– Bọn mình còn đâu chỗ mà vui chơi!</span></p>
+<p><span>Ja Ka, Ja Prok thì rầu rĩ:</span></p>
+<p><span>– Biết làm thế nào bây giờ?</span></p>
+<p><span>Bỗng Mư Hoa hỏi:</span></p>
+<p><span>– Các cậu có thấy bầu trời như một vườn hoa không?</span></p>
+<div class="ads_ads ads_2"><ins class="982a9496" data-key="1353c29425a79255e99fea2f719d8207" id="982a9496-1353c29425a79255e99fea2f719d8207-0-2091"><ins id="982a9496-1353c29425a79255e99fea2f719d8207-0-2091-1">
+<div id="wrapper-inread-video-456df4d0f0e64616ab4c39ad529aaa0d-1786956922767"></div>
+</ins></ins></div>
+<p><span>Mư Nhơ gật đầu:</span></p>
+<p><span>– Cánh diều giống hoa ngũ sắc, đám mây giống hoa cúc trắng,...</span></p>
+<p><span>Mư Hoa bật dậy:</span></p>
+<p><span>– Chúng ta sẽ biến nơi đây thành cánh đồng hoa. Mọi người không nỡ lấy cánh đồng đẹp làm chỗ đổ rác đâu.</span></p>
+<p><span>Các bạn nhỏ chụm đầu bàn tính và quyết tâm cải tạo đồng cỏ. Biết ý tưởng đó, nhiều cô bác trong làng đã hưởng ứng. Họ hồ hởi cùng các bạn bắt tay vào dọn rác, xới đất, gieo hạt, trồng cây; ngày ngày tưới nước, nhỏ cỏ, bắt sâu. Cây đâm chồi, nảy lộc, rồi nhú nở những bông hoa đầu tiên. Ba tháng sau, hoa đã đua nhau khoe sắc: cúc bách nhật tím lịm, cúc vạn thọ vàng tươi, mào gà đỏ thắm,... Quả nhiên, không thấy ai đến đây đổ rác nữa. Nhóm bạn vui mừng nhảy múa, ca hát giữa muôn hoa rực rỡ, trong tiếng trống rộn ràng.</span></p>
+<p><span>Với cánh đồng hoa xinh đẹp, ngôi làng trở nên nổi tiếng, đón nhiều khách tới tham quan. Các bạn nhỏ và dân làng cười vui. Cánh đồng hoa cũng như đang vui cười hạnh phúc.</span></p>
+<p style="text-align: right;"><span>(<em>Theo</em> Lê Anh Vinh – Bùi Thị Diển)</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Thảo luận: Cánh đồng hoa" data-type="discussion" data-sec="2"
+             data-pkey="pl/80102/8312574"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8312574'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8312574']"
+                     @change="await p.toggle('pl/80102/8312574'); $el.checked = !!p.done['pl/80102/8312574']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="thảo luận">💬</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Thảo luận: Cánh đồng hoa</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">thảo luận</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/discussion_topics/664739" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><span style="font-size: 14pt;"><em><strong>Đọc văn bản Cánh đồng hoa và trả lời các câu hỏi:</strong></em></span></p>
+<p><span style="font-size: 14pt;">Câu 1. Các bạn nhỏ có những hoạt động vui chơi nào trên đồng cỏ đầu làng? Chuyện gì xảy ra ở đó?</span><br/><br/><span style="font-size: 14pt;">Câu 2.  Khi thấy đồng cỏ có nguy cơ trở thành bãi rác, cảm xúc của các bạn nhỏ thế nào? Tìm các từ ngữ trong bài để thể hiện cảm xúc đó.</span><br/><br/><span style="font-size: 14pt;">Câu 3. Trước nguy cơ đó, các bạn đã có ý tưởng gì? Kết quả ra sao? Các bạn có cảm xúc gì trước thành quả đó? Chi tiết nào cho em biết điều đó?</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="🏡🌏: NHIỆM VỤ SAU TIẾT HỌC" data-sec="3"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          🏡🌏: NHIỆM VỤ SAU TIẾT HỌC
+        </div>
+        
+        
+        
+        <div data-item data-title="Quiz: Từ loại" data-type="quiz" data-sec="3"
+             data-pkey="pl/80102/8284215"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8284215'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8284215']"
+                     @change="await p.toggle('pl/80102/8284215'); $el.checked = !!p.done['pl/80102/8284215']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/80102/quizzes/2076798" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Quiz: Từ loại
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                
+                
+                  <span>10 câu hỏi</span>
+                  <span>10 điểm</span>
+                  
+                  <span>1 lượt làm</span>
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 25/08</span>
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/quizzes/2076798" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="K5_TV_PCT_Tuan 1..pdf" data-type="file" data-sec="3"
+             data-pkey="pl/80102/8489694"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/8489694'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 2.25rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/8489694']"
+                     @change="await p.toggle('pl/80102/8489694'); $el.checked = !!p.done['pl/80102/8489694']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/1-1-1-2-thanh-am-cua-gio-canh-dong-hoa/K5_TV_PCT_Tuan 1..pdf" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                K5_TV_PCT_Tuan 1..pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <span>164.9 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 22/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="TIẾNG VIỆT - TÀI LIỆU THAM KHẢO"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">TIẾNG VIỆT - TÀI LIỆU THAM KHẢO</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 3
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/3'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">3 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-item data-title="TỔNG QUAN CHƯƠNG TRÌNH TIẾNG VIỆT 5" data-type="page" data-sec="0"
+             data-pkey="pl/80102/7760698"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/7760698'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/7760698']"
+                     @change="await p.toggle('pl/80102/7760698'); $el.checked = !!p.done['pl/80102/7760698']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">TỔNG QUAN CHƯƠNG TRÌNH TIẾNG VIỆT 5</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 17/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80102/pages/tong-quan-chuong-trinh-tieng-viet-5" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p style="text-align: center;"><span style="color: #e62429; font-size: 24pt;"><strong>GIỚI THIỆU MÔN HỌC</strong></span></p>
+<ul>
+<li><strong><span style="font-size: 18pt;">Trong chương trình Tiếng Việt 5, các con sẽ học 9 tiết/ tuần với các nội dung chính:</span></strong></li>
+<li><span style="font-size: 18pt;">Đọc</span></li>
+<li><span style="font-size: 18pt;">Luyện từ và câu</span></li>
+<li><span style="font-size: 18pt;">Viết sáng tạo</span></li>
+</ul>
+<p style="text-align: center;"><em><strong><img alt="Screenshot (219).png" loading="lazy" src="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/Screenshot (219).png"/></strong></em></p>
+<p style="text-align: center;"><em><strong><img alt="Screenshot (218).png" loading="lazy" src="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/Screenshot (218).png"/></strong></em></p>
+<p style="text-align: center;"><em><strong><img alt="Screenshot (220).png" loading="lazy" src="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/Screenshot (220).png"/></strong></em></p>
+<p style="text-align: center;"><em><strong><img alt="Screenshot (221).png" loading="lazy" src="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/Screenshot (221).png"/></strong></em></p>
+<p style="text-align: center;"><em><strong>Để bắt đầu với các nội dung chi tiết, các con hãy click chuột vào ô "CLICK HERE" dưới đây hoặc lựa chọn "Modules" ở khung điều hướng bên trái.</strong></em></p>
+<p style="text-align: center;"><em><strong>CÔ CHÚC CÁC CON CÓ THÊM THẬT NHIỀU KIẾN THỨC LÍ THÚ VÀ BỔ ÍCH!</strong></em></p>
+<p><a class="inline_disabled" href="https://lms.vinschool.edu.vn/courses/80102/modules" rel="noopener" target="_blank"><img alt="click-here.jpg" height="148" loading="lazy" src="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/click-here.jpg" style="display: block; margin-left: auto; margin-right: auto;" width="421"/></a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="SGK TIẾNG VIỆT - LỚP 5 - TẬP 2.pdf" data-type="file" data-sec="0"
+             data-pkey="pl/80102/7757541"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/7757541'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/7757541']"
+                     @change="await p.toggle('pl/80102/7757541'); $el.checked = !!p.done['pl/80102/7757541']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/SGK TIẾNG VIỆT - LỚP 5 - TẬP 2.pdf" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                SGK TIẾNG VIỆT - LỚP 5 - TẬP 2.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <span>24.7 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 21/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="SGK TIẾNG VIỆT - LỚP 5 - TẬP 1.pdf" data-type="file" data-sec="0"
+             data-pkey="pl/80102/7757544"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80102/7757544'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80102/7757544']"
+                     @change="await p.toggle('pl/80102/7757544'); $el.checked = !!p.done['pl/80102/7757544']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/tieng-viet-5/tieng-viet-tai-lieu-tham-khao/SGK TIẾNG VIỆT - LỚP 5 - TẬP 1.pdf" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                SGK TIẾNG VIỆT - LỚP 5 - TẬP 1.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <span>25.9 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 12/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+
+  </main>
+
+  <footer class="max-w-4xl mx-auto px-4 pb-8 text-center text-xs text-slate-400">
+    Cập nhật tự động · bản lưu offline
+  </footer>
+</body>
+</html>

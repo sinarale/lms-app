@@ -1,0 +1,23 @@
+# Cấu hình deploy site "Góc Học Tập" lên Cloudflare Workers.
+#
+# Deploy:  ./scripts/publish_cf.sh      (hoặc: npx wrangler deploy)
+#
+# Chuẩn bị một lần:
+#   npx wrangler login
+#   npx wrangler kv namespace create PROGRESS_KV     # rồi dán id vào dưới
+#   npx wrangler secret put LMS_SECRET          # nhập mã bí mật
+#
+# Lưu ý: assets trỏ vào public/ (do scripts/prepare_cf.sh dựng từ dist/, đã lọc
+# bỏ tài liệu). KHÔNG trỏ thẳng vào dist/ để không phải xoá file gốc.
+
+name = "lms"
+main = "worker/index.js"
+compatibility_date = "2026-08-20"
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+[[kv_namespaces]]
+binding = "PROGRESS_KV"
+id = "490c8ae7c319483d953f95f7855b6ad1"
