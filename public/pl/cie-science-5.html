@@ -141,7 +141,7 @@
         </a>
         <div class="min-w-0 flex-1">
           <h1 class="text-lg font-bold text-slate-900 truncate">CIE Science 5</h1>
-          <p class="text-xs text-slate-500">PL · 3 tuần/bài · cập nhật 2026-08-26 14:18</p>
+          <p class="text-xs text-slate-500">PL · 3 tuần/bài · cập nhật 2026-08-31 16:09</p>
         </div>
       </div>
       <div class="mt-2 flex items-center gap-2">
@@ -195,10 +195,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80432/')).length / 6 * 100) + '%'"></div>
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80432/')).length / 8 * 100) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/80432/')).length + '/6 đã học'"></span>
+              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/80432/')).length + '/8 đã học'"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -225,11 +225,11 @@
         <span class="font-semibold text-slate-900 flex-1">Unit 2 – Materials: Properties and Changes (Grade 5)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 3
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 5
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/3'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/5'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">3 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">5 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
@@ -292,6 +292,70 @@
 <p>Homework 2: <a class="instructure_file_link instructure_scribd_file inline_disabled" data-canvas-previewable="false" href="https://sinarale.github.io/lms/pl/materials/cie-science-5/unit-2-materials-properties-and-changes-grade-5/2.1 .1 Unit 2 grade 5.pdf" target="_blank" title="2.1 .1 Unit 2 grade 5.pdf">2.1 .1 Unit 2 grade 5.pdf</a></p>
 <p><a href="https://wordwall.net/play/34716/450/336" rel="noopener" target="_blank"></a></p>
 <p><a href="https://www.youtube.com/watch?v=QQsybALJoew" rel="noopener" target="_blank"></a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Grade 5 2.2 W7 PowerPoint, Video, Quiz and Bonus Game " data-type="assignment" data-sec="0"
+             data-pkey="pl/80432/7836351"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80432/7836351'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80432/7836351']"
+                     @change="await p.toggle('pl/80432/7836351'); $el.checked = !!p.done['pl/80432/7836351']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Grade 5 2.2 W7 PowerPoint, Video, Quiz and Bonus Game </span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80432/assignments/2678519" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Powerpoint:<a class="instructure_file_link instructure_scribd_file inline_disabled" data-canvas-previewable="false" href="https://sinarale.github.io/lms/pl/materials/cie-science-5/unit-2-materials-properties-and-changes-grade-5/G5_Science_Week7_ vThembelihlehd1.pptx" target="_blank" title="G5_Science_Week7_ vThembelihlehd1.pptx">G5_Science_Week7_ vThembelihlehd1.pptx</a> </p>
+<p><a href="https://docs.google.com/presentation/d/1YfeZDL2RwKIuiJI8CuAaazzQVz7Sl_mI/edit?usp=sharing&amp;ouid=115101954136382619710&amp;rtpof=true&amp;sd=true" rel="noopener" target="_blank">https://docs.google.com/presentation/d/1YfeZDL2RwKIuiJI8CuAaazzQVz7Sl_mI/edit?usp=sharing&amp;ouid=115101954136382619710&amp;rtpof=true&amp;sd=true</a> </p>
+<p>Recap: <a href="https://wordwall.net/play/34718/400/107" rel="noopener" target="_blank">https://wordwall.net/play/34718/400/107</a></p>
+<p>Video: <span><a href="https://www.youtube.com/watch?v=U8IFo7ykHuU" rel="noopener" target="_blank">https://www.youtube.com/watch?v=U8IFo7ykHuU</a></span></p>
+<p>Quiz: <a href="https://wordwall.net/play/36083/533/221" rel="noopener" target="_blank">https://wordwall.net/play/36083/533/221</a> (Definition Teacher Quiz), <strong><a href="https://wordwall.net/play/36083/381/875" rel="noopener" target="_blank">https://wordwall.net/play/36083/381/875</a> (Definition Match), </strong><a href="https://wordwall.net/play/34740/217/117" rel="noopener" target="_blank">https://wordwall.net/play/34740/217/117</a> (Sort), <a href="https://wordwall.net/play/34718/400/962" rel="noopener" target="_blank">https://wordwall.net/play/34718/400/962 </a>(Teacher Quiz 3)</p>
+<p>Bonus Games: <a href="https://wordwall.net/play/36157/826/548" rel="noopener" target="_blank">https://wordwall.net/play/36157/826/548</a> (Balloon Pop), <a href="https://wordwall.net/play/36157/861/288" rel="noopener" target="_blank">https://wordwall.net/play/36157/861/288</a> (Maze Chase) </p>
+<p>Homework : Workbook 2.2-2.3</p>
+<p> </p>
               </div>
               
             </div>
@@ -408,6 +472,66 @@
                 <p>Study the terminology for Unit 2</p>
 <p><a class="inline_disabled" href="https://docs.google.com/document/d/17gQxDyXbNWioTxRd-ctdZqhwAKMu8dEu0vhhft343BU/edit?usp=sharing" rel="noopener" target="_blank" title="Link">Terminology Unit 2</a></p>
 <p>Marking scheme for Type of Mixtures worksheet: <a class="instructure_file_link instructure_scribd_file inline_disabled" data-canvas-previewable="false" href="https://sinarale.github.io/lms/pl/materials/cie-science-5/unit-2-materials-properties-and-changes-grade-5/MixturesWorksheet.pdf" target="_blank" title="MixturesWorksheet.pdf">Mixtures Worksheet.pdf</a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Video Homework" data-type="assignment" data-sec="0"
+             data-pkey="pl/80432/8638992"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80432/8638992'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80432/8638992']"
+                     @change="await p.toggle('pl/80432/8638992'); $el.checked = !!p.done['pl/80432/8638992']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Video Homework</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80432/assignments/2991694" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p><a class="instructure_file_link instructure_scribd_file inline_disabled" data-canvas-previewable="false" href="https://sinarale.github.io/lms/pl/materials/cie-science-5/unit-2-materials-properties-and-changes-grade-5/Grade 5 Science Homework 28.docx" target="_blank" title="Grade 5 Science Homework 28.docx">Grade 5 Science Homework 28.docx</a></p>
+<p>Instructions</p>
+<p>1. Watch the videos before answering the question.</p>
+<p>2. Send your work as a response or on my email -  <span>v.thembelihlehd1@vinschool.edu.vn</span></p>
               </div>
               
             </div>

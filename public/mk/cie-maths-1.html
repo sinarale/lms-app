@@ -141,7 +141,7 @@
         </a>
         <div class="min-w-0 flex-1">
           <h1 class="text-lg font-bold text-slate-900 truncate">CIE Maths 1</h1>
-          <p class="text-xs text-slate-500">MK · 2 tuần/bài · cập nhật 2026-08-26 14:18</p>
+          <p class="text-xs text-slate-500">MK · 2 tuần/bài · cập nhật 2026-08-31 16:09</p>
         </div>
       </div>
       <div class="mt-2 flex items-center gap-2">
@@ -196,10 +196,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length / 3 * 100) + '%'"></div>
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length / 4 * 100) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length + '/3 đã học'"></span>
+              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length + '/4 đã học'"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -365,17 +365,71 @@
         <span class="font-semibold text-slate-900 flex-1">Week 2 (24.08.26-28.08.26) Unit 1: Numbers to 100</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 1
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 2
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/1'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/2'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">2 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">4 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
         
         
-        <div data-title="Daily Practice" data-sec="1"
+        <div data-title="Homework" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          Homework
+        </div>
+        
+        
+        
+        <div data-item data-title="G1 Maths Homework Wk2.docx" data-type="file" data-sec="1"
+             data-pkey="mk/80353/8623877"
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80353/8623877'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80353/8623877']"
+                     @change="await p.toggle('mk/80353/8623877'); $el.checked = !!p.done['mk/80353/8623877']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-2-24-08-26-28-08-26-unit-1-numbers-to-100/G1 Maths Homework Wk2.docx" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                G1 Maths Homework Wk2.docx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <span>116.6 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-title="Daily Practice" data-sec="2"
              x-show="headingMatches($el, f)"
              class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
              style="padding-left: 1.0rem">
@@ -384,7 +438,7 @@
         
         
         
-        <div data-item data-title="Maths Daily Practice Grade 1 - Week 2.pptx" data-type="file" data-sec="1"
+        <div data-item data-title="Maths Daily Practice Grade 1 - Week 2.pptx" data-type="file" data-sec="2"
              data-pkey="mk/80353/8550202"
              
              x-show="itemMatches($el, f)"
