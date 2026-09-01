@@ -11,9 +11,13 @@
   <header class="bg-indigo-600 text-white">
     <div class="max-w-4xl mx-auto px-4 py-8">
       <h1 class="text-2xl font-bold">📚 Góc Học Tập</h1>
-      <p class="mt-1 text-indigo-200 text-sm">Bản lưu offline — cập nhật lần cuối: 2026-08-31 16:12</p>
+      <p class="mt-1 text-indigo-200 text-sm">Bản lưu offline — cập nhật lần cuối: 2026-09-01 20:14</p>
     </div>
   </header>
+
+  <!-- Cảnh báo dữ liệu cũ: tính ngay trên trình duyệt nên vẫn hoạt động kể cả
+       khi toàn bộ hệ thống đồng bộ đã chết (lúc đó không có gì gửi báo lỗi được) -->
+  <div id="stale" data-built="2026-09-01T20:14+07:00" class="hidden max-w-4xl mx-auto px-4 pt-4"></div>
 
   <main class="max-w-4xl mx-auto px-4 py-8 grid gap-6 sm:grid-cols-2">
     
@@ -207,7 +211,7 @@
               <span class="block text-sm font-medium text-slate-700 group-hover:text-indigo-700">CIE Science 1</span>
               <!-- Chỉ số 7 ngày gần nhất, tính bằng JS theo giờ hiện tại -->
               <span class="lms-counts mt-0.5 hidden gap-1.5 flex-wrap text-xs"
-                    data-counts='[{&#34;k&#34;:&#34;h&#34;,&#34;t&#34;:1787303375000}]'></span>
+                    data-counts='[{&#34;k&#34;:&#34;h&#34;,&#34;t&#34;:1787844783000},{&#34;k&#34;:&#34;h&#34;,&#34;t&#34;:1787891104000},{&#34;k&#34;:&#34;h&#34;,&#34;t&#34;:1787303375000}]'></span>
             </span>
             <span class="text-xs text-slate-400 shrink-0 mt-0.5">→</span>
           </a>
@@ -271,6 +275,26 @@
   </main>
 
   <script>
+    // Báo động khi dữ liệu quá cũ — nghĩa là job đồng bộ đang hỏng hoặc không chạy
+    (function () {
+      var el = document.getElementById('stale');
+      if (!el) return;
+      var built = new Date(el.dataset.built);
+      if (isNaN(built)) return;
+      var days = Math.floor((Date.now() - built) / 86400000);
+      if (days < 3) return;
+      var nang = days >= 7;
+      el.innerHTML =
+        '<div class="rounded-lg border px-4 py-3 text-sm ' +
+        (nang ? 'bg-rose-50 border-rose-300 text-rose-800'
+              : 'bg-amber-50 border-amber-300 text-amber-800') + '">' +
+        '<strong>' + (nang ? '⚠️ Dữ liệu đã cũ ' : '🕓 Chưa cập nhật ') + days + ' ngày.</strong> ' +
+        'Việc đồng bộ có thể đang hỏng hoặc không chạy — kiểm tra bằng lệnh ' +
+        '<code class="px-1 rounded bg-black/5">journalctl --user -u lms-sync.service</code>' +
+        '</div>';
+      el.classList.remove('hidden');
+    })();
+
     // Đếm homework / bài tập / quiz trong 7 ngày gần nhất, tính động lúc mở trang
     (function () {
       var WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
