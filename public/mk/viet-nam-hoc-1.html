@@ -262,118 +262,6 @@
              @expand-all.window="open = true"
              @collapse-all.window="open = false"
              x-effect="if (q || filtering) open = true"
-             data-module data-title="TỔNG QUAN CHƯƠNG TRÌNH VIỆT NAM HỌC LỚP 1 "
-             x-show="moduleMatches($el, f)"
-             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <button @click="open = !open"
-              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
-        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
-             :class="open ? 'rotate-90' : ''"
-             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-        <span class="font-semibold text-slate-900 flex-1">TỔNG QUAN CHƯƠNG TRÌNH VIỆT NAM HỌC LỚP 1 </span>
-        <template x-if="p.online">
-          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 1
-                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/1'"></span>
-        </template>
-        <span class="text-xs text-slate-400 shrink-0">1 mục</span>
-      </button>
-
-      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
-        
-        
-        <div data-item data-title="GIỚI THIỆU CHƯƠNG TRÌNH" data-type="page" data-sec="0"
-             data-pkey="mk/80232/7945275"
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80232/7945275'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['mk/80232/7945275']"
-                     @change="await p.toggle('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff'); $el.checked = !!p.done['mk/80232/7945275']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
-              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">GIỚI THIỆU CHƯƠNG TRÌNH</span>
-                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
-                     :class="o ? 'rotate-180' : ''"
-                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff')">
-                  <button @click.stop="p.seen('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 14/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80232/pages/gioi-thieu-chuong-trinh" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-              <div x-show="o" x-collapse x-cloak
-                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
-                <p>Chào mừng các con đã đến với kho học liệu môn Việt Nam học lớp 1.</p>
-<p><span><strong><a href="https://drive.google.com/file/d/1qCeCaq_Mq6TqkaoqOskYaTy0Tk8EXyeX/view?usp=sharing" rel="noopener" target="_blank"><img alt="pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772.jpg" height="51" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772-2.jpg" width="51"/></a>1. Mục tiêu, tổng quan chương trình</strong></span></p>
-<p><span><strong><img alt="Capture.PNG" height="297" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/Capture-3.PNG" style="display: block; margin-left: auto; margin-right: auto;" width="517"/></strong></span></p>
-<p> </p>
-<p>Môn Việt Nam học sẽ giúp các con tìm hiểu về những bản sắc văn hóa Việt Nam như các hoạt động, lễ hội truyền thống, phong tục tập quán xa xưa. Từ đó, các con sẽ thêm hiểu, thêm yêu và tự hào về con người, đất nước Việt Nam, có lòng tự tôn dân tộc.</p>
-<p> </p>
-<p><span><strong><a href="https://drive.google.com/file/d/1qEiitFIa2Zhzt2hejp4YTKPjkRYn8zIK/view?usp=sharing" rel="noopener" target="_blank"><img alt="pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772.jpg" height="66" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772-2.jpg" width="66"/></a>2. Chương trình Việt Nam học lớp Một</strong></span><strong><span> bao gồm 6 chủ đề:</span></strong></p>
-<p><span>1. Trò chơi dân gian và Đồng dao</span></p>
-<p><span>2. Văn hóa chào hỏi</span></p>
-<p><span>3. Hoa trái Việt Nam</span></p>
-<p><span>4. Dòng họ của gia đình em</span></p>
-<p><span>5. Câu hát ru</span></p>
-<p><span>6. Tranh dân gian Đông Hồ</span></p>
-<p style="text-align: center;"><img alt="Capture-1.PNG" height="354" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/Capture-1-1.PNG" width="576"/><br/><strong><em>Chúc các con sẽ có những giây phút trải nghiệm thật tuyệt vời với kho học liệu thầy cô Vinschool cung cấp nhé!</em><br/></strong></p>
-<p><span>Để bắt đầu với các nội dung chi tiết, các con hãy nhấn vào dòng <em>Click here</em> hoặc lựa chọn "Modules" ở khung điều hướng bên trái.</span></p>
-<p><a href="https://lms.vinschool.edu.vn/courses/80232/modules" rel="noopener" target="_blank"><span><img alt="unnamed.png" height="120" loading="lazy" src="https://lms.vinschool.edu.vn/users/38259/files/2757164/preview?verifier=lnjRGlTA3VQI53rf8qPBoOTzicbH8WGvbu2fwHbS" style="display: block; margin-left: auto; margin-right: auto;" width="412"/></span></a></p>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-      </div>
-    </section>
-    
-    <!-- Một Tuần học / Bài học -->
-    <section x-data="{ open: false }"
-             @expand-all.window="open = true"
-             @collapse-all.window="open = false"
-             x-effect="if (q || filtering) open = true"
              data-module data-title="CHƯƠNG 1 - TRÒ CHƠI DÂN GIAN VÀ ĐỒNG DAO"
              x-show="moduleMatches($el, f)"
              class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -906,6 +794,118 @@
               <div x-show="o" x-collapse x-cloak
                    class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
                 <p>Mời các con cùng xem lại các nội dung học tập tổng hợp trong chương 1 này nhé!<iframe allowfullscreen="allowfullscreen" height="314" loading="lazy" src="https://www.youtube.com/embed/5mUCHKtNBBs" width="560"></iframe></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="TỔNG QUAN CHƯƠNG TRÌNH VIỆT NAM HỌC LỚP 1 "
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">TỔNG QUAN CHƯƠNG TRÌNH VIỆT NAM HỌC LỚP 1 </span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 1
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/1'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">1 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-item data-title="GIỚI THIỆU CHƯƠNG TRÌNH" data-type="page" data-sec="0"
+             data-pkey="mk/80232/7945275"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80232/7945275'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80232/7945275']"
+                     @change="await p.toggle('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff'); $el.checked = !!p.done['mk/80232/7945275']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">GIỚI THIỆU CHƯƠNG TRÌNH</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff')">
+                  <button @click.stop="p.seen('mk/80232/7945275', '312953ee9c698ce51bc6c6ac7ac40a075eecc4ff')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 14/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80232/pages/gioi-thieu-chuong-trinh" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>Chào mừng các con đã đến với kho học liệu môn Việt Nam học lớp 1.</p>
+<p><span><strong><a href="https://drive.google.com/file/d/1qCeCaq_Mq6TqkaoqOskYaTy0Tk8EXyeX/view?usp=sharing" rel="noopener" target="_blank"><img alt="pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772.jpg" height="51" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772-2.jpg" width="51"/></a>1. Mục tiêu, tổng quan chương trình</strong></span></p>
+<p><span><strong><img alt="Capture.PNG" height="297" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/Capture-3.PNG" style="display: block; margin-left: auto; margin-right: auto;" width="517"/></strong></span></p>
+<p> </p>
+<p>Môn Việt Nam học sẽ giúp các con tìm hiểu về những bản sắc văn hóa Việt Nam như các hoạt động, lễ hội truyền thống, phong tục tập quán xa xưa. Từ đó, các con sẽ thêm hiểu, thêm yêu và tự hào về con người, đất nước Việt Nam, có lòng tự tôn dân tộc.</p>
+<p> </p>
+<p><span><strong><a href="https://drive.google.com/file/d/1qEiitFIa2Zhzt2hejp4YTKPjkRYn8zIK/view?usp=sharing" rel="noopener" target="_blank"><img alt="pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772.jpg" height="66" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/pngtree-megaphone-vector-illustration-isolated-on-white-background-megaphone-clip-art-png-image_2016772-2.jpg" width="66"/></a>2. Chương trình Việt Nam học lớp Một</strong></span><strong><span> bao gồm 6 chủ đề:</span></strong></p>
+<p><span>1. Trò chơi dân gian và Đồng dao</span></p>
+<p><span>2. Văn hóa chào hỏi</span></p>
+<p><span>3. Hoa trái Việt Nam</span></p>
+<p><span>4. Dòng họ của gia đình em</span></p>
+<p><span>5. Câu hát ru</span></p>
+<p><span>6. Tranh dân gian Đông Hồ</span></p>
+<p style="text-align: center;"><img alt="Capture-1.PNG" height="354" loading="lazy" src="https://sinarale.github.io/lms/mk/materials/viet-nam-hoc-1/tong-quan-chuong-trinh-viet-nam-hoc-lop-1/Capture-1-1.PNG" width="576"/><br/><strong><em>Chúc các con sẽ có những giây phút trải nghiệm thật tuyệt vời với kho học liệu thầy cô Vinschool cung cấp nhé!</em><br/></strong></p>
+<p><span>Để bắt đầu với các nội dung chi tiết, các con hãy nhấn vào dòng <em>Click here</em> hoặc lựa chọn "Modules" ở khung điều hướng bên trái.</span></p>
+<p><a href="https://lms.vinschool.edu.vn/courses/80232/modules" rel="noopener" target="_blank"><span><img alt="unnamed.png" height="120" loading="lazy" src="https://lms.vinschool.edu.vn/users/38259/files/2757164/preview?verifier=lnjRGlTA3VQI53rf8qPBoOTzicbH8WGvbu2fwHbS" style="display: block; margin-left: auto; margin-right: auto;" width="412"/></span></a></p>
               </div>
               
             </div>

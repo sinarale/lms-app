@@ -1629,91 +1629,6 @@
              @expand-all.window="open = true"
              @collapse-all.window="open = false"
              x-effect="if (q || filtering) open = true"
-             data-module data-title="WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025"
-             x-show="moduleMatches($el, f)"
-             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <button @click="open = !open"
-              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
-        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
-             :class="open ? 'rotate-90' : ''"
-             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-        <span class="font-semibold text-slate-900 flex-1">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
-        <template x-if="p.online">
-          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 1
-                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/1'"></span>
-        </template>
-        <span class="text-xs text-slate-400 shrink-0">1 mục</span>
-      </button>
-
-      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
-        
-        
-        <div data-item data-title="Science 1 Week 1 - Environments and Habitats.pdf" data-type="file" data-sec="0"
-             data-pkey="mk/80196/7818740"
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/7818740'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 3.5rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['mk/80196/7818740']"
-                     @change="await p.toggle('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749'); $el.checked = !!p.done['mk/80196/7818740']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-environments-and-habitats-18-08-2025-22-08-2025/Science 1 Week 1 - Environments and Habitats.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Science 1 Week 1 - Environments and Habitats.pdf
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749')">
-                  <button @click.stop="p.seen('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>1.8 MB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-      </div>
-    </section>
-    
-    <!-- Một Tuần học / Bài học -->
-    <section x-data="{ open: false }"
-             @expand-all.window="open = true"
-             @collapse-all.window="open = false"
-             x-effect="if (q || filtering) open = true"
              data-module data-title="Workbook Answers"
              x-show="moduleMatches($el, f)"
              class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -1776,6 +1691,91 @@
                   </button>
                 </template>
                 <span>10.6 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="font-semibold text-slate-900 flex-1">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 1
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/1'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">1 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-item data-title="Science 1 Week 1 - Environments and Habitats.pdf" data-type="file" data-sec="0"
+             data-pkey="mk/80196/7818740"
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80196/7818740'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 3.5rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80196/7818740']"
+                     @change="await p.toggle('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749'); $el.checked = !!p.done['mk/80196/7818740']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-environments-and-habitats-18-08-2025-22-08-2025/Science 1 Week 1 - Environments and Habitats.pdf" target="_blank" rel="noopener"
+                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                Science 1 Week 1 - Environments and Habitats.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749')">
+                  <button @click.stop="p.seen('mk/80196/7818740', '6e750c9989b1c3f33fc0a2e06d9d025e7664d749')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>1.8 MB</span>
                 
                 
                 
