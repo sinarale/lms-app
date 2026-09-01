@@ -42,6 +42,15 @@
         },
 
         items(g) { return this.todoOnly ? g.items.filter(i => !i.done) : g.items; },
+
+        // Ô có tên riêng thì hiện tên; ô mà bản thân nội dung là URL thì rút gọn
+        // cho dễ đọc. Từ khi đọc qua Sheets API, hai thứ này có thể khác nhau:
+        // ví dụ "Can You Name the baby Animals" gắn link YouTube.
+        display(it) {
+          return /^https?:\/\//.test(it.label)
+            ? it.label.replace(/^https?:\/\/(www\.)?/, '')
+            : it.label;
+        },
         groups(s) { return s.groups.filter(g => this.items(g).length > 0); },
         visible(s) { return this.groups(s).length > 0; },
         left(s) { return s.groups.reduce((n, g) => n + g.items.filter(i => !i.done).length, 0); },
@@ -170,10 +179,10 @@
                 <template x-if="it.url">
                   <a :href="it.url" target="_blank" rel="noopener"
                      class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline break-all"
-                     x-text="it.url.replace(/^https?:\/\/(www\.)?/, '')"></a>
+                     x-text="display(it)"></a>
                 </template>
                 <template x-if="!it.url">
-                  <span class="text-sm font-medium text-slate-800" x-text="it.label"></span>
+                  <span class="text-sm font-medium text-slate-800" x-text="display(it)"></span>
                 </template>
                 <div class="mt-0.5 flex items-center gap-2 text-xs text-slate-400">
                   <span x-show="it.subject" class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500"
