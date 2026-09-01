@@ -42,52 +42,129 @@ function parseCsv(text) {
   return rows;
 }
 
-/** Gom các dòng thành buổi học → môn → đầu mục. Chỉ giữ cột an toàn. */
+/** Gom các dòng thành buổi học → nhóm nhỏ → đầu mục. Chỉ giữ cột an toàn.
+ *
+ * Cấu trúc thật trong sheet:
+ *   cột A "Saturday 30/8"                 → buổi học
+ *   cột A "Science"                       → môn của buổi đó
+ *   cột B "4.5. Vocab: Teeth" (không tick) → tiêu đề nhóm nhỏ
+ *   cột B <nội dung> + cột E TRUE/FALSE   → đầu mục cần làm
+ *
+ * `rows[i][j]` là { text, link } — link có thể là hyperlink gắn trong ô mà bản
+ * xuất CSV không hề chứa.
+ */
 function toSessions(rows, col) {
   const sessions = [];
-  let cur = null, subject = "";
+  let cur = null, group = null, subject = "";
+
+  const newGroup = (name) => {
+    group = { name, items: [] };
+    if (cur) cur.groups.push(group);
+  };
+
   rows.forEach((r, i) => {
-    const rowNo = i + 1;                       // dòng thứ i trong CSV = dòng i+1 trong sheet
-    const a = (r[0] || "").trim();
-    const label = (r[COL_LABEL] || "").trim();
-    const raw = (r[col] || "").trim().toUpperCase();
+    const rowNo = i + 1;                       // dòng thứ i = dòng i+1 trong sheet
+    const cell = (j) => (r[j] || { text: "", link: "" });
+    const a = cell(0).text.trim();
+    const b = cell(COL_LABEL);
+    const label = b.text.trim();
+    const raw = cell(col).text.trim().toUpperCase();
     const isTask = raw === "TRUE" || raw === "FALSE";
 
     if (a && !isTask) {
       if (SESSION_RE.test(a)) {                // "Saturday 30/8", "OFF_Thursday 27/8"
-        cur = { title: a, items: [] };
+        cur = { title: a, groups: [] };
         sessions.push(cur);
         subject = "";
+        group = null;
       } else {
         subject = a;                           // "Science", "English"
       }
-      if (!label) return;                      // dòng chỉ có tiêu đề, không phải việc
     }
-    if (!isTask || !label) return;
-    if (!cur) { cur = { title: "Chưa phân buổi", items: [] }; sessions.push(cur); }
-    cur.items.push({
+    if (!label) return;
+
+    if (!isTask) { newGroup(label); return; }  // dòng có chữ nhưng không có ô tick
+    if (!cur) { cur = { title: "Chưa phân buổi", groups: [] }; sessions.push(cur); }
+    if (!group) newGroup("");
+    group.items.push({
       row: rowNo,
       subject,
       label,
-      url: /^https?:\/\//.test(label) ? label : "",
+      // Ưu tiên hyperlink gắn trong ô; nếu không có thì xét bản thân nội dung
+      url: b.link || (/^https?:\/\//.test(label) ? label : ""),
       done: raw === "TRUE",
     });
   });
-  return sessions.filter((s) => s.items.length);
+
+  return sessions
+    .map((s) => ({ ...s, groups: s.groups.filter((g) => g.items.length) }))
+    .filter((s) => s.groups.length);
+}
+
+/** Đọc qua Sheets API — cách DUY NHẤT lấy được hyperlink gắn trong ô.
+ *  Bản xuất CSV/gviz chỉ có text hiển thị, nên ô kiểu "Can You Name the baby
+ *  Animals" gắn link sẽ mất link nếu đọc bằng CSV. */
+async function readViaApi(env, col) {
+  const token = await accessToken(env);
+  const auth = { authorization: `Bearer ${token}` };
+  const id = env.SHEET_ID;
+
+  // Cần TÊN tab để dùng A1 notation; chỉ có gid nên phải tra một lần
+  const meta = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${id}?fields=sheets.properties(sheetId,title)`,
+    { headers: auth },
+  );
+  if (!meta.ok) throw new Error(`Sheets API ${meta.status} khi đọc metadata`);
+  const gid = Number(env.SHEET_GID);
+  const tab = (await meta.json()).sheets.find((s) => s.properties.sheetId === gid);
+  if (!tab) throw new Error(`Không tìm thấy tab có gid=${gid}`);
+
+  // Chỉ lấy các cột an toàn (A..F). Cột G/H chứa mật khẩu tài khoản học liệu —
+  // không bao giờ được lọt ra khỏi Worker.
+  const lastCol = String.fromCharCode(65 + Math.max(col, 5));
+  const r = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${id}` +
+      `?includeGridData=true&ranges=${encodeURIComponent(`'${tab.properties.title}'!A:${lastCol}`)}` +
+      `&fields=${encodeURIComponent("sheets.data.rowData.values(formattedValue,hyperlink)")}`,
+    { headers: auth },
+  );
+  if (!r.ok) throw new Error(`Sheets API ${r.status} khi đọc dữ liệu`);
+  const grid = (await r.json()).sheets?.[0]?.data?.[0]?.rowData || [];
+  return grid.map((row) =>
+    (row.values || []).map((c) => ({ text: c.formattedValue || "", link: c.hyperlink || "" })),
+  );
+}
+
+/** Dự phòng khi chưa cấu hình service account: đọc bản CSV công khai.
+ *  Mất hyperlink nhưng vẫn xem được danh sách và trạng thái. */
+async function readViaCsv(env) {
+  const url = `https://docs.google.com/spreadsheets/d/${env.SHEET_ID}/export?format=csv&gid=${env.SHEET_GID}`;
+  const r = await fetch(url, { redirect: "follow" });
+  if (!r.ok) throw new Error(`Không đọc được sheet (HTTP ${r.status})`);
+  return parseCsv(await r.text()).map((row) => row.map((t) => ({ text: t, link: "" })));
 }
 
 export async function readSheet(env) {
   if (!env.SHEET_ID || !env.SHEET_GID) {
     return { error: "Chưa cấu hình SHEET_ID / SHEET_GID", status: 503 };
   }
-  const url = `https://docs.google.com/spreadsheets/d/${env.SHEET_ID}/export?format=csv&gid=${env.SHEET_GID}`;
-  const r = await fetch(url, { redirect: "follow" });
-  if (!r.ok) return { error: `Không đọc được sheet (HTTP ${r.status})`, status: 502 };
   const col = Number(env.SHEET_COL ?? 4);
-  const sessions = toSessions(parseCsv(await r.text()), col);
-  const total = sessions.reduce((n, s) => n + s.items.length, 0);
-  const done = sessions.reduce((n, s) => n + s.items.filter((i) => i.done).length, 0);
-  return { sessions, total, done };
+  let rows, source = "api";
+  try {
+    if (!env.GOOGLE_SA_KEY) throw new Error("chưa có service account");
+    rows = await readViaApi(env, col);
+  } catch (e) {
+    rows = await readViaCsv(env);   // vẫn dùng được, chỉ thiếu hyperlink
+    source = "csv";
+  }
+  const sessions = toSessions(rows, col);
+  const items = sessions.flatMap((s) => s.groups.flatMap((g) => g.items));
+  return {
+    sessions,
+    source,
+    total: items.length,
+    done: items.filter((i) => i.done).length,
+  };
 }
 
 // ── Ghi: service account → JWT → access token → Sheets API ───────────────────

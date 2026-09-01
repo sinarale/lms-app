@@ -41,9 +41,10 @@
           }
         },
 
-        shown(s) { return this.todoOnly ? s.items.filter(i => !i.done) : s.items; },
-        visible(s) { return this.shown(s).length > 0; },
-        left(s) { return s.items.filter(i => !i.done).length; },
+        items(g) { return this.todoOnly ? g.items.filter(i => !i.done) : g.items; },
+        groups(s) { return s.groups.filter(g => this.items(g).length > 0); },
+        visible(s) { return this.groups(s).length > 0; },
+        left(s) { return s.groups.reduce((n, g) => n + g.items.filter(i => !i.done).length, 0); },
 
         async toggle(item) {
           if (!this.secret && !(await this.askSecret())) return;
@@ -155,8 +156,13 @@
                 x-text="left(s) === 0 ? 'xong' : left(s) + ' chưa xong'"></span>
         </button>
 
-        <div x-show="open[si]" x-collapse class="border-t border-slate-100 divide-y divide-slate-100">
-          <template x-for="it in shown(s)" :key="it.row">
+        <div x-show="open[si]" x-collapse class="border-t border-slate-100">
+          <template x-for="(g, gi) in groups(s)" :key="gi">
+          <div class="divide-y divide-slate-100">
+            <!-- Tiêu đề nhóm nhỏ trong buổi, ví dụ "4.5. Vocab: Teeth" -->
+            <div x-show="g.name" class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+                 x-text="g.name"></div>
+            <template x-for="it in items(g)" :key="it.row">
             <div class="flex items-start gap-3 px-4 py-2.5" :class="it.done ? 'bg-emerald-50/60' : ''">
               <input type="checkbox" :checked="it.done" @change.prevent="toggle(it)"
                      class="mt-0.5 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
@@ -176,6 +182,8 @@
                 </div>
               </div>
             </div>
+            </template>
+          </div>
           </template>
         </div>
       </section>
