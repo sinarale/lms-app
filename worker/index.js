@@ -20,6 +20,8 @@
  *   LMS_SECRET      — mã bí mật để được phép ghi (đặt trên dashboard)
  */
 
+import { readSheet, writeCell } from "./sheet.js";
+
 const KEY = "progress";
 const MAX_ITEMS = 5000; // chặn ghi phình vô hạn
 const KEY_RE = /^[\w-]+\/\d+\/[\w-]+$/;
@@ -100,6 +102,38 @@ export default {
     if (pathname === "/api/progress") {
       if (request.method === "GET") return handleGet(env);
       if (request.method === "POST") return handlePost(request, env);
+      return json({ error: "Method không hỗ trợ" }, 405);
+    }
+
+    if (pathname === "/api/sheet") {
+      if (request.method === "GET") {
+        try {
+          const d = await readSheet(env);
+          return d.error ? json({ error: d.error }, d.status || 500) : json(d);
+        } catch (e) {
+          return json({ error: String(e.message || e) }, 502);
+        }
+      }
+      if (request.method === "POST") {
+        // Ghi vào sheet của lớp → chặn bằng cùng mã bí mật với tiến độ
+        const secret = env.LMS_SECRET || "";
+        if (!secret) return json({ error: "Chưa cấu hình LMS_SECRET" }, 503);
+        if ((request.headers.get("x-progress-key") || "") !== secret) {
+          return json({ error: "Mã bí mật không đúng" }, 401);
+        }
+        let body;
+        try { body = await request.json(); } catch { return json({ error: "Body không hợp lệ" }, 400); }
+        const row = Number(body?.row);
+        if (!Number.isInteger(row) || row < 1 || row > 100000) {
+          return json({ error: "Thiếu hoặc sai 'row'" }, 400);
+        }
+        try {
+          const d = await writeCell(env, row, !!body.done);
+          return d.error ? json({ error: d.error }, d.status || 500) : json(d);
+        } catch (e) {
+          return json({ error: String(e.message || e) }, 502);
+        }
+      }
       return json({ error: "Method không hỗ trợ" }, 405);
     }
 

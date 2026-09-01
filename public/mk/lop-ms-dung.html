@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Lớp Ms Dung — MK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>[x-cloak]{display:none!important}</style>
+  <script>
+    // Trang này KHÔNG dựng sẵn dữ liệu lúc build — mỗi lần mở là đọc thẳng từ
+    // Google Sheet qua /api/sheet, nên luôn khớp với bản gốc.
+    function sheetApp() {
+      return {
+        sessions: [], total: 0, done: 0,
+        loading: true, err: '', saving: 0,
+        todoOnly: true,                 // mặc định chỉ hiện việc chưa xong
+        open: {},                       // buổi nào đang mở rộng
+        secret: localStorage.getItem('lms_key') || '',
+
+        async init() { await this.load(); },
+
+        async load() {
+          this.loading = true; this.err = '';
+          try {
+            const r = await fetch('/api/sheet', { headers: { accept: 'application/json' } });
+            const d = await r.json();
+            if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+            this.sessions = d.sessions || [];
+            this.total = d.total || 0;
+            this.done = d.done || 0;
+            // Mở sẵn 3 buổi gần nhất; các buổi cũ để thu gọn cho đỡ rối
+            this.open = {};
+            this.sessions.slice(0, 3).forEach((s, i) => (this.open[i] = true));
+          } catch (e) {
+            this.err = e.message;
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        shown(s) { return this.todoOnly ? s.items.filter(i => !i.done) : s.items; },
+        visible(s) { return this.shown(s).length > 0; },
+        left(s) { return s.items.filter(i => !i.done).length; },
+
+        async toggle(item) {
+          if (!this.secret && !(await this.askSecret())) return;
+          const next = !item.done;
+          item.done = next;                       // phản hồi ngay, hỏng thì hoàn tác
+          this.done += next ? 1 : -1;
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/sheet', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ row: item.row, done: next }),
+            });
+            const d = await r.json().catch(() => ({}));
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error(d.error || ('Không lưu được (HTTP ' + r.status + ')'));
+          } catch (e) {
+            item.done = !next; this.done += next ? -1 : 1;   // hoàn tác
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 5000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        async askSecret() {
+          const v = (prompt('Nhập mã bí mật để đánh dấu:') || '').trim();
+          if (!v) return false;
+          try {
+            const r = await fetch('/api/progress?check=1', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': v },
+              body: '{}',
+            });
+            if (!r.ok) { alert('Mã không đúng.'); return false; }
+          } catch { alert('Không kết nối được máy chủ.'); return false; }
+          this.secret = v; localStorage.setItem('lms_key', v);
+          return true;
+        },
+      };
+    }
+  </script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen" x-data="sheetApp()" x-init="init()">
+
+  <header class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3">
+      <div class="flex items-center gap-3">
+        <a href="../index.html" class="shrink-0 text-slate-500 hover:text-indigo-600" title="Về trang chủ">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg font-bold text-slate-900 truncate">Lớp Ms Dung</h1>
+          <p class="text-xs text-slate-500">
+            MK · đọc trực tiếp từ bảng của lớp
+            <span x-show="saving" x-cloak class="text-indigo-500">· đang lưu…</span>
+          </p>
+        </div>
+        <button @click="load()" :disabled="loading"
+                class="shrink-0 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 disabled:opacity-50">
+          Tải lại
+        </button>
+      </div>
+
+      <div class="mt-2 flex items-center gap-2 text-xs" x-show="!loading && !err" x-cloak>
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-emerald-500 transition-all duration-300"
+               :style="'width:' + (total ? Math.round(done / total * 100) : 0) + '%'"></div>
+        </div>
+        <span class="text-slate-500 whitespace-nowrap" x-text="done + '/' + total + ' đã xong'"></span>
+      </div>
+
+      <div class="mt-2 flex items-center gap-1.5 flex-wrap text-xs" x-show="!loading && !err" x-cloak>
+        <button @click="todoOnly = true"
+                :class="todoOnly ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300'"
+                class="px-2 py-1 rounded-full border font-medium">○ Chưa hoàn thành</button>
+        <button @click="todoOnly = false"
+                :class="!todoOnly ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300'"
+                class="px-2 py-1 rounded-full border">Tất cả</button>
+        <span class="text-rose-600 ml-1" x-show="err" x-cloak x-text="err"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 space-y-3">
+    <p x-show="loading" class="text-center text-sm text-slate-400 py-10">Đang đọc bảng của lớp…</p>
+
+    <div x-show="err && !loading" x-cloak class="rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+      <strong>Không đọc được bảng.</strong> <span x-text="err"></span>
+      <p class="mt-1 text-xs">Nếu đang mở file cục bộ thì trang cần chạy trên website mới gọi được API.</p>
+    </div>
+
+    <template x-for="(s, si) in sessions" :key="si">
+      <section x-show="!loading && !err && visible(s)" x-cloak
+               class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <button @click="open[si] = !open[si]" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+          <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+               :class="open[si] ? 'rotate-90' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+          <span class="font-semibold text-slate-900 flex-1" x-text="s.title.trim()"></span>
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="left(s) === 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-800'"
+                x-text="left(s) === 0 ? 'xong' : left(s) + ' chưa xong'"></span>
+        </button>
+
+        <div x-show="open[si]" x-collapse class="border-t border-slate-100 divide-y divide-slate-100">
+          <template x-for="it in shown(s)" :key="it.row">
+            <div class="flex items-start gap-3 px-4 py-2.5" :class="it.done ? 'bg-emerald-50/60' : ''">
+              <input type="checkbox" :checked="it.done" @change.prevent="toggle(it)"
+                     class="mt-0.5 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              <div class="min-w-0 flex-1">
+                <template x-if="it.url">
+                  <a :href="it.url" target="_blank" rel="noopener"
+                     class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline break-all"
+                     x-text="it.url.replace(/^https?:\/\/(www\.)?/, '')"></a>
+                </template>
+                <template x-if="!it.url">
+                  <span class="text-sm font-medium text-slate-800" x-text="it.label"></span>
+                </template>
+                <div class="mt-0.5 flex items-center gap-2 text-xs text-slate-400">
+                  <span x-show="it.subject" class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500"
+                        x-text="it.subject.trim()"></span>
+                  <span x-text="'dòng ' + it.row"></span>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </section>
+    </template>
+
+    <p x-show="!loading && !err && !sessions.some(s => visible(s))" x-cloak
+       class="text-center text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg py-6">
+      🎉 Không còn việc nào chưa hoàn thành.
+    </p>
+  </main>
+
+  <footer class="max-w-4xl mx-auto px-4 pb-8 text-center text-xs text-slate-400">
+    Đọc và ghi trực tiếp vào bảng của lớp
+  </footer>
+</body>
+</html>

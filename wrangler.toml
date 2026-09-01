@@ -14,6 +14,12 @@ name = "lms"
 main = "worker/index.js"
 compatibility_date = "2026-08-20"
 
+[vars]
+# Cột trạng thái trong bảng của lớp, đánh số từ 0 (E = 4).
+# Không phải bí mật nên để var; SHEET_ID/SHEET_GID thì là secret vì sheet
+# cho phép sửa ẩn danh, lộ id là ai cũng vào phá được.
+SHEET_COL = "4"
+
 [assets]
 directory = "public"
 binding = "ASSETS"
