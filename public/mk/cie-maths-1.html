@@ -50,6 +50,24 @@
       if (vnorm(el.dataset.title).includes(vnorm(f.q))) return true;
       return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
     }
+    // ---- Checkbox của tiêu đề nhóm ------------------------------------------
+    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page
+    // cũng là một mục nên tự nằm trong danh sách này — tick nhóm là tick cả nó.
+    function secEntries(head) {
+      const box = head.closest('[data-module]');
+      if (!box) return [];
+      return Array.from(box.querySelectorAll('[data-item][data-sec="' + head.dataset.sec + '"]'))
+        .map(c => ({ key: c.dataset.pkey, hash: c.dataset.hash || '' }));
+    }
+    // Ba trạng thái: xong hết → tick; xong một phần → gạch ngang; chưa gì → trống
+    function syncSecBox(el, done) {
+      const e = secEntries(el.closest('[data-sechead]'));
+      const n = e.filter(x => done[x.key]).length;
+      el.checked = e.length > 0 && n === e.length;
+      el.indeterminate = n > 0 && n < e.length;
+      return e.length;
+    }
+
     // Đếm số mục đã học trong một tuần/bài
     function moduleDone(el, done) {
       const items = Array.from(el.querySelectorAll('[data-item]'));
@@ -112,6 +130,43 @@
             // hoàn tác cả trạng thái lẫn vân tay
             if (next) { delete this.done[key]; delete this.hashes[key]; }
             else { this.done[key] = true; if (prevHash) this.hashes[key] = prevHash; }
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        // Tick/bỏ tick cả một nhóm trong một lượt gọi — tránh bắn N request
+        async setMany(entries, want) {
+          if (!this.online || !entries.length) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const prevDone = { ...this.done }, prevHash = { ...this.hashes };
+          const updates = {};
+          for (const e of entries) {
+            if (want) {
+              this.done[e.key] = true;
+              if (e.hash) this.hashes[e.key] = e.hash;
+              updates[e.key] = { hash: e.hash };
+            } else {
+              delete this.done[e.key]; delete this.hashes[e.key];
+              updates[e.key] = false;
+            }
+          }
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ updates }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            this.done = prevDone; this.hashes = prevHash;   // hoàn tác cả nhóm
             this.err = e.message;
             setTimeout(() => (this.err = ''), 4000);
           } finally {
@@ -274,17 +329,25 @@
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
         
         
-        <div data-title="Homework" data-sec="1"
+        <div data-sechead data-title="Homework" data-sec="1"
              x-show="headingMatches($el, f)"
-             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
              style="padding-left: 1.0rem">
-          Homework
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Homework</span>
         </div>
         
         
         
         <div data-item data-title="G1 Maths Homework Wk2.docx" data-type="file" data-sec="1"
-             data-pkey="mk/80353/8623877"
+             data-pkey="mk/80353/8623877" data-hash="9e1d201bbb90b51214df0aa70f2b5472c0f3d169"
+             
              data-hw="1"
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -293,12 +356,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80353/8623877']"
                      @change="await p.toggle('mk/80353/8623877', '9e1d201bbb90b51214df0aa70f2b5472c0f3d169'); $el.checked = !!p.done['mk/80353/8623877']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">
@@ -337,17 +402,25 @@
         
         
         
-        <div data-title="Daily Practice" data-sec="2"
+        <div data-sechead data-title="Daily Practice" data-sec="2"
              x-show="headingMatches($el, f)"
-             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
              style="padding-left: 1.0rem">
-          Daily Practice
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Daily Practice</span>
         </div>
         
         
         
         <div data-item data-title="Maths Daily Practice Grade 1 - Week 2.pptx" data-type="file" data-sec="2"
-             data-pkey="mk/80353/8550202"
+             data-pkey="mk/80353/8550202" data-hash="eb65cc5e2f92de6099cb9b4a3d9bc47ceb5ce17f"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -356,12 +429,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80353/8550202']"
                      @change="await p.toggle('mk/80353/8550202', 'eb65cc5e2f92de6099cb9b4a3d9bc47ceb5ce17f'); $el.checked = !!p.done['mk/80353/8550202']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">
@@ -431,17 +506,25 @@
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
         
         
-        <div data-title="Homework" data-sec="1"
+        <div data-sechead data-title="Homework" data-sec="1"
              x-show="headingMatches($el, f)"
-             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
              style="padding-left: 1.0rem">
-          Homework
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Homework</span>
         </div>
         
         
         
         <div data-item data-title="G1 Maths Homework Wk1.docx" data-type="file" data-sec="1"
-             data-pkey="mk/80353/8471762"
+             data-pkey="mk/80353/8471762" data-hash="d380115b970c45012a01c3759b40d6410cac7590"
+             
              data-hw="1"
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -450,12 +533,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80353/8471762']"
                      @change="await p.toggle('mk/80353/8471762', 'd380115b970c45012a01c3759b40d6410cac7590'); $el.checked = !!p.done['mk/80353/8471762']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">
@@ -494,17 +579,25 @@
         
         
         
-        <div data-title="Daily Practice" data-sec="2"
+        <div data-sechead data-title="Daily Practice" data-sec="2"
              x-show="headingMatches($el, f)"
-             class="px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
              style="padding-left: 1.0rem">
-          Daily Practice
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Daily Practice</span>
         </div>
         
         
         
         <div data-item data-title="Maths Daily Practice Grade 1 - Week 1.pptx" data-type="file" data-sec="2"
-             data-pkey="mk/80353/8263761"
+             data-pkey="mk/80353/8263761" data-hash="49f0b111bc039ef5961d58d56b08fe15c86d1548"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -513,12 +606,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80353/8263761']"
                      @change="await p.toggle('mk/80353/8263761', '49f0b111bc039ef5961d58d56b08fe15c86d1548'); $el.checked = !!p.done['mk/80353/8263761']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">

@@ -50,6 +50,24 @@
       if (vnorm(el.dataset.title).includes(vnorm(f.q))) return true;
       return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
     }
+    // ---- Checkbox của tiêu đề nhóm ------------------------------------------
+    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page
+    // cũng là một mục nên tự nằm trong danh sách này — tick nhóm là tick cả nó.
+    function secEntries(head) {
+      const box = head.closest('[data-module]');
+      if (!box) return [];
+      return Array.from(box.querySelectorAll('[data-item][data-sec="' + head.dataset.sec + '"]'))
+        .map(c => ({ key: c.dataset.pkey, hash: c.dataset.hash || '' }));
+    }
+    // Ba trạng thái: xong hết → tick; xong một phần → gạch ngang; chưa gì → trống
+    function syncSecBox(el, done) {
+      const e = secEntries(el.closest('[data-sechead]'));
+      const n = e.filter(x => done[x.key]).length;
+      el.checked = e.length > 0 && n === e.length;
+      el.indeterminate = n > 0 && n < e.length;
+      return e.length;
+    }
+
     // Đếm số mục đã học trong một tuần/bài
     function moduleDone(el, done) {
       const items = Array.from(el.querySelectorAll('[data-item]'));
@@ -112,6 +130,43 @@
             // hoàn tác cả trạng thái lẫn vân tay
             if (next) { delete this.done[key]; delete this.hashes[key]; }
             else { this.done[key] = true; if (prevHash) this.hashes[key] = prevHash; }
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        // Tick/bỏ tick cả một nhóm trong một lượt gọi — tránh bắn N request
+        async setMany(entries, want) {
+          if (!this.online || !entries.length) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const prevDone = { ...this.done }, prevHash = { ...this.hashes };
+          const updates = {};
+          for (const e of entries) {
+            if (want) {
+              this.done[e.key] = true;
+              if (e.hash) this.hashes[e.key] = e.hash;
+              updates[e.key] = { hash: e.hash };
+            } else {
+              delete this.done[e.key]; delete this.hashes[e.key];
+              updates[e.key] = false;
+            }
+          }
+          this.saving++; this.err = '';
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ updates }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            this.done = prevDone; this.hashes = prevHash;   // hoàn tác cả nhóm
             this.err = e.message;
             setTimeout(() => (this.err = ''), 4000);
           } finally {
@@ -274,7 +329,8 @@
         
         
         <div data-item data-title="Grade 5 2.1 W2 PowerPoint, Video, Quiz and Bonus Game " data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/7836350"
+             data-pkey="pl/80432/7836350" data-hash="aab08335092484f718391b0687de948a759e61fa"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -283,12 +339,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836350']"
                      @change="await p.toggle('pl/80432/7836350', 'aab08335092484f718391b0687de948a759e61fa'); $el.checked = !!p.done['pl/80432/7836350']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
@@ -348,7 +406,8 @@
         
         
         <div data-item data-title="Grade 5 2.2 W7 PowerPoint, Video, Quiz and Bonus Game " data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/7836351"
+             data-pkey="pl/80432/7836351" data-hash="2556b6b1daa1717914e1029a40a056f1d5bc232c"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -357,12 +416,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836351']"
                      @change="await p.toggle('pl/80432/7836351', '2556b6b1daa1717914e1029a40a056f1d5bc232c'); $el.checked = !!p.done['pl/80432/7836351']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
@@ -421,7 +482,8 @@
         
         
         <div data-item data-title="PHET Simulations (States of Matter)" data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/7836354"
+             data-pkey="pl/80432/7836354" data-hash="f793aafa640354fab4fbad0eb6951f302501f3e9"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -430,12 +492,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836354']"
                      @change="await p.toggle('pl/80432/7836354', 'f793aafa640354fab4fbad0eb6951f302501f3e9'); $el.checked = !!p.done['pl/80432/7836354']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
@@ -487,7 +551,8 @@
         
         
         <div data-item data-title="Terminology Unit 2" data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/7836355"
+             data-pkey="pl/80432/7836355" data-hash="a818cc621737b8d3400e7643e4c5ff9e463d8bd6"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -496,12 +561,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836355']"
                      @change="await p.toggle('pl/80432/7836355', 'a818cc621737b8d3400e7643e4c5ff9e463d8bd6'); $el.checked = !!p.done['pl/80432/7836355']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
@@ -555,7 +622,8 @@
         
         
         <div data-item data-title="Video Homework" data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/8638992"
+             data-pkey="pl/80432/8638992" data-hash="d154961a737063d9f0f51577b6a0a900c901ab07"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -564,12 +632,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/8638992']"
                      @change="await p.toggle('pl/80432/8638992', 'd154961a737063d9f0f51577b6a0a900c901ab07'); $el.checked = !!p.done['pl/80432/8638992']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
@@ -655,7 +725,8 @@
         
         
         <div data-item data-title="Science Learner&#39;s Book Stage 6" data-type="file" data-sec="0"
-             data-pkey="pl/80432/7836360"
+             data-pkey="pl/80432/7836360" data-hash="41d6454cd1be690174d092a6541e8ccd1e63e27a"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -664,12 +735,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836360']"
                      @change="await p.toggle('pl/80432/7836360', '41d6454cd1be690174d092a6541e8ccd1e63e27a'); $el.checked = !!p.done['pl/80432/7836360']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">
@@ -709,7 +782,8 @@
         
         
         <div data-item data-title="Science Workbook Stage 6" data-type="file" data-sec="0"
-             data-pkey="pl/80432/7836362"
+             data-pkey="pl/80432/7836362" data-hash="62450082eb0096974296054ddedd987df3d16288"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -718,12 +792,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836362']"
                      @change="await p.toggle('pl/80432/7836362', '62450082eb0096974296054ddedd987df3d16288'); $el.checked = !!p.done['pl/80432/7836362']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
             <div class="min-w-0 flex-1">
@@ -794,7 +870,8 @@
         
         
         <div data-item data-title="Scientific Inquiry slides" data-type="assignment" data-sec="0"
-             data-pkey="pl/80432/7836333"
+             data-pkey="pl/80432/7836333" data-hash="c548b7e65487f9b1feaac7fc75c9f5b4f0de4615"
+             
              
              x-show="itemMatches($el, f)"
              x-data="{ o: false }"
@@ -803,12 +880,14 @@
           <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
             <!-- Đánh dấu đã học -->
             <template x-if="p.online">
+              
               <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['pl/80432/7836333']"
                      @change="await p.toggle('pl/80432/7836333', 'c548b7e65487f9b1feaac7fc75c9f5b4f0de4615'); $el.checked = !!p.done['pl/80432/7836333']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
             <div class="min-w-0 flex-1">
