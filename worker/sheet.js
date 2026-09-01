@@ -108,7 +108,20 @@ async function accessToken(env) {
   const now = Math.floor(Date.now() / 1000);
   if (tokenCache.value && tokenCache.exp - 120 > now) return tokenCache.value;
 
-  const sa = JSON.parse(env.GOOGLE_SA_KEY);
+  let sa;
+  try {
+    sa = JSON.parse(env.GOOGLE_SA_KEY);
+  } catch {
+    // Hay gặp: dán JSON nhiều dòng vào prompt của `wrangler secret put` thì chỉ
+    // một phần được nhận. Phải nạp từ file: wrangler secret put X < key.json
+    throw new Error(
+      "GOOGLE_SA_KEY không phải JSON hợp lệ (dài " + (env.GOOGLE_SA_KEY || "").length +
+      " ký tự). Nạp lại từ file thay vì dán tay: " +
+      "npx wrangler secret put GOOGLE_SA_KEY < key.json");
+  }
+  if (!sa.client_email || !sa.private_key) {
+    throw new Error("GOOGLE_SA_KEY thiếu client_email hoặc private_key");
+  }
   const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
   const claim = b64url(JSON.stringify({
     iss: sa.client_email,
