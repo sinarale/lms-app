@@ -51,8 +51,9 @@
       return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
     }
     // ---- Checkbox của tiêu đề nhóm ------------------------------------------
-    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page
-    // cũng là một mục nên tự nằm trong danh sách này — tick nhóm là tick cả nó.
+    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page CÓ
+    // nội dung cũng là một mục nên tự nằm trong danh sách — tick nhóm là tick cả
+    // nó. Page rỗng thì không có [data-item] nên đứng ngoài phép đếm.
     function secEntries(head) {
       const box = head.closest('[data-module]');
       if (!box) return [];
@@ -301,10 +302,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length / 25 * 100) + '%'"></div>
+               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length / 19 * 100) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length + '/25 đã học'"></span>
+              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length + '/19 đã học'"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -331,75 +332,28 @@
         <span class="font-semibold text-slate-900 flex-1"> Week 2: 4.2 Growing (24/08/2026-28/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 12
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 8
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/12'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/8'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">12 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">8 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
         
         
-        <div data-item data-title="Lesson Resources" data-type="page" data-sec="1"
-             data-pkey="mk/80196/8631130" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8631130'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/lesson-resources" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Lesson Resources
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8631130', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8631130', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/lesson-resources" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Lesson Resources" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Lesson Resources</span>
         </div>
         
         
@@ -518,65 +472,18 @@
         
         
         
-        <div data-item data-title="Homework " data-type="page" data-sec="2"
-             data-pkey="mk/80196/8631131" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             data-hw="1"
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8631131'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/homework-5" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Homework 
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8631131', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8631131', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/homework-5" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Homework " data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Homework </span>
         </div>
         
         
@@ -638,65 +545,18 @@
         
         
         
-        <div data-item data-title="Practice Worksheet" data-type="page" data-sec="3"
-             data-pkey="mk/80196/8631144" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8631144'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/practice-worksheet" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Practice Worksheet
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8631144', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8631144', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/practice-worksheet" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Practice Worksheet" data-sec="3"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Practice Worksheet</span>
         </div>
         
         
@@ -872,65 +732,18 @@
         
         
         
-        <div data-item data-title="Retrieval Practice Online" data-type="page" data-sec="4"
-             data-pkey="mk/80196/8631188" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8631188'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/retrieval-practice-online" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Retrieval Practice Online
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8631188', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8631188', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/retrieval-practice-online" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Retrieval Practice Online" data-sec="4"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Retrieval Practice Online</span>
         </div>
         
         
@@ -1074,75 +887,28 @@
         <span class="font-semibold text-slate-900 flex-1">Week 1: 4.1 Comparing Animals (17/08/2026-21/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 11
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 9
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/11'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/9'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">13 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">9 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
         
         
-        <div data-item data-title="Lesson Resources" data-type="page" data-sec="1"
-             data-pkey="mk/80196/8463423" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8463423'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/lesson-resources" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Lesson Resources
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8463423', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8463423', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/lesson-resources" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Lesson Resources" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Lesson Resources</span>
         </div>
         
         
@@ -1578,65 +1344,18 @@
         
         
         
-        <div data-item data-title="Retrieval Practice Online" data-type="page" data-sec="4"
-             data-pkey="mk/80196/8463424" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709"
-             data-sechead
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['mk/80196/8463424'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Mục này vừa là nội dung vừa là tiêu đề nhóm → checkbox của nó
-                   điều khiển cả nhóm (gồm chính nó) -->
-              <input type="checkbox" title="Đánh dấu cả nhóm này"
-                     x-effect="syncSecBox($el, p.done)"
-                     @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/80196/pages/retrieval-practice-online" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
-                Retrieval Practice Online
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('mk/80196/8463424', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('mk/80196/8463424', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 20/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/80196/pages/retrieval-practice-online" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
+        <div data-sechead data-title="Retrieval Practice Online" data-sec="4"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Retrieval Practice Online</span>
         </div>
         
         

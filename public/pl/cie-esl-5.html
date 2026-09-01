@@ -51,8 +51,9 @@
       return pass.some(c => vnorm(c.dataset.title).includes(vnorm(f.q)));
     }
     // ---- Checkbox của tiêu đề nhóm ------------------------------------------
-    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page
-    // cũng là một mục nên tự nằm trong danh sách này — tick nhóm là tick cả nó.
+    // Mọi mục con thuộc cùng data-sec trong cùng tuần/bài. Tiêu đề kiểu Page CÓ
+    // nội dung cũng là một mục nên tự nằm trong danh sách — tick nhóm là tick cả
+    // nó. Page rỗng thì không có [data-item] nên đứng ngoài phép đếm.
     function secEntries(head) {
       const box = head.closest('[data-module]');
       if (!box) return [];
@@ -335,7 +336,7 @@
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
                 x-text="moduleDone($el.closest('[data-module]'), p.done) + '/5'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">8 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">5 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
@@ -715,7 +716,7 @@
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
                 x-text="moduleDone($el.closest('[data-module]'), p.done) + '/8'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">11 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">8 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
