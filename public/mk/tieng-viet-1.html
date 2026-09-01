@@ -63,7 +63,7 @@
     // trang vẫn xem được bình thường, chỉ tắt phần đánh dấu.
     function progressStore() {
       return {
-        done: {}, ready: false, online: false, saving: 0, err: '',
+        done: {}, hashes: {}, ready: false, online: false, saving: 0, err: '',
         secret: localStorage.getItem('lms_key') || '',
 
         async init() {
@@ -71,7 +71,11 @@
             const r = await fetch('/api/progress', { headers: { accept: 'application/json' } });
             if (!r.ok) throw new Error('HTTP ' + r.status);
             const d = await r.json();
-            this.done = Object.fromEntries(Object.keys(d.items || {}).map(k => [k, true]));
+            const items = d.items || {};
+            this.done = Object.fromEntries(Object.keys(items).map(k => [k, true]));
+            // Vân tay nội dung lúc đánh dấu, để phát hiện bài bị sửa sau đó
+            this.hashes = Object.fromEntries(
+              Object.entries(items).filter(([, v]) => v && v.hash).map(([k, v]) => [k, v.hash]));
             this.online = true;
           } catch (e) {
             this.online = false;   // không có backend → chế độ chỉ đọc
@@ -79,17 +83,25 @@
           this.ready = true;
         },
 
-        async toggle(key) {
+        // Bài đã học nhưng nội dung đổi từ sau lúc đánh dấu.
+        // Mục đánh dấu trước khi có tính năng này không có hash → không báo.
+        stale(key, hash) {
+          return !!this.done[key] && !!this.hashes[key] && !!hash && this.hashes[key] !== hash;
+        },
+
+        async toggle(key, hash) {
           if (!this.online) return;
           if (!this.secret) { if (!(await this.askSecret())) return; }
           const next = !this.done[key];
-          next ? (this.done[key] = true) : delete this.done[key];
+          const prevHash = this.hashes[key];
+          if (next) { this.done[key] = true; if (hash) this.hashes[key] = hash; }
+          else { delete this.done[key]; delete this.hashes[key]; }
           this.saving++; this.err = '';
           try {
             const r = await fetch('/api/progress', {
               method: 'POST',
               headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
-              body: JSON.stringify({ key, done: next }),
+              body: JSON.stringify({ key, done: next, hash: hash || '' }),
             });
             if (r.status === 401) {
               this.secret = ''; localStorage.removeItem('lms_key');
@@ -97,7 +109,33 @@
             }
             if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
           } catch (e) {
-            next ? delete this.done[key] : (this.done[key] = true);  // hoàn tác
+            // hoàn tác cả trạng thái lẫn vân tay
+            if (next) { delete this.done[key]; delete this.hashes[key]; }
+            else { this.done[key] = true; if (prevHash) this.hashes[key] = prevHash; }
+            this.err = e.message;
+            setTimeout(() => (this.err = ''), 4000);
+          } finally {
+            this.saving--;
+          }
+        },
+
+        // Xác nhận đã xem lại bài vừa được cập nhật: giữ nguyên "đã học",
+        // chỉ ghi đè vân tay bằng nội dung mới nhất
+        async seen(key, hash) {
+          if (!this.online || !hash) return;
+          if (!this.secret) { if (!(await this.askSecret())) return; }
+          const prev = this.hashes[key];
+          this.hashes[key] = hash;
+          this.saving++;
+          try {
+            const r = await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ key, done: true, hash }),
+            });
+            if (!r.ok) throw new Error('Không lưu được (HTTP ' + r.status + ')');
+          } catch (e) {
+            this.hashes[key] = prev;
             this.err = e.message;
             setTimeout(() => (this.err = ''), 4000);
           } finally {
@@ -264,7 +302,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943842']"
-                     @change="await p.toggle('mk/80231/7943842'); $el.checked = !!p.done['mk/80231/7943842']"
+                     @change="await p.toggle('mk/80231/7943842', '679629839e21ca8cab1aa66c4bcfb96238726a64'); $el.checked = !!p.done['mk/80231/7943842']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
@@ -283,6 +321,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943842', '679629839e21ca8cab1aa66c4bcfb96238726a64')">
+                  <button @click.stop="p.seen('mk/80231/7943842', '679629839e21ca8cab1aa66c4bcfb96238726a64')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                 
@@ -335,7 +382,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943843']"
-                     @change="await p.toggle('mk/80231/7943843'); $el.checked = !!p.done['mk/80231/7943843']"
+                     @change="await p.toggle('mk/80231/7943843', '101fd58bc01193071e5c95069336b322010acb29'); $el.checked = !!p.done['mk/80231/7943843']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="bài kiểm tra">🧪</span>
@@ -353,6 +400,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài kiểm tra</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943843', '101fd58bc01193071e5c95069336b322010acb29')">
+                  <button @click.stop="p.seen('mk/80231/7943843', '101fd58bc01193071e5c95069336b322010acb29')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                   <span>3 câu hỏi</span>
@@ -390,7 +446,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943844']"
-                     @change="await p.toggle('mk/80231/7943844'); $el.checked = !!p.done['mk/80231/7943844']"
+                     @change="await p.toggle('mk/80231/7943844', '4ce7fc205a83c36e525006d623a90c5c807442e0'); $el.checked = !!p.done['mk/80231/7943844']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
@@ -409,6 +465,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943844', '4ce7fc205a83c36e525006d623a90c5c807442e0')">
+                  <button @click.stop="p.seen('mk/80231/7943844', '4ce7fc205a83c36e525006d623a90c5c807442e0')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                 
@@ -466,7 +531,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943846']"
-                     @change="await p.toggle('mk/80231/7943846'); $el.checked = !!p.done['mk/80231/7943846']"
+                     @change="await p.toggle('mk/80231/7943846', '7bc5413cb3f0079313da0c697965e64183639390'); $el.checked = !!p.done['mk/80231/7943846']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
@@ -485,6 +550,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943846', '7bc5413cb3f0079313da0c697965e64183639390')">
+                  <button @click.stop="p.seen('mk/80231/7943846', '7bc5413cb3f0079313da0c697965e64183639390')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                 
@@ -554,7 +628,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943850']"
-                     @change="await p.toggle('mk/80231/7943850'); $el.checked = !!p.done['mk/80231/7943850']"
+                     @change="await p.toggle('mk/80231/7943850', '0a6f178b378059fec7dcbbaf39b12a9059242aa1'); $el.checked = !!p.done['mk/80231/7943850']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
@@ -569,6 +643,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943850', '0a6f178b378059fec7dcbbaf39b12a9059242aa1')">
+                  <button @click.stop="p.seen('mk/80231/7943850', '0a6f178b378059fec7dcbbaf39b12a9059242aa1')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 <span>460.8 KB</span>
                 
                 
@@ -599,7 +682,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/8613081']"
-                     @change="await p.toggle('mk/80231/8613081'); $el.checked = !!p.done['mk/80231/8613081']"
+                     @change="await p.toggle('mk/80231/8613081', 'f8999ca4598b12db5cd47566105a306ae8d009ec'); $el.checked = !!p.done['mk/80231/8613081']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
@@ -614,6 +697,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/8613081', 'f8999ca4598b12db5cd47566105a306ae8d009ec')">
+                  <button @click.stop="p.seen('mk/80231/8613081', 'f8999ca4598b12db5cd47566105a306ae8d009ec')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 <span>353.7 KB</span>
                 
                 
@@ -684,7 +776,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943854']"
-                     @change="await p.toggle('mk/80231/7943854'); $el.checked = !!p.done['mk/80231/7943854']"
+                     @change="await p.toggle('mk/80231/7943854', 'b047fa720fe4c48b6e4dcd1c75743c5d0156506f'); $el.checked = !!p.done['mk/80231/7943854']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
@@ -703,6 +795,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943854', 'b047fa720fe4c48b6e4dcd1c75743c5d0156506f')">
+                  <button @click.stop="p.seen('mk/80231/7943854', 'b047fa720fe4c48b6e4dcd1c75743c5d0156506f')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                 
@@ -756,7 +857,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943855']"
-                     @change="await p.toggle('mk/80231/7943855'); $el.checked = !!p.done['mk/80231/7943855']"
+                     @change="await p.toggle('mk/80231/7943855', '16f7a0b256991121f4066d7c537943fbe1170e5b'); $el.checked = !!p.done['mk/80231/7943855']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
@@ -775,6 +876,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943855', '16f7a0b256991121f4066d7c537943fbe1170e5b')">
+                  <button @click.stop="p.seen('mk/80231/7943855', '16f7a0b256991121f4066d7c537943fbe1170e5b')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 
                 
                 
@@ -837,7 +947,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943857']"
-                     @change="await p.toggle('mk/80231/7943857'); $el.checked = !!p.done['mk/80231/7943857']"
+                     @change="await p.toggle('mk/80231/7943857', 'd72d05eccab6ed08ca691fcbb2d0954d6c15b094'); $el.checked = !!p.done['mk/80231/7943857']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
@@ -852,6 +962,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943857', 'd72d05eccab6ed08ca691fcbb2d0954d6c15b094')">
+                  <button @click.stop="p.seen('mk/80231/7943857', 'd72d05eccab6ed08ca691fcbb2d0954d6c15b094')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 <span>1.2 MB</span>
                 
                 
@@ -891,7 +1010,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/7943859']"
-                     @change="await p.toggle('mk/80231/7943859'); $el.checked = !!p.done['mk/80231/7943859']"
+                     @change="await p.toggle('mk/80231/7943859', 'b1083e6b760b6d942ecbd8736ed98e52e1e3563c'); $el.checked = !!p.done['mk/80231/7943859']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
@@ -906,6 +1025,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/7943859', 'b1083e6b760b6d942ecbd8736ed98e52e1e3563c')">
+                  <button @click.stop="p.seen('mk/80231/7943859', 'b1083e6b760b6d942ecbd8736ed98e52e1e3563c')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 <span>2.1 MB</span>
                 
                 
@@ -936,7 +1064,7 @@
                    thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
               <input type="checkbox" title="Đánh dấu đã học"
                      x-effect="$el.checked = !!p.done['mk/80231/8451396']"
-                     @change="await p.toggle('mk/80231/8451396'); $el.checked = !!p.done['mk/80231/8451396']"
+                     @change="await p.toggle('mk/80231/8451396', '26dc1f42fafdb4574139fa0815c7c95616ae4404'); $el.checked = !!p.done['mk/80231/8451396']"
                      class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
             </template>
             <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
@@ -951,6 +1079,15 @@
 
               <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                 <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80231/8451396', '26dc1f42fafdb4574139fa0815c7c95616ae4404')">
+                  <button @click.stop="p.seen('mk/80231/8451396', '26dc1f42fafdb4574139fa0815c7c95616ae4404')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
                 <span>485.2 KB</span>
                 
                 

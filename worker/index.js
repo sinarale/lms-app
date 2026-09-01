@@ -60,12 +60,12 @@ async function handlePost(request, env) {
     return json({ error: "Body không phải JSON hợp lệ" }, 400);
   }
 
-  // Chấp nhận {key, done} hoặc {updates: {key: done, ...}}
+  // Chấp nhận {key, done, hash} hoặc {updates: {key: done, ...}}
   const updates =
     body && typeof body.updates === "object" && body.updates !== null
       ? body.updates
       : body && typeof body.key === "string"
-      ? { [body.key]: !!body.done }
+      ? { [body.key]: body.done ? { hash: body.hash } : false }
       : null;
   if (!updates) return json({ error: "Thiếu 'key' hoặc 'updates'" }, 400);
 
@@ -73,8 +73,17 @@ async function handlePost(request, env) {
   const now = new Date().toISOString();
   for (const [k, v] of Object.entries(updates)) {
     if (typeof k !== "string" || !KEY_RE.test(k)) continue;
-    if (v) items[k] = { done: true, at: now };
-    else delete items[k];
+    if (!v) {
+      delete items[k];
+      continue;
+    }
+    items[k] = { done: true, at: now };
+    // Vân tay nội dung lúc đánh dấu. Nhờ nó, lần sau mở trang có thể phát hiện
+    // bài đã bị sửa từ sau khi học — chỉ so id thì không bao giờ biết được.
+    // Mục đánh dấu từ trước khi có tính năng này không có hash → coi như không
+    // đổi, tránh báo động giả hàng loạt.
+    const h = typeof v === "object" && v !== null ? v.hash : undefined;
+    if (typeof h === "string" && /^[0-9a-f]{6,64}$/.test(h)) items[k].hash = h;
   }
   if (Object.keys(items).length > MAX_ITEMS) {
     return json({ error: "Vượt giới hạn số mục" }, 413);
