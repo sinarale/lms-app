@@ -7,7 +7,7 @@
   <title>Việt Nam Học 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.9d735524.css">
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -27,10 +27,35 @@
       return (s || '').toLowerCase().normalize('NFD')
         .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
     }
+    // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
+    // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+    function isRecentEl(el) {
+      var ts = el && +el.dataset.ts;
+      return !!ts && (Date.now() - ts) <= RECENT_WINDOW_MS;
+    }
+    function recentItems() {
+      return Array.from(document.querySelectorAll('[data-item][data-ts]')).filter(isRecentEl);
+    }
+    function recentStats(done) {
+      var els = recentItems();
+      return {
+        total: els.length,
+        done: els.filter(function (el) { return done[el.dataset.pkey]; }).length
+      };
+    }
+    function recentPct(done) {
+      var s = recentStats(done);
+      return s.total ? Math.round(s.done / s.total * 100) : 0;
+    }
+    function moduleIsRecent(box) {
+      return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
+    }
     // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
     function typeOk(el, f) {
       if (f.hw && el.dataset.hw !== '1') return false;
       if (f.todo && f.done[el.dataset.pkey]) return false;
+      if (f.recent7 && !isRecentEl(el)) return false;
       return !f.types.length || f.types.includes(el.dataset.type);
     }
     function itemMatches(el, f) {
@@ -38,7 +63,7 @@
     }
     // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
     function headingMatches(el, f) {
-      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      if (!f.q && !f.types.length && !f.hw && !f.todo && !f.recent7) return true;
       const box = el.closest('[data-module]');
       if (!box) return true;
       return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
@@ -220,10 +245,10 @@
   </script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen"
-      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+      x-data="{ q: '', types: [], hw: false, todo: false, recent7: false, p: progressStore(),
                 toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
-                get filtering() { return this.types.length > 0 || this.hw || this.todo },
-                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+                get filtering() { return this.types.length > 0 || this.hw || this.todo || this.recent7 },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, recent7: this.recent7, done: this.p.done } } }"
       x-init="p.init()">
 
   <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
@@ -292,6 +317,11 @@
           💬 thảo luận
         </button>
         
+        <button @click="recent7 = !recent7"
+                :class="recent7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-300 hover:border-amber-500'"
+                class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+          🕓 7 ngày
+        </button>
         <template x-if="p.online">
           <button @click="todo = !todo"
                   :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
@@ -299,7 +329,7 @@
             ○ Chưa học
           </button>
         </template>
-        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false; recent7 = false"
                 class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
           Bỏ lọc
         </button>
@@ -309,10 +339,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80104/')).length / 12 * 100) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80104/')).length / 12 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/80104/')).length + '/12 đã học'"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/80104/')).length + '/12 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -336,7 +366,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Chủ đề 1: Hoa văn đình, đền, chùa</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Chủ đề 1: Hoa văn đình, đền, chùa</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 12
@@ -350,7 +380,7 @@
         
         
         <div data-item data-title="TỔNG QUAN CHƯƠNG TRÌNH MÔN VIỆT NAM HỌC" data-type="page" data-sec="0"
-             data-pkey="pl/80104/7772432" data-hash="cf80d8a7354c771381d8f3205a7b2a2e134885c6"
+             data-pkey="pl/80104/7772432" data-hash="cf80d8a7354c771381d8f3205a7b2a2e134885c6" data-ts="1786673226000"
              
              
              x-show="itemMatches($el, f)"
@@ -374,7 +404,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">TỔNG QUAN CHƯƠNG TRÌNH MÔN VIỆT NAM HỌC</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">TỔNG QUAN CHƯƠNG TRÌNH MÔN VIỆT NAM HỌC</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -434,7 +464,7 @@
         
         
         <div data-item data-title="Nội dung dạy học trên lớp_Chủ đề 1" data-type="page" data-sec="0"
-             data-pkey="pl/80104/7772436" data-hash="5d0357bc8432ff6e2be442f3e65347c9c626e3cf"
+             data-pkey="pl/80104/7772436" data-hash="5d0357bc8432ff6e2be442f3e65347c9c626e3cf" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -458,7 +488,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Nội dung dạy học trên lớp_Chủ đề 1</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Nội dung dạy học trên lớp_Chủ đề 1</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -521,7 +551,7 @@
         
         
         <div data-item data-title="Tự học_Chủ đề 1_Tìm hiểu hoa văn đình, đền, chùa" data-type="page" data-sec="1"
-             data-pkey="pl/80104/7772441" data-hash="d489d6703bb9ab83e9bb04d6408c2e388d318c6b"
+             data-pkey="pl/80104/7772441" data-hash="d489d6703bb9ab83e9bb04d6408c2e388d318c6b" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -545,7 +575,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tự học_Chủ đề 1_Tìm hiểu hoa văn đình, đền, chùa</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Tự học_Chủ đề 1_Tìm hiểu hoa văn đình, đền, chùa</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -614,7 +644,7 @@
         
         
         <div data-item data-title="Tìm hiểu về các nhóm hoa văn" data-type="discussion" data-sec="2"
-             data-pkey="pl/80104/7772445" data-hash="e4a5c946de466ca3817e6ceea92da10eccc5589d"
+             data-pkey="pl/80104/7772445" data-hash="e4a5c946de466ca3817e6ceea92da10eccc5589d" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -638,7 +668,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tìm hiểu về các nhóm hoa văn</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Tìm hiểu về các nhóm hoa văn</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -695,7 +725,7 @@
         
         
         <div data-item data-title="Tìm hiểu về hoa văn đình làng Đình Bảng" data-type="assignment" data-sec="2"
-             data-pkey="pl/80104/7772449" data-hash="0f76e3d4b0c0725c3559b0ad927e0276263c9dc8"
+             data-pkey="pl/80104/7772449" data-hash="0f76e3d4b0c0725c3559b0ad927e0276263c9dc8" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -719,7 +749,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tìm hiểu về hoa văn đình làng Đình Bảng</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Tìm hiểu về hoa văn đình làng Đình Bảng</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -782,7 +812,7 @@
         
         
         <div data-item data-title="Tài liệu tham khảo_Hoa văn Xi Vẫn" data-type="page" data-sec="3"
-             data-pkey="pl/80104/7772452" data-hash="2f821ecd3ba0e1118585d45fbb2d9a6149f45397"
+             data-pkey="pl/80104/7772452" data-hash="2f821ecd3ba0e1118585d45fbb2d9a6149f45397" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -806,7 +836,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Tài liệu tham khảo_Hoa văn Xi Vẫn</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Tài liệu tham khảo_Hoa văn Xi Vẫn</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -853,7 +883,7 @@
         
         
         <div data-item data-title="Tài liệu tham khảo_Hoa văn Đại Việt.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/80104/7772454" data-hash="ec0611d70f153722826be6a9762be0f9092af41f"
+             data-pkey="pl/80104/7772454" data-hash="ec0611d70f153722826be6a9762be0f9092af41f" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -877,7 +907,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/viet-nam-hoc-5/chu-de-1-hoa-van-dinh-den-chua/Tài liệu tham khảo_Hoa văn Đại Việt.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Tài liệu tham khảo_Hoa văn Đại Việt.pdf
               </a>
               
@@ -910,7 +941,7 @@
         
         
         <div data-item data-title="Chú thích hoa văn đình đền chùa.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/80104/7772457" data-hash="2f0235b912745ce70b58aab1f469c6e9083945bb"
+             data-pkey="pl/80104/7772457" data-hash="2f0235b912745ce70b58aab1f469c6e9083945bb" data-ts="1786527489000"
              
              
              x-show="itemMatches($el, f)"
@@ -934,7 +965,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/viet-nam-hoc-5/chu-de-1-hoa-van-dinh-den-chua/Chú thích hoa văn đình đền chùa.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Chú thích hoa văn đình đền chùa.pdf
               </a>
               
@@ -967,7 +999,7 @@
         
         
         <div data-item data-title="Ý nghĩa của các loại hoa văn.docx" data-type="file" data-sec="3"
-             data-pkey="pl/80104/7772460" data-hash="daec428fb977f088ed848290a399151904a1b8b3"
+             data-pkey="pl/80104/7772460" data-hash="daec428fb977f088ed848290a399151904a1b8b3" data-ts="1786527490000"
              
              
              x-show="itemMatches($el, f)"
@@ -991,7 +1023,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/viet-nam-hoc-5/chu-de-1-hoa-van-dinh-den-chua/Bai doc GV 3_Y nghia mot so motif dinh lang.docx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Ý nghĩa của các loại hoa văn.docx
               </a>
               
@@ -1024,7 +1057,7 @@
         
         
         <div data-item data-title="Quiz_Phân loại hoa văn" data-type="quiz" data-sec="3"
-             data-pkey="pl/80104/7772463" data-hash="c0b910a94e29e6405b8322dfdd4b41acd760d3f6"
+             data-pkey="pl/80104/7772463" data-hash="c0b910a94e29e6405b8322dfdd4b41acd760d3f6" data-ts="1787629440000"
              
              
              x-show="itemMatches($el, f)"
@@ -1048,7 +1081,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://lms.vinschool.edu.vn/courses/80104/quizzes/1935577" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Quiz_Phân loại hoa văn
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1091,7 +1125,7 @@
         
         
         <div data-item data-title="Bài tập tìm hiểu_Chủ đề 1" data-type="assignment" data-sec="3"
-             data-pkey="pl/80104/7772467" data-hash="348778780a425da0f93f541db04efb863b6d9af0"
+             data-pkey="pl/80104/7772467" data-hash="348778780a425da0f93f541db04efb863b6d9af0" data-ts="1786527490000"
              
              
              x-show="itemMatches($el, f)"
@@ -1115,7 +1149,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Bài tập tìm hiểu_Chủ đề 1</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Bài tập tìm hiểu_Chủ đề 1</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1160,7 +1194,7 @@
         
         
         <div data-item data-title="PHIẾU SUY NGẪM CUỐI CHỦ ĐỀ" data-type="file" data-sec="3"
-             data-pkey="pl/80104/7772469" data-hash="3f7aa0646e9b0c9e91e19a2a8245f5112c323ab8"
+             data-pkey="pl/80104/7772469" data-hash="3f7aa0646e9b0c9e91e19a2a8245f5112c323ab8" data-ts="1786527490000"
              
              
              x-show="itemMatches($el, f)"
@@ -1184,7 +1218,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/viet-nam-hoc-5/chu-de-1-hoa-van-dinh-den-chua/K5_VNH_Bai 1.6_Phieu suy ngam.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 PHIẾU SUY NGẪM CUỐI CHỦ ĐỀ
               </a>
               

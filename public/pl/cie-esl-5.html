@@ -7,7 +7,7 @@
   <title>CIE ESL 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.9d735524.css">
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -27,10 +27,35 @@
       return (s || '').toLowerCase().normalize('NFD')
         .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
     }
+    // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
+    // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+    function isRecentEl(el) {
+      var ts = el && +el.dataset.ts;
+      return !!ts && (Date.now() - ts) <= RECENT_WINDOW_MS;
+    }
+    function recentItems() {
+      return Array.from(document.querySelectorAll('[data-item][data-ts]')).filter(isRecentEl);
+    }
+    function recentStats(done) {
+      var els = recentItems();
+      return {
+        total: els.length,
+        done: els.filter(function (el) { return done[el.dataset.pkey]; }).length
+      };
+    }
+    function recentPct(done) {
+      var s = recentStats(done);
+      return s.total ? Math.round(s.done / s.total * 100) : 0;
+    }
+    function moduleIsRecent(box) {
+      return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
+    }
     // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
     function typeOk(el, f) {
       if (f.hw && el.dataset.hw !== '1') return false;
       if (f.todo && f.done[el.dataset.pkey]) return false;
+      if (f.recent7 && !isRecentEl(el)) return false;
       return !f.types.length || f.types.includes(el.dataset.type);
     }
     function itemMatches(el, f) {
@@ -38,7 +63,7 @@
     }
     // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
     function headingMatches(el, f) {
-      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      if (!f.q && !f.types.length && !f.hw && !f.todo && !f.recent7) return true;
       const box = el.closest('[data-module]');
       if (!box) return true;
       return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
@@ -220,10 +245,10 @@
   </script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen"
-      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+      x-data="{ q: '', types: [], hw: false, todo: false, recent7: false, p: progressStore(),
                 toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
-                get filtering() { return this.types.length > 0 || this.hw || this.todo },
-                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+                get filtering() { return this.types.length > 0 || this.hw || this.todo || this.recent7 },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, recent7: this.recent7, done: this.p.done } } }"
       x-init="p.init()">
 
   <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
@@ -287,6 +312,11 @@
           🔗 liên kết ngoài
         </button>
         
+        <button @click="recent7 = !recent7"
+                :class="recent7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-300 hover:border-amber-500'"
+                class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+          🕓 7 ngày
+        </button>
         <template x-if="p.online">
           <button @click="todo = !todo"
                   :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
@@ -294,7 +324,7 @@
             ○ Chưa học
           </button>
         </template>
-        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false; recent7 = false"
                 class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
           Bỏ lọc
         </button>
@@ -304,10 +334,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/79605/')).length / 13 * 100) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/79605/')).length / 13 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('pl/79605/')).length + '/13 đã học'"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/79605/')).length + '/13 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -331,7 +361,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Week 2 - 1.3</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2 - 1.3</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 5
@@ -361,7 +391,7 @@
         
         
         <div data-item data-title="Complete the booklet on the past tense" data-type="page" data-sec="1"
-             data-pkey="pl/79605/8624634" data-hash="ee3144ed0611979aad466744e83aa757c0983652"
+             data-pkey="pl/79605/8624634" data-hash="ee3144ed0611979aad466744e83aa757c0983652" data-ts="1787801391000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -385,7 +415,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Complete the booklet on the past tense</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Complete the booklet on the past tense</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -448,7 +478,7 @@
         
         
         <div data-item data-title="1. 6Uv.02 - Use an increasing range of prepositions preceding nouns and adjectives in prepositional phrases..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8569080" data-hash="dc60accb40676d5b35ace2d62406f280ada898a8"
+             data-pkey="pl/79605/8569080" data-hash="dc60accb40676d5b35ace2d62406f280ada898a8" data-ts="1787800177000"
              
              
              x-show="itemMatches($el, f)"
@@ -472,7 +502,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/1. 6Uv.02 - Use an increasing range of prepositions preceding nouns and adjectives in prepositional phrases..pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 1. 6Uv.02 - Use an increasing range of prepositions preceding nouns and adjectives in prepositional phrases..pptx
               </a>
               
@@ -505,7 +536,7 @@
         
         
         <div data-item data-title="2. 6Sor.01 - Link sentences using an increased range of connectives..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8569081" data-hash="42cb4f02905fd9662e4c24af861f0042c9cf1263"
+             data-pkey="pl/79605/8569081" data-hash="42cb4f02905fd9662e4c24af861f0042c9cf1263" data-ts="1787800181000"
              
              
              x-show="itemMatches($el, f)"
@@ -529,7 +560,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/2. 6Sor.01 - Link sentences using an increased range of connectives..pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 2. 6Sor.01 - Link sentences using an increased range of connectives..pptx
               </a>
               
@@ -562,7 +594,7 @@
         
         
         <div data-item data-title="3. Understand, with support most of the main points of short and extended texts.pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8569082" data-hash="d4b3fb724ed30d91dfa8f6da5d4657f5ab8f4a02"
+             data-pkey="pl/79605/8569082" data-hash="d4b3fb724ed30d91dfa8f6da5d4657f5ab8f4a02" data-ts="1787800186000"
              
              
              x-show="itemMatches($el, f)"
@@ -586,7 +618,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/3. Understand, with support most of the main points of short and extended texts.pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 3. Understand, with support most of the main points of short and extended texts.pptx
               </a>
               
@@ -635,7 +668,7 @@
         
         
         <div data-item data-title="Preposition Practise" data-type="external" data-sec="3"
-             data-pkey="pl/79605/8569109" data-hash="a08a03eae355967620fd812539bc39d2095e84ac"
+             data-pkey="pl/79605/8569109" data-hash="a08a03eae355967620fd812539bc39d2095e84ac" data-ts="1787629440000"
              
              
              x-show="itemMatches($el, f)"
@@ -659,7 +692,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.english-grammar.at/online_exercises/prepositions/prep033.htm" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Preposition Practise
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -711,7 +745,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Week 1 - 1.1 + 1.2</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 - 1.1 + 1.2</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 8
@@ -741,7 +775,7 @@
         
         
         <div data-item data-title="Workbook pages 8 - 11" data-type="page" data-sec="1"
-             data-pkey="pl/79605/8338872" data-hash="fb874a2910077d4c96ca80255262bb9c9d885542"
+             data-pkey="pl/79605/8338872" data-hash="fb874a2910077d4c96ca80255262bb9c9d885542" data-ts="1787018727000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -765,7 +799,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm font-medium text-slate-800 group-hover:text-indigo-700">Workbook pages 8 - 11</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Workbook pages 8 - 11</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -827,7 +861,7 @@
         
         
         <div data-item data-title="3. 6Ld.04 Understand, with support, most specific information and detail of short and extended talk.pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8306634" data-hash="edd319bba0f8d4a2aee3ad30662c252ccbb8eb85"
+             data-pkey="pl/79605/8306634" data-hash="edd319bba0f8d4a2aee3ad30662c252ccbb8eb85" data-ts="1787566940000"
              
              
              x-show="itemMatches($el, f)"
@@ -851,7 +885,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/3. 6Ld.04 Understand, with support, most specific information and detail of short and extended talk.pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 3. 6Ld.04 Understand, with support, most specific information and detail of short and extended talk.pptx
               </a>
               
@@ -884,7 +919,7 @@
         
         
         <div data-item data-title="4. 6So.01 - Express opinions, feelings and reactions..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8306635" data-hash="835578e7ee5732ddc1d2b9d68b64be856eb7b97e"
+             data-pkey="pl/79605/8306635" data-hash="835578e7ee5732ddc1d2b9d68b64be856eb7b97e" data-ts="1787658001000"
              
              
              x-show="itemMatches($el, f)"
@@ -908,7 +943,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/4. 6So.01 - Express opinions, feelings and reactions..pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 4. 6So.01 - Express opinions, feelings and reactions..pptx
               </a>
               
@@ -941,7 +977,7 @@
         
         
         <div data-item data-title="5-6. 6Ug.07 – Use present perfect forms to express recent, indefinite and unfinished past..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8306636" data-hash="15f54c5175f9330a78d8a86c37d7ce58c25d4e2d"
+             data-pkey="pl/79605/8306636" data-hash="15f54c5175f9330a78d8a86c37d7ce58c25d4e2d" data-ts="1787279653000"
              
              
              x-show="itemMatches($el, f)"
@@ -965,7 +1001,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/5-6. 6Ug.07 – Use present perfect forms to express recent, indefinite and unfinished past..pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 5-6. 6Ug.07 – Use present perfect forms to express recent, indefinite and unfinished past..pptx
               </a>
               
@@ -998,7 +1035,7 @@
         
         
         <div data-item data-title="7. 6Rd.03 - Understand, with support, most of the detail of an argument in short and extended texts..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79605/8306637" data-hash="2e91d1d541d29fca2b376a1a7e63f8d8e37cfff8"
+             data-pkey="pl/79605/8306637" data-hash="2e91d1d541d29fca2b376a1a7e63f8d8e37cfff8" data-ts="1787279659000"
              
              
              x-show="itemMatches($el, f)"
@@ -1022,7 +1059,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/7. 6Rd.03 - Understand, with support, most of the detail of an argument in short and extended texts..pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 7. 6Rd.03 - Understand, with support, most of the detail of an argument in short and extended texts..pptx
               </a>
               
@@ -1071,7 +1109,7 @@
         
         
         <div data-item data-title="Present Perfect Tense practice.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/79605/8306641" data-hash="4456e2f6f038ef2001671d9dabe67713ad8f206b"
+             data-pkey="pl/79605/8306641" data-hash="4456e2f6f038ef2001671d9dabe67713ad8f206b" data-ts="1787658079000"
              
              
              x-show="itemMatches($el, f)"
@@ -1095,7 +1133,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Present Perfect Tense practice.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Present Perfect Tense practice.pdf
               </a>
               
@@ -1128,7 +1167,7 @@
         
         
         <div data-item data-title="Positive Present Perfect Tense Practise.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/79605/8306745" data-hash="87d845adb12a447987a69ba75abb1f9816248274"
+             data-pkey="pl/79605/8306745" data-hash="87d845adb12a447987a69ba75abb1f9816248274" data-ts="1787658103000"
              
              
              x-show="itemMatches($el, f)"
@@ -1152,7 +1191,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Positive Present Perfect Tense Practise.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Positive Present Perfect Tense Practise.pdf
               </a>
               
@@ -1185,7 +1225,7 @@
         
         
         <div data-item data-title="Negative Present Perfect Tense Practise.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/79605/8306746" data-hash="0767587fa0820a608bb9e2f08197573f4381bb44"
+             data-pkey="pl/79605/8306746" data-hash="0767587fa0820a608bb9e2f08197573f4381bb44" data-ts="1786952148000"
              
              
              x-show="itemMatches($el, f)"
@@ -1209,7 +1249,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Negative Present Perfect Tense Practise.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Negative Present Perfect Tense Practise.pdf
               </a>
               

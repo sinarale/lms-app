@@ -7,7 +7,7 @@
   <title>CIE Science 1 — MK</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.9d735524.css">
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -27,10 +27,35 @@
       return (s || '').toLowerCase().normalize('NFD')
         .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
     }
+    // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
+    // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+    function isRecentEl(el) {
+      var ts = el && +el.dataset.ts;
+      return !!ts && (Date.now() - ts) <= RECENT_WINDOW_MS;
+    }
+    function recentItems() {
+      return Array.from(document.querySelectorAll('[data-item][data-ts]')).filter(isRecentEl);
+    }
+    function recentStats(done) {
+      var els = recentItems();
+      return {
+        total: els.length,
+        done: els.filter(function (el) { return done[el.dataset.pkey]; }).length
+      };
+    }
+    function recentPct(done) {
+      var s = recentStats(done);
+      return s.total ? Math.round(s.done / s.total * 100) : 0;
+    }
+    function moduleIsRecent(box) {
+      return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
+    }
     // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
     function typeOk(el, f) {
       if (f.hw && el.dataset.hw !== '1') return false;
       if (f.todo && f.done[el.dataset.pkey]) return false;
+      if (f.recent7 && !isRecentEl(el)) return false;
       return !f.types.length || f.types.includes(el.dataset.type);
     }
     function itemMatches(el, f) {
@@ -38,7 +63,7 @@
     }
     // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
     function headingMatches(el, f) {
-      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      if (!f.q && !f.types.length && !f.hw && !f.todo && !f.recent7) return true;
       const box = el.closest('[data-module]');
       if (!box) return true;
       return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
@@ -220,10 +245,10 @@
   </script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen"
-      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+      x-data="{ q: '', types: [], hw: false, todo: false, recent7: false, p: progressStore(),
                 toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
-                get filtering() { return this.types.length > 0 || this.hw || this.todo },
-                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+                get filtering() { return this.types.length > 0 || this.hw || this.todo || this.recent7 },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, recent7: this.recent7, done: this.p.done } } }"
       x-init="p.init()">
 
   <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
@@ -287,6 +312,11 @@
           🔗 liên kết ngoài
         </button>
         
+        <button @click="recent7 = !recent7"
+                :class="recent7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-300 hover:border-amber-500'"
+                class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+          🕓 7 ngày
+        </button>
         <template x-if="p.online">
           <button @click="todo = !todo"
                   :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
@@ -294,7 +324,7 @@
             ○ Chưa học
           </button>
         </template>
-        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false; recent7 = false"
                 class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
           Bỏ lọc
         </button>
@@ -304,10 +334,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length / 19 * 100) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length / 19 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length + '/19 đã học'"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('mk/80196/')).length + '/19 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -331,7 +361,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1"> Week 2: 4.2 Growing (24/08/2026-28/08/2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'"> Week 2: 4.2 Growing (24/08/2026-28/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 8
@@ -361,7 +391,7 @@
         
         
         <div data-item data-title="G1_Science_W2_4.2 Growing.pdf" data-type="file" data-sec="1"
-             data-pkey="mk/80196/8631160" data-hash="c0ce8266cc4a2301470b1d54cda07cc9dcc84ef0"
+             data-pkey="mk/80196/8631160" data-hash="c0ce8266cc4a2301470b1d54cda07cc9dcc84ef0" data-ts="1787891150000"
              
              
              x-show="itemMatches($el, f)"
@@ -385,7 +415,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_1.2 Growing.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_4.2 Growing.pdf
               </a>
               
@@ -418,7 +449,7 @@
         
         
         <div data-item data-title="G1_Science_W2_4.2 Growing_Key Vocabulary.pdf" data-type="file" data-sec="1"
-             data-pkey="mk/80196/8631162" data-hash="753afeba3c7ae6b50bd7b0722a088fead55b2124"
+             data-pkey="mk/80196/8631162" data-hash="753afeba3c7ae6b50bd7b0722a088fead55b2124" data-ts="1787919730000"
              
              
              x-show="itemMatches($el, f)"
@@ -442,7 +473,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_1.2 Growing_Key Vocabulary.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_4.2 Growing_Key Vocabulary.pdf
               </a>
               
@@ -491,7 +523,7 @@
         
         
         <div data-item data-title="G1_Science_W2_HW_4.2 Growing.pdf" data-type="file" data-sec="2"
-             data-pkey="mk/80196/8631168" data-hash="cd3ad7f851529af3a78bc352108b7c7c43434d30"
+             data-pkey="mk/80196/8631168" data-hash="cd3ad7f851529af3a78bc352108b7c7c43434d30" data-ts="1787891104000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -515,7 +547,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_HW_4.2 Growing.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_HW_4.2 Growing.pdf
               </a>
               
@@ -564,7 +597,7 @@
         
         
         <div data-item data-title="G1_Science_W2_WS_4.2 Growing.pdf" data-type="file" data-sec="3"
-             data-pkey="mk/80196/8631169" data-hash="7e4e362868943929794603bd65dab0615a780621"
+             data-pkey="mk/80196/8631169" data-hash="7e4e362868943929794603bd65dab0615a780621" data-ts="1787908965000"
              
              
              x-show="itemMatches($el, f)"
@@ -588,7 +621,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_WS_4.2 Growing.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_WS_4.2 Growing.pdf
               </a>
               
@@ -621,7 +655,7 @@
         
         
         <div data-item data-title="G1_Science_W2_WS_4.2 Growing_2.pdf" data-type="file" data-sec="3"
-             data-pkey="mk/80196/8631181" data-hash="3cad34d1004fbc7db8d5511f01d78326e4c5eb8b"
+             data-pkey="mk/80196/8631181" data-hash="3cad34d1004fbc7db8d5511f01d78326e4c5eb8b" data-ts="1787891124000"
              
              
              x-show="itemMatches($el, f)"
@@ -645,7 +679,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_WS_4.2 Growing_2.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_WS_4.2 Growing_2.pdf
               </a>
               
@@ -678,7 +713,7 @@
         
         
         <div data-item data-title="G1_Science_W2_Key Vocabulary Practice Writing.pdf" data-type="file" data-sec="3"
-             data-pkey="mk/80196/8631238" data-hash="58b4063bc9f066d04d799460b6aaf7303c056d76"
+             data-pkey="mk/80196/8631238" data-hash="58b4063bc9f066d04d799460b6aaf7303c056d76" data-ts="1787891128000"
              
              
              x-show="itemMatches($el, f)"
@@ -702,7 +737,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_Key Vocabulary Practice Writing.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_Key Vocabulary Practice Writing.pdf
               </a>
               
@@ -751,7 +787,7 @@
         
         
         <div data-item data-title="The Stage of Humans" data-type="external" data-sec="4"
-             data-pkey="mk/80196/8631190" data-hash="aca0cf734026a2b8ca2ab2e9d54a00d416363f16"
+             data-pkey="mk/80196/8631190" data-hash="aca0cf734026a2b8ca2ab2e9d54a00d416363f16" data-ts="1788167400000"
              
              
              x-show="itemMatches($el, f)"
@@ -775,7 +811,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/37970075/the-human-life-cycle" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 The Stage of Humans
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -810,7 +847,7 @@
         
         
         <div data-item data-title="Adult and Young" data-type="external" data-sec="4"
-             data-pkey="mk/80196/8631200" data-hash="f18c4c77eef29a84cafe51c12bc58fefeecdf250"
+             data-pkey="mk/80196/8631200" data-hash="f18c4c77eef29a84cafe51c12bc58fefeecdf250" data-ts="1788167400000"
              
              
              x-show="itemMatches($el, f)"
@@ -834,7 +871,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/48875/science/animals-and-their-babies" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Adult and Young
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -886,7 +924,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Week 1: 4.1 Comparing Animals (17/08/2026-21/08/2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1: 4.1 Comparing Animals (17/08/2026-21/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 9
@@ -916,7 +954,7 @@
         
         
         <div data-item data-title="G1_W1_4.1 Comparing Animals.pdf" data-type="file" data-sec="1"
-             data-pkey="mk/80196/8463436" data-hash="c2e9b0ca7b4f42bc08e369a17f3827bc1cb58b11"
+             data-pkey="mk/80196/8463436" data-hash="c2e9b0ca7b4f42bc08e369a17f3827bc1cb58b11" data-ts="1787303654000"
              
              
              x-show="itemMatches($el, f)"
@@ -940,7 +978,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/G1_W1_4.1 Comparing Animals.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_W1_4.1 Comparing Animals.pdf
               </a>
               
@@ -973,7 +1012,7 @@
         
         
         <div data-item data-title="Mammals Poster.png" data-type="file" data-sec="1"
-             data-pkey="mk/80196/8463426" data-hash="cedb5057487b16560c52cb9b95b8bba9fcc0f748"
+             data-pkey="mk/80196/8463426" data-hash="cedb5057487b16560c52cb9b95b8bba9fcc0f748" data-ts="1787242769000"
              
              
              x-show="itemMatches($el, f)"
@@ -997,7 +1036,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Mammals Poster.png" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Mammals Poster.png
               </a>
               
@@ -1030,7 +1070,7 @@
         
         
         <div data-item data-title="Birds Poster.png" data-type="file" data-sec="1"
-             data-pkey="mk/80196/8463425" data-hash="b836cc823133b7f12c3cee8cccf0e0cdea6ab5e7"
+             data-pkey="mk/80196/8463425" data-hash="b836cc823133b7f12c3cee8cccf0e0cdea6ab5e7" data-ts="1787242768000"
              
              
              x-show="itemMatches($el, f)"
@@ -1054,7 +1094,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Birds Poster.png" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Birds Poster.png
               </a>
               
@@ -1087,7 +1128,7 @@
         
         
         <div data-item data-title="Unit 4.1 Key Vocabulary and Spelling Practice.pdf" data-type="file" data-sec="1"
-             data-pkey="mk/80196/7818958" data-hash="27bb392d23e1b719f047eec08ed0dfdc73b5888a"
+             data-pkey="mk/80196/7818958" data-hash="27bb392d23e1b719f047eec08ed0dfdc73b5888a" data-ts="1787306015000"
              
              
              x-show="itemMatches($el, f)"
@@ -1111,7 +1152,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Key Vocabulary and Spelling Practice.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Key Vocabulary and Spelling Practice.pdf
               </a>
               
@@ -1160,7 +1202,7 @@
         
         
         <div data-item data-title="G1_W1_HW_Comparing Animals.pdf" data-type="file" data-sec="2"
-             data-pkey="mk/80196/8463447" data-hash="960320faf7b28b3db882745cca5851e8c70e6a0d"
+             data-pkey="mk/80196/8463447" data-hash="960320faf7b28b3db882745cca5851e8c70e6a0d" data-ts="1787303375000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -1184,7 +1226,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/G1_W1_HW_Comparing Animals.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1_W1_HW_Comparing Animals.pdf
               </a>
               
@@ -1233,7 +1276,7 @@
         
         
         <div data-item data-title="Unit 4.1 Comapring Animals Practice Worksheet.pdf" data-type="file" data-sec="3"
-             data-pkey="mk/80196/8463461" data-hash="b311502af913a5154b168ec035991fac3e6e0ec4"
+             data-pkey="mk/80196/8463461" data-hash="b311502af913a5154b168ec035991fac3e6e0ec4" data-ts="1787308861000"
              
              
              x-show="itemMatches($el, f)"
@@ -1257,7 +1300,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Comapring Animals Practice Worksheet.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Comapring Animals Practice Worksheet.pdf
               </a>
               
@@ -1290,7 +1334,7 @@
         
         
         <div data-item data-title="Unit 4.1 Comapring Animals Practice Worksheet_Answer Key.pdf" data-type="file" data-sec="3"
-             data-pkey="mk/80196/8463462" data-hash="345e91ad2ed11ab2d555bf2934e2e4c7fd0691b7"
+             data-pkey="mk/80196/8463462" data-hash="345e91ad2ed11ab2d555bf2934e2e4c7fd0691b7" data-ts="1787323230000"
              
              
              x-show="itemMatches($el, f)"
@@ -1314,7 +1358,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Comapring Animals Practice Worksheet_Answer Key.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Comapring Animals Practice Worksheet_Answer Key.pdf
               </a>
               
@@ -1363,7 +1408,7 @@
         
         
         <div data-item data-title="Sorting Mammals and Animals" data-type="external" data-sec="4"
-             data-pkey="mk/80196/8463452" data-hash="d9e84f625676d8608f1f4ec7030d09b1ee831651"
+             data-pkey="mk/80196/8463452" data-hash="d9e84f625676d8608f1f4ec7030d09b1ee831651" data-ts="1787629440000"
              
              
              x-show="itemMatches($el, f)"
@@ -1387,7 +1432,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/78496393/birds-and-mammals" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Sorting Mammals and Animals
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1422,7 +1468,7 @@
         
         
         <div data-item data-title="Characteristics of Mammals and Birds" data-type="external" data-sec="4"
-             data-pkey="mk/80196/8463455" data-hash="1c487a13f7c83f74ee7ad9a2e6d427ababc30650"
+             data-pkey="mk/80196/8463455" data-hash="1c487a13f7c83f74ee7ad9a2e6d427ababc30650" data-ts="1787629440000"
              
              
              x-show="itemMatches($el, f)"
@@ -1446,7 +1492,8 @@
               
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/17190264/science/mammals-and-birds" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Characteristics of Mammals and Birds
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1498,7 +1545,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Workbook Answers</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Workbook Answers</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 1
@@ -1512,7 +1559,7 @@
         
         
         <div data-item data-title="P_Science_2_workbook_answers.pdf" data-type="file" data-sec="0"
-             data-pkey="mk/80196/7818736" data-hash="cb1fd30501fd8757121e1d55bf6e14450de2968f"
+             data-pkey="mk/80196/7818736" data-hash="cb1fd30501fd8757121e1d55bf6e14450de2968f" data-ts="1787223436000"
              
              
              x-show="itemMatches($el, f)"
@@ -1536,7 +1583,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/workbook-answers/P_Science_2_workbook_answers.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 P_Science_2_workbook_answers.pdf
               </a>
               
@@ -1586,7 +1634,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 1
@@ -1600,7 +1648,7 @@
         
         
         <div data-item data-title="Science 1 Week 1 - Environments and Habitats.pdf" data-type="file" data-sec="0"
-             data-pkey="mk/80196/7818740" data-hash="6e750c9989b1c3f33fc0a2e06d9d025e7664d749"
+             data-pkey="mk/80196/7818740" data-hash="6e750c9989b1c3f33fc0a2e06d9d025e7664d749" data-ts="1787223399000"
              
              
              x-show="itemMatches($el, f)"
@@ -1624,7 +1672,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-environments-and-habitats-18-08-2025-22-08-2025/Science 1 Week 1 - Environments and Habitats.pdf" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Science 1 Week 1 - Environments and Habitats.pdf
               </a>
               

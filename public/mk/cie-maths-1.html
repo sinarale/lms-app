@@ -7,7 +7,7 @@
   <title>CIE Maths 1 — MK</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.9d735524.css">
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -27,10 +27,35 @@
       return (s || '').toLowerCase().normalize('NFD')
         .replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
     }
+    // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
+    // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+    function isRecentEl(el) {
+      var ts = el && +el.dataset.ts;
+      return !!ts && (Date.now() - ts) <= RECENT_WINDOW_MS;
+    }
+    function recentItems() {
+      return Array.from(document.querySelectorAll('[data-item][data-ts]')).filter(isRecentEl);
+    }
+    function recentStats(done) {
+      var els = recentItems();
+      return {
+        total: els.length,
+        done: els.filter(function (el) { return done[el.dataset.pkey]; }).length
+      };
+    }
+    function recentPct(done) {
+      var s = recentStats(done);
+      return s.total ? Math.round(s.done / s.total * 100) : 0;
+    }
+    function moduleIsRecent(box) {
+      return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
+    }
     // Lọc loại nội dung (OR trong nhóm); Homework và "chưa học" nhân AND với nhóm đó
     function typeOk(el, f) {
       if (f.hw && el.dataset.hw !== '1') return false;
       if (f.todo && f.done[el.dataset.pkey]) return false;
+      if (f.recent7 && !isRecentEl(el)) return false;
       return !f.types.length || f.types.includes(el.dataset.type);
     }
     function itemMatches(el, f) {
@@ -38,7 +63,7 @@
     }
     // Đề mục (SubHeader) chỉ hiện khi còn ít nhất 1 mục thuộc nó đang hiển thị
     function headingMatches(el, f) {
-      if (!f.q && !f.types.length && !f.hw && !f.todo) return true;
+      if (!f.q && !f.types.length && !f.hw && !f.todo && !f.recent7) return true;
       const box = el.closest('[data-module]');
       if (!box) return true;
       return Array.from(box.querySelectorAll('[data-sec="' + el.dataset.sec + '"][data-item]'))
@@ -220,10 +245,10 @@
   </script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen"
-      x-data="{ q: '', types: [], hw: false, todo: false, p: progressStore(),
+      x-data="{ q: '', types: [], hw: false, todo: false, recent7: false, p: progressStore(),
                 toggle(t) { this.types.includes(t) ? this.types.splice(this.types.indexOf(t), 1) : this.types.push(t) },
-                get filtering() { return this.types.length > 0 || this.hw || this.todo },
-                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, done: this.p.done } } }"
+                get filtering() { return this.types.length > 0 || this.hw || this.todo || this.recent7 },
+                get f() { return { q: this.q, types: this.types, hw: this.hw, todo: this.todo, recent7: this.recent7, done: this.p.done } } }"
       x-init="p.init()">
 
   <!-- Header dính, chứa tìm kiếm + Expand/Collapse All -->
@@ -275,6 +300,11 @@
           📎 tài liệu
         </button>
         
+        <button @click="recent7 = !recent7"
+                :class="recent7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-300 hover:border-amber-500'"
+                class="px-2 py-1 text-xs font-medium rounded-full border transition-colors">
+          🕓 7 ngày
+        </button>
         <template x-if="p.online">
           <button @click="todo = !todo"
                   :class="todo ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500'"
@@ -282,7 +312,7 @@
             ○ Chưa học
           </button>
         </template>
-        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false"
+        <button x-show="filtering" x-cloak @click="types = []; hw = false; todo = false; recent7 = false"
                 class="px-2 py-1 text-xs text-slate-500 hover:text-indigo-600 underline">
           Bỏ lọc
         </button>
@@ -292,10 +322,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length / 4 * 100) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length / 4 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length + '/4 đã học'"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('mk/80353/')).length + '/4 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -319,7 +349,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Week 2 (24.08.26-28.08.26) Unit 1: Numbers to 100</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2 (24.08.26-28.08.26) Unit 1: Numbers to 100</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 2
@@ -349,7 +379,7 @@
         
         
         <div data-item data-title="G1 Maths Homework Wk2.docx" data-type="file" data-sec="1"
-             data-pkey="mk/80353/8623877" data-hash="9e1d201bbb90b51214df0aa70f2b5472c0f3d169"
+             data-pkey="mk/80353/8623877" data-hash="9e1d201bbb90b51214df0aa70f2b5472c0f3d169" data-ts="1787909381000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -373,7 +403,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-2-24-08-26-28-08-26-unit-1-numbers-to-100/G1 Maths Homework Wk2.docx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1 Maths Homework Wk2.docx
               </a>
               
@@ -422,7 +453,7 @@
         
         
         <div data-item data-title="Maths Daily Practice Grade 1 - Week 2.pptx" data-type="file" data-sec="2"
-             data-pkey="mk/80353/8550202" data-hash="eb65cc5e2f92de6099cb9b4a3d9bc47ceb5ce17f"
+             data-pkey="mk/80353/8550202" data-hash="eb65cc5e2f92de6099cb9b4a3d9bc47ceb5ce17f" data-ts="1787545047000"
              
              
              x-show="itemMatches($el, f)"
@@ -446,7 +477,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-2-24-08-26-28-08-26-unit-1-numbers-to-100/Maths Daily Practice Grade 1 - Week 2.pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Maths Daily Practice Grade 1 - Week 2.pptx
               </a>
               
@@ -496,7 +528,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="font-semibold text-slate-900 flex-1">Week 1 (17.08.26-21.08.26) Unit 1: Numbers to 100</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 (17.08.26-21.08.26) Unit 1: Numbers to 100</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 2
@@ -526,7 +558,7 @@
         
         
         <div data-item data-title="G1 Maths Homework Wk1.docx" data-type="file" data-sec="1"
-             data-pkey="mk/80353/8471762" data-hash="d380115b970c45012a01c3759b40d6410cac7590"
+             data-pkey="mk/80353/8471762" data-hash="d380115b970c45012a01c3759b40d6410cac7590" data-ts="1787313571000"
              
              data-hw="1"
              x-show="itemMatches($el, f)"
@@ -550,7 +582,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-1-17-08-26-21-08-26-unit-1-numbers-to-100/G1 Maths Homework Wk1.docx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 G1 Maths Homework Wk1.docx
               </a>
               
@@ -599,7 +632,7 @@
         
         
         <div data-item data-title="Maths Daily Practice Grade 1 - Week 1.pptx" data-type="file" data-sec="2"
-             data-pkey="mk/80353/8263761" data-hash="49f0b111bc039ef5961d58d56b08fe15c86d1548"
+             data-pkey="mk/80353/8263761" data-hash="49f0b111bc039ef5961d58d56b08fe15c86d1548" data-ts="1787201772000"
              
              
              x-show="itemMatches($el, f)"
@@ -623,7 +656,8 @@
               
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-1-17-08-26-21-08-26-unit-1-numbers-to-100/Maths Daily Practice Grade 1 - Week 1.pptx" target="_blank" rel="noopener"
-                 class="text-sm font-medium text-slate-800 hover:text-indigo-700 hover:underline">
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
                 Maths Daily Practice Grade 1 - Week 1.pptx
               </a>
               
