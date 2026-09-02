@@ -19,6 +19,7 @@
         sessions: [], total: 0, done: 0,
         loading: true, err: '', saving: 0,
         todoOnly: true,                 // mặc định chỉ hiện việc chưa xong
+        recent7: false,                 // chỉ hiện buổi trong 7 ngày gần nhất
         open: {},                       // buổi nào đang mở rộng
         secret: localStorage.getItem('lms_key') || '',
 
@@ -45,6 +46,32 @@
 
         items(g) { return this.todoOnly ? g.items.filter(i => !i.done) : g.items; },
 
+        // ── Bộ lọc "7 ngày gần nhất" ────────────────────────────────────────
+        // Buổi ghi kiểu "Saturday 30/8" (ngày/tháng, không có năm). Giải năm
+        // bằng cách lấy năm hiện tại, nếu rơi vào tương lai thì lùi một năm.
+        sessionTs(s) {
+          const m = /(\d{1,2})\/(\d{1,2})/.exec(s.title || '');
+          if (!m) return null;
+          const day = +m[1], month = +m[2];
+          if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+          const now = new Date(), y = now.getFullYear();
+          let d = new Date(y, month - 1, day);
+          if (d.getTime() > now.getTime()) d = new Date(y - 1, month - 1, day);
+          return d.getTime();
+        },
+        isRecentSession(s) {
+          const ts = this.sessionTs(s);
+          return ts != null && (Date.now() - ts) <= 7 * 24 * 60 * 60 * 1000;
+        },
+        get recentStats() {
+          let total = 0, done = 0;
+          this.sessions.forEach(s => {
+            if (!this.isRecentSession(s)) return;
+            s.groups.forEach(g => g.items.forEach(i => { total++; if (i.done) done++; }));
+          });
+          return { total, done };
+        },
+
         // Ô có tên riêng thì hiện tên; ô mà bản thân nội dung là URL thì rút gọn
         // cho dễ đọc. Từ khi đọc qua Sheets API, hai thứ này có thể khác nhau:
         // ví dụ "Can You Name the baby Animals" gắn link YouTube.
@@ -54,7 +81,7 @@
             : it.label;
         },
         groups(s) { return s.groups.filter(g => this.items(g).length > 0); },
-        visible(s) { return this.groups(s).length > 0; },
+        visible(s) { return (this.recent7 ? this.isRecentSession(s) : true) && this.groups(s).length > 0; },
         left(s) { return s.groups.reduce((n, g) => n + g.items.filter(i => !i.done).length, 0); },
 
         async toggle(item) {
@@ -128,9 +155,10 @@
       <div class="mt-2 flex items-center gap-2 text-xs" x-show="!loading && !err" x-cloak>
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width:' + (total ? Math.round(done / total * 100) : 0) + '%'"></div>
+               :style="'width:' + (recent7 ? (recentStats.total ? Math.round(recentStats.done / recentStats.total * 100) : 0) : (total ? Math.round(done / total * 100) : 0)) + '%'"></div>
         </div>
-        <span class="text-slate-500 whitespace-nowrap" x-text="done + '/' + total + ' đã xong'"></span>
+        <span class="text-slate-500 whitespace-nowrap"
+              x-text="recent7 ? (recentStats.done + '/' + recentStats.total + ' đã xong · 7 ngày') : (done + '/' + total + ' đã xong')"></span>
       </div>
 
       <div class="mt-2 flex items-center gap-1.5 flex-wrap text-xs" x-show="!loading && !err" x-cloak>
@@ -140,6 +168,9 @@
         <button @click="todoOnly = false"
                 :class="!todoOnly ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-300'"
                 class="px-2 py-1 rounded-full border">Tất cả</button>
+        <button @click="recent7 = !recent7"
+                :class="recent7 ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-700 border-amber-300'"
+                class="px-2 py-1 rounded-full border font-medium">🕓 7 ngày</button>
         <span class="text-rose-600 ml-1" x-show="err" x-cloak x-text="err"></span>
       </div>
     </div>
@@ -202,7 +233,8 @@
 
     <p x-show="!loading && !err && !sessions.some(s => visible(s))" x-cloak
        class="text-center text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg py-6">
-      🎉 Không còn việc nào chưa hoàn thành.
+      <span x-show="recent7" x-cloak>🕓 Không có việc nào trong 7 ngày gần nhất.</span>
+      <span x-show="!recent7">🎉 Không còn việc nào chưa hoàn thành.</span>
     </p>
   </main>
 
