@@ -7,7 +7,7 @@
   <title>CIE ICT 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -262,7 +262,7 @@
         </a>
         <div class="min-w-0 flex-1">
           <h1 class="text-lg font-bold text-slate-900 truncate">CIE ICT 5</h1>
-          <p class="text-xs text-slate-500">PL · 1 tuần/bài · cập nhật 2026-08-26 16:34</p>
+          <p class="text-xs text-slate-500">PL · 1 tuần/bài · cập nhật 2026-09-02 18:01</p>
         </div>
       </div>
       <div class="mt-2 flex items-center gap-2">
@@ -333,10 +333,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80095/')).length / 9 * 100)) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/80095/')).length / 13 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/80095/')).length + '/9 đã học')"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/80095/')).length + '/13 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -363,11 +363,11 @@
         <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Unit 1: Digital Resilience</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 9
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 13
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/9'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/13'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">9 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">13 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
@@ -1066,6 +1066,315 @@
 <p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none" style="color: #f1c40f;">Yellow group: Must be written in complete sentences. Research 3 problems with photo editing.</span></p>
 <p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none" style="color: #e03e2d;">Red group: Same as yellow but explain in greater detail the possible consequences of photo editing and find 3 tips people could follow if their mental health is effected by social media.</span></p>
 <p class="cvGsUA direction-ltr align-start para-style-body"><a class="inline_disabled" href="https://www.canva.com/design/DAF6BKMlemA/t2L5uMbZoBMAiEecB_ZhLQ/edit?utm_content=DAF6BKMlemA&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" rel="noopener" target="_blank">Editing images example</a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-sechead data-title="Week 4:" data-sec="5"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Week 4:</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="Week 4" data-type="page" data-sec="5"
+             data-pkey="pl/80095/8333960" data-hash="40f9185f1c6af9c6689d1aa6794afd77aca9f567" data-ts="1788331752000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80095/8333960'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80095/8333960']"
+                     @change="await p.toggle('pl/80095/8333960', '40f9185f1c6af9c6689d1aa6794afd77aca9f567'); $el.checked = !!p.done['pl/80095/8333960']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Week 4</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/80095/8333960', '40f9185f1c6af9c6689d1aa6794afd77aca9f567')">
+                  <button @click.stop="p.seen('pl/80095/8333960', '40f9185f1c6af9c6689d1aa6794afd77aca9f567')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80095/pages/week-4-4" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p>This week, we start our new unit by exploring fake news and how we can identify i.</p>
+<p> </p>
+<p>Our success criteria for the lesson are:</p>
+<p><span>I understand that different people may interpret my online posts differently based on their perspectives and experiences.</span></p>
+<p><span>I can describe strategies to safeguard my online presence and seek guidance from trusted adults to ensure my safety and wellbeing in the digital world.</span></p>
+<p><span>I am confident in incorporating different multimedia elements such as sound, video, and text to enhance the quality of my digital projects</span></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Grade 5 Week 4" data-type="external" data-sec="5"
+             data-pkey="pl/80095/8333961" data-hash="20df33e324e903be9be548014aed7dc9804f8fbc" data-ts="1788346860000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80095/8333961'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80095/8333961']"
+                     @change="await p.toggle('pl/80095/8333961', '20df33e324e903be9be548014aed7dc9804f8fbc'); $el.checked = !!p.done['pl/80095/8333961']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://www.canva.com/design/DAF6qqgsPBk/vB6b_uYYEC5rwoKSLnCm8A/edit?utm_content=DAF6qqgsPBk&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                Grade 5 Week 4
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/80095/8333961', '20df33e324e903be9be548014aed7dc9804f8fbc')">
+                  <button @click.stop="p.seen('pl/80095/8333961', '20df33e324e903be9be548014aed7dc9804f8fbc')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 02/09</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Real or Fake?-5" data-type="page" data-sec="5"
+             data-pkey="pl/80095/8333962" data-hash="7bda1fe7c689d3352689ec0a07d31ee05dedf825" data-ts="1788331754000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80095/8333962'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80095/8333962']"
+                     @change="await p.toggle('pl/80095/8333962', '7bda1fe7c689d3352689ec0a07d31ee05dedf825'); $el.checked = !!p.done['pl/80095/8333962']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Real or Fake?-5</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/80095/8333962', '7bda1fe7c689d3352689ec0a07d31ee05dedf825')">
+                  <button @click.stop="p.seen('pl/80095/8333962', '7bda1fe7c689d3352689ec0a07d31ee05dedf825')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80095/pages/real-or-fake-3" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">Your Job:</span></p>
+<p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">I am going to give you 2 different news reports.</span></p>
+<p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">I want you to use the internet and the guide to figure out which one is true and which one is fake.</span></p>
+<p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">If it is true, you should be able to find other websites which share a similar story</span></p>
+<p> </p>
+<p><span style=" color: #2dc26b;">Green group: </span></p>
+<p><a href="https://www.canva.com/design/DAF6qssFmVI/Ge8VNdpkUfVWPcYyA7ki5A/edit?utm_content=DAF6qssFmVI&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" rel="noopener" target="_blank"><span>https://www.canva.com/design/DAF6qssFmVI/Ge8VNdpkUfVWPcYyA7ki5A/edit?utm_content=DAF6qssFmVI&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton</span></a></p>
+<p><span style=" color: #f1c40f;">Yellow group: </span></p>
+<p><a href="https://www.canva.com/design/DAF6qySnGSQ/z6uwVBSgxwFrfaBCOjz_0g/edit?utm_content=DAF6qySnGSQ&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" rel="noopener" target="_blank"><span>https://www.canva.com/design/DAF6qySnGSQ/z6uwVBSgxwFrfaBCOjz_0g/edit?utm_content=DAF6qySnGSQ&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton</span></a></p>
+<p><span style=" color: #e03e2d;">Red group: </span></p>
+<p><a href="https://www.canva.com/design/DAF6q8MfCEA/uQmwZQepy_46GjyeBO3j_Q/edit?utm_content=DAF6q8MfCEA&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" rel="noopener" target="_blank"><strong>https://www.canva.com/design/DAF6q8MfCEA/uQmwZQepy_46GjyeBO3j_Q/edit?utm_content=DAF6q8MfCEA&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton</strong></a></p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Fake News" data-type="assignment" data-sec="5"
+             data-pkey="pl/80095/8333963" data-hash="85b4e9e85b7c66aaa1ac3f867eefa857ad1ed546" data-ts="1788331755000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/80095/8333963'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/80095/8333963']"
+                     @change="await p.toggle('pl/80095/8333963', '85b4e9e85b7c66aaa1ac3f867eefa857ad1ed546'); $el.checked = !!p.done['pl/80095/8333963']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="bài tập">📝</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
+              <button @click="o = !o" class="w-full text-left flex items-center gap-2">
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Fake News</span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
+                     :class="o ? 'rotate-180' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">bài tập</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/80095/8333963', '85b4e9e85b7c66aaa1ac3f867eefa857ad1ed546')">
+                  <button @click.stop="p.seen('pl/80095/8333963', '85b4e9e85b7c66aaa1ac3f867eefa857ad1ed546')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/80095/assignments/2877998" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+              <div x-show="o" x-collapse x-cloak
+                   class="lms-content mt-2 mb-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-sm leading-relaxed">
+                <p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">Your job today:</span></p>
+<p class="cvGsUA direction-ltr align-start para-style-body"><span class="OYPEnA text-decoration-none text-strikethrough-none">Create a poster to explain:</span></p>
+<ul>
+<li><span class="OYPEnA text-decoration-none text-strikethrough-none">What is fake news</span></li>
+<li><span class="OYPEnA text-decoration-none text-strikethrough-none">Why people share fake news</span></li>
+<li><span class="OYPEnA text-decoration-none text-strikethrough-none">How can we identify fake news</span></li>
+<li><span class="OYPEnA text-decoration-none text-strikethrough-none">Tips to make sure the news we read is safe</span></li>
+</ul>
+<p class="cvGsUA direction-ltr align-start para-style-body"><a class="inline_disabled" href="https://www.canva.com/design/DAF6rawHn_g/3aS1nzuhdPYJWPaa39CSbw/edit?utm_content=DAF6rawHn_g&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" rel="noopener" target="_blank">Group Group Example</a></p>
+<p><span style="color: #2dc26b;">Green group: Create a poster using simple sentences and images</span></p>
+<p><span style="color: #f1c40f;">Yellow group: Create a poster using extended sentences, images and links</span></p>
+<p><span style="color: #e03e2d;">Red group: Create a poster using all of the above and an example of a fake news story which has spread around the world</span></p>
               </div>
               
             </div>
