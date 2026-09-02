@@ -97,7 +97,8 @@ async function handlePost(request, env) {
 
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
+    const url = new URL(request.url);
+    const { pathname } = url;
 
     if (pathname === "/api/progress") {
       if (request.method === "GET") return handleGet(env);
@@ -137,7 +138,25 @@ export default {
       return json({ error: "Method không hỗ trợ" }, 405);
     }
 
-    // Mọi đường dẫn khác: trả file tĩnh
-    return env.ASSETS.fetch(request);
+    // Mọi đường dẫn khác: trả file tĩnh.
+    //
+    // wrangler.toml đặt html_handling = "none" để bỏ chuyển hướng 307 thừa từ
+    // "/pl/x.html" sang "/pl/x". Nhưng tắt nó cũng tắt luôn hai tiện ích khác của
+    // Cloudflare, phải tự làm lại ở đây, nếu không sẽ gãy:
+    //   1. "/" không còn tự tìm index.html  → trang chủ 404
+    //   2. "/pl/x" (không đuôi) không còn tìm ra x.html → hỏng link đã lưu của
+    //      người dùng từ trước khi đổi
+    const asset = (path) => env.ASSETS.fetch(new Request(new URL(path, url), request));
+
+    if (pathname.endsWith("/")) return asset(pathname + "index.html");
+
+    const res = await asset(pathname);
+    // Chỉ thử thêm ".html" khi thật sự không thấy file, và chỉ với đường dẫn
+    // không có đuôi — tránh đi tìm lần hai cho ảnh/PDF vốn đã 404 thật.
+    if (res.status === 404 && !pathname.split("/").pop().includes(".")) {
+      const alt = await asset(pathname + ".html");
+      if (alt.status !== 404) return alt;
+    }
+    return res;
   },
 };

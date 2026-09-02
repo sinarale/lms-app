@@ -23,6 +23,11 @@ SHEET_COL = "4"
 [assets]
 directory = "public"
 binding = "ASSETS"
+# Mặc định Cloudflare trả 307 từ "/pl/x.html" sang "/pl/x" — mỗi lần bấm vào một
+# môn là một vòng đi-về thừa. Trang chủ trỏ tới link .html (phải vậy để dist/ còn
+# chạy được trên GitHub Pages lẫn khi mở file cục bộ), nên tắt hẳn cơ chế này.
+# Đổi lại, "/" không tự tìm index.html nữa — worker/index.js viết lại giúp.
+html_handling = "none"
 
 [[kv_namespaces]]
 binding = "PROGRESS_KV"
