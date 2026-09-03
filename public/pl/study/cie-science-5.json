@@ -737,7 +737,37 @@
     "irreversible",
     "evidence",
     "rust"
-   ]
+   ],
+   "checklist": {
+    "title": "Evidence for chemical reactions",
+    "items": [
+     {
+      "sign": "A gas is produced",
+      "look_for": "You see bubbles of gas forming in the liquid.",
+      "book_example": "Mix vinegar and bicarbonate of soda — gas bubbles form.",
+      "icon": "bubbles"
+     },
+     {
+      "sign": "A colour change",
+      "look_for": "The mixture turns a new colour.",
+      "book_example": "Mix cornstarch with iodine solution — it changes colour.",
+      "icon": "swap"
+     },
+     {
+      "sign": "A temperature change",
+      "look_for": "The thermometer goes up or down.",
+      "book_example": "Pour vinegar on wire wool — the temperature rises after five minutes.",
+      "icon": "heat"
+     },
+     {
+      "sign": "A liquid turns cloudy",
+      "look_for": "A clear liquid becomes cloudy.",
+      "book_example": "Breathe carbon dioxide into clear limewater — it turns cloudy.",
+      "icon": "cloud"
+     }
+    ],
+    "note": "One sign alone does not always prove a reaction — a new substance must be made."
+   }
   }
  ],
  "glossary": [],
@@ -1721,5 +1751,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T10:45:42+00:00"
+ "generated_at": "2026-09-03T11:01:06+00:00"
 }
