@@ -321,6 +321,62 @@
     "matter",
     "mass",
     "evaporation"
+   ],
+   "glossary": [
+    {
+     "term": "property",
+     "def": "A special feature of a substance that helps us tell it apart from other things.",
+     "example": "Gold melts at 1064 °C — that helps us identify it.",
+     "concept": "c.materials.properties.melting"
+    },
+    {
+     "term": "matter",
+     "def": "Anything that takes up space and has mass.",
+     "example": "Air is a mixture of gases that takes up space.",
+     "concept": "c.materials.properties.gases"
+    },
+    {
+     "term": "mass",
+     "def": "The amount of material that makes up an object.",
+     "example": "The air inside a blown-up balloon has mass we can measure.",
+     "concept": "c.materials.properties.gases"
+    },
+    {
+     "term": "melting point",
+     "def": "The exact temperature at which a solid turns into a liquid.",
+     "example": "Ice changes into liquid water at 0 °C.",
+     "concept": "c.materials.properties.melting"
+    },
+    {
+     "term": "freezing",
+     "def": "A liquid loses heat and turns into a solid.",
+     "example": "Liquid water turns into ice when cooled to 0 °C.",
+     "concept": "c.materials.properties.melting"
+    },
+    {
+     "term": "boiling point",
+     "def": "The exact temperature where all of a liquid gets enough energy to turn into a gas.",
+     "example": "Pure water changes into a gas at 100 °C.",
+     "concept": "c.materials.properties.boiling_evaporation"
+    },
+    {
+     "term": "boiling",
+     "def": "A fast change where particles all through the liquid turn into a gas when heated.",
+     "example": "Water bubbling on a hot plate at 100 °C.",
+     "concept": "c.materials.properties.boiling_evaporation"
+    },
+    {
+     "term": "evaporation",
+     "def": "A slow change where only the particles on the surface of a liquid turn into a gas.",
+     "example": "Water slowly disappearing from a shallow dish at room temperature.",
+     "concept": "c.materials.properties.boiling_evaporation"
+    },
+    {
+     "term": "condensation",
+     "def": "A gas cools down and turns back into a liquid.",
+     "example": "Water droplets forming on a cool surface when steam cools.",
+     "concept": "c.materials.properties.boiling_evaporation"
+    }
    ]
   },
   {
@@ -394,6 +450,44 @@
     "electrical conductor",
     "insulator",
     "graphite"
+   ],
+   "glossary": [
+    {
+     "term": "conduction",
+     "def": "The way heat moves from a hot object to a colder one when they touch.",
+     "example": "A metal teaspoon in hot tea gets warm.",
+     "concept": "c.materials.conductors.thermal"
+    },
+    {
+     "term": "thermal conductor",
+     "def": "A material that lets heat travel through it quickly and easily.",
+     "example": "Copper on the bottom of a pan.",
+     "concept": "c.materials.conductors.thermal"
+    },
+    {
+     "term": "thermal insulator",
+     "def": "A material that does not let heat pass through it easily.",
+     "example": "A polystyrene foam cup keeps tea warm.",
+     "concept": "c.materials.conductors.insulators"
+    },
+    {
+     "term": "electrical conductor",
+     "def": "A material that lets electricity flow through it easily.",
+     "example": "A steel paper clip can light a lamp in a circuit.",
+     "concept": "c.materials.conductors.electrical"
+    },
+    {
+     "term": "electrical insulator",
+     "def": "A material that stops electricity flowing through it.",
+     "example": "The plastic handle of a pan.",
+     "concept": "c.materials.conductors.insulators"
+    },
+    {
+     "term": "circuit",
+     "def": "A complete loop that electricity flows around.",
+     "example": "A lamp, a cell and copper connecting wires joined in a loop.",
+     "concept": "c.materials.conductors.electrical"
+    }
    ]
   },
   {
@@ -473,7 +567,9 @@
    "id": "f.79a2e8db",
    "concept": "c.materials.properties.melting",
    "front_en": "Melting point",
-   "back_en": "The temperature at which a solid material melts and becomes a liquid."
+   "back_en": "The exact temperature at which a solid turns into a liquid.",
+   "example_en": "Ice changes into liquid water at 0 °C.",
+   "kind": "term"
   },
   {
    "id": "f.d58f4d12",
@@ -485,7 +581,9 @@
    "id": "f.3fe997b6",
    "concept": "c.materials.properties.boiling_evaporation",
    "front_en": "Evaporation",
-   "back_en": "When particles only on the surface of a liquid change into a gas."
+   "back_en": "A slow change where only the particles on the surface of a liquid turn into a gas.",
+   "example_en": "Water slowly disappearing from a shallow dish at room temperature.",
+   "kind": "term"
   },
   {
    "id": "f.0c977a51",
@@ -509,7 +607,9 @@
    "id": "f.06dd155a",
    "concept": "c.materials.conductors.thermal",
    "front_en": "Thermal conductor",
-   "back_en": "A material or substance that conducts heat very well."
+   "back_en": "A material that lets heat travel through it quickly and easily.",
+   "example_en": "Copper on the bottom of a pan.",
+   "kind": "term"
   },
   {
    "id": "f.92b3061b",
@@ -521,7 +621,9 @@
    "id": "f.e6856b98",
    "concept": "c.materials.conductors.electrical",
    "front_en": "Electrical conductor",
-   "back_en": "A material or substance that allows electricity to flow through it easily."
+   "back_en": "A material that lets electricity flow through it easily.",
+   "example_en": "A steel paper clip can light a lamp in a circuit.",
+   "kind": "term"
   },
   {
    "id": "f.0d9dd1e4",
@@ -533,7 +635,9 @@
    "id": "f.38ec3d63",
    "concept": "c.materials.conductors.insulators",
    "front_en": "Electrical insulator",
-   "back_en": "A material or substance that is not a good conductor of electricity."
+   "back_en": "A material that stops electricity flowing through it.",
+   "example_en": "The plastic handle of a pan.",
+   "kind": "term"
   },
   {
    "id": "f.3349162b",
@@ -612,6 +716,86 @@
    "concept": "c.materials.chemical.examples",
    "front_en": "What chemical change happens when you burn a match?",
    "back_en": "The wood burns and changes into a new black substance called carbon."
+  },
+  {
+   "id": "f.9ae33a7d",
+   "concept": "c.materials.properties.melting",
+   "front_en": "Property",
+   "back_en": "A special feature of a substance that helps us tell it apart from other things.",
+   "example_en": "Gold melts at 1064 °C — that helps us identify it.",
+   "kind": "term"
+  },
+  {
+   "id": "f.0a94e1dd",
+   "concept": "c.materials.properties.gases",
+   "front_en": "Matter",
+   "back_en": "Anything that takes up space and has mass.",
+   "example_en": "Air is a mixture of gases that takes up space.",
+   "kind": "term"
+  },
+  {
+   "id": "f.af0ad10b",
+   "concept": "c.materials.properties.gases",
+   "front_en": "Mass",
+   "back_en": "The amount of material that makes up an object.",
+   "example_en": "The air inside a blown-up balloon has mass we can measure.",
+   "kind": "term"
+  },
+  {
+   "id": "f.bb2894a4",
+   "concept": "c.materials.properties.melting",
+   "front_en": "Freezing",
+   "back_en": "A liquid loses heat and turns into a solid.",
+   "example_en": "Liquid water turns into ice when cooled to 0 °C.",
+   "kind": "term"
+  },
+  {
+   "id": "f.083fb413",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "Boiling point",
+   "back_en": "The exact temperature where all of a liquid gets enough energy to turn into a gas.",
+   "example_en": "Pure water changes into a gas at 100 °C.",
+   "kind": "term"
+  },
+  {
+   "id": "f.177a695d",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "Boiling",
+   "back_en": "A fast change where particles all through the liquid turn into a gas when heated.",
+   "example_en": "Water bubbling on a hot plate at 100 °C.",
+   "kind": "term"
+  },
+  {
+   "id": "f.91f559c7",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "Condensation",
+   "back_en": "A gas cools down and turns back into a liquid.",
+   "example_en": "Water droplets forming on a cool surface when steam cools.",
+   "kind": "term"
+  },
+  {
+   "id": "f.d543e0c2",
+   "concept": "c.materials.conductors.thermal",
+   "front_en": "Conduction",
+   "back_en": "The way heat moves from a hot object to a colder one when they touch.",
+   "example_en": "A metal teaspoon in hot tea gets warm.",
+   "kind": "term"
+  },
+  {
+   "id": "f.5c799b56",
+   "concept": "c.materials.conductors.insulators",
+   "front_en": "Thermal insulator",
+   "back_en": "A material that does not let heat pass through it easily.",
+   "example_en": "A polystyrene foam cup keeps tea warm.",
+   "kind": "term"
+  },
+  {
+   "id": "f.a13e1f1f",
+   "concept": "c.materials.conductors.electrical",
+   "front_en": "Circuit",
+   "back_en": "A complete loop that electricity flows around.",
+   "example_en": "A lamp, a cell and copper connecting wires joined in a loop.",
+   "kind": "term"
   }
  ],
  "quiz": [
@@ -1241,5 +1425,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T10:21:01+00:00"
+ "generated_at": "2026-09-03T10:36:48+00:00"
 }

@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.4fabf686.css">
+  <link rel="stylesheet" href="../assets/tw.25448956.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -655,6 +655,7 @@
         <p class="mt-2 text-lg font-medium text-slate-900" x-text="q.front_en"></p>
         <div x-show="revealed" x-cloak class="mt-4 pt-4 border-t border-slate-100">
           <p class="text-slate-700" x-text="q.back_en"></p>
+          <p x-show="q.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="q.example_en"></p>
         </div>
         <button x-show="!revealed" @click="revealed = true"
                 class="mt-auto pt-6 text-sm font-medium text-indigo-600 hover:text-indigo-800 self-start">
@@ -692,6 +693,24 @@
           <!-- Ý lớn: một câu, chữ to, để nhớ được cả mục -->
           <p x-show="sec.big_en" x-cloak
              class="px-5 py-4 text-base font-medium text-slate-800 leading-snug" x-text="sec.big_en"></p>
+
+          <!-- ── Từ vựng khoa học của mục ─────────────────────────────────────
+               Đặt trước sơ đồ và các ý: phải biết từ thì mới đọc được phần còn
+               lại. Cùng dữ liệu này sinh ra thẻ ghi nhớ (src/study.py).      -->
+          <template x-if="(sec.glossary || []).length">
+          <div class="px-5 pb-4">
+            <p class="text-xs font-bold uppercase tracking-wide text-indigo-500 mb-2">📖 Key words</p>
+            <dl class="grid gap-x-4 gap-y-2 sm:grid-cols-2">
+              <template x-for="g in sec.glossary" :key="g.term">
+                <div class="rounded-lg bg-indigo-50/60 border border-indigo-100 px-3 py-2">
+                  <dt class="text-sm font-semibold text-indigo-900" x-text="g.term"></dt>
+                  <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
+                  <dd x-show="g.example" class="mt-1 text-xs text-slate-500 italic" x-text="g.example"></dd>
+                </div>
+              </template>
+            </dl>
+          </div>
+          </template>
 
           <!-- ── Sơ đồ: ba trạng thái của chất, theo mô hình hạt ────────────
                Vẽ thẳng, KHÔNG dùng x-for: <template> bên trong <svg> nằm ở không
