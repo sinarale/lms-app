@@ -114,10 +114,227 @@
    "pages": "61-62"
   }
  ],
- "summary": [],
+ "summary": [
+  {
+   "concept": "c.materials.properties",
+   "points_en": [
+    "Solid, liquid, and gas are the three states of matter.",
+    "The melting point is the temperature at which a solid becomes a liquid.",
+    "The boiling point is the temperature at which particles throughout a liquid have enough energy to change to a gas.",
+    "All matter has mass and takes up space, even gases like air.",
+    "Boiling happens throughout a liquid, while evaporation only happens at the surface."
+   ],
+   "terms": [
+    "property",
+    "melting point",
+    "boiling point",
+    "matter",
+    "mass",
+    "evaporation"
+   ]
+  },
+  {
+   "concept": "c.materials.conductors",
+   "points_en": [
+    "Conduction is the transfer of heat energy from one object to another.",
+    "Materials that conduct heat well are called thermal conductors.",
+    "Materials that conduct electricity well are called electrical conductors.",
+    "Metals are very good conductors of both heat and electricity.",
+    "Materials that are not good conductors of heat or electricity are called insulators."
+   ],
+   "terms": [
+    "conduction",
+    "thermal conductors",
+    "electrical conductors",
+    "insulators",
+    "metals"
+   ]
+  },
+  {
+   "concept": "c.materials.reversible",
+   "points_en": [
+    "A physical change changes how a substance looks but does not make a new substance.",
+    "A reversible change is a change that can be undone to get the original substance back.",
+    "Melting ice to make water and freezing water back to ice is a reversible change.",
+    "Dissolving a solid substance in a liquid is also a reversible change.",
+    "The substance that dissolves is the solute, and the liquid it dissolves in is the solvent."
+   ],
+   "terms": [
+    "physical change",
+    "reversible",
+    "solute",
+    "solvent",
+    "solution",
+    "dissolving"
+   ]
+  },
+  {
+   "concept": "c.materials.chemical",
+   "points_en": [
+    "In a chemical reaction, substances react together to form new substances.",
+    "The starting substances are reactants, and the new substances made are products.",
+    "Chemical reactions are irreversible, meaning they cannot be easily changed back.",
+    "Burning wood, rusting iron nails, and baking cakes are chemical reactions.",
+    "Evidence of a reaction includes gas bubbles, colour changes, and temperature changes."
+   ],
+   "terms": [
+    "chemical reaction",
+    "reactants",
+    "products",
+    "irreversible",
+    "evidence",
+    "react"
+   ]
+  }
+ ],
  "glossary": [],
  "misconceptions": [],
- "flashcards": [],
+ "flashcards": [
+  {
+   "id": "f.79a2e8db",
+   "concept": "c.materials.properties.melting",
+   "front_en": "Melting point",
+   "back_en": "The temperature at which a solid material melts and becomes a liquid."
+  },
+  {
+   "id": "f.d58f4d12",
+   "concept": "c.materials.properties.melting",
+   "front_en": "At what temperature does ice melt into liquid water?",
+   "back_en": "Ice melts at a temperature of 0 degrees Celsius."
+  },
+  {
+   "id": "f.3fe997b6",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "Evaporation",
+   "back_en": "When particles only on the surface of a liquid change into a gas."
+  },
+  {
+   "id": "f.0c977a51",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "What is the difference in heating between boiling and evaporation?",
+   "back_en": "Boiling usually needs heating, but evaporation can happen at any temperature."
+  },
+  {
+   "id": "f.ead9650a",
+   "concept": "c.materials.properties.gases",
+   "front_en": "Gas",
+   "back_en": "One of the three states of matter that has mass and takes up space."
+  },
+  {
+   "id": "f.b7311932",
+   "concept": "c.materials.properties.gases",
+   "front_en": "What two properties does all matter, including gas, have?",
+   "back_en": "All matter has mass and takes up space."
+  },
+  {
+   "id": "f.06dd155a",
+   "concept": "c.materials.conductors.thermal",
+   "front_en": "Thermal conductor",
+   "back_en": "A material or substance that conducts heat very well."
+  },
+  {
+   "id": "f.92b3061b",
+   "concept": "c.materials.conductors.thermal",
+   "front_en": "Which metal is the best conductor of heat?",
+   "back_en": "Silver is the best conductor of heat."
+  },
+  {
+   "id": "f.e6856b98",
+   "concept": "c.materials.conductors.electrical",
+   "front_en": "Electrical conductor",
+   "back_en": "A material or substance that allows electricity to flow through it easily."
+  },
+  {
+   "id": "f.0d9dd1e4",
+   "concept": "c.materials.conductors.electrical",
+   "front_en": "Which solid non-metal can conduct electricity in a circuit?",
+   "back_en": "Graphite can conduct electricity."
+  },
+  {
+   "id": "f.38ec3d63",
+   "concept": "c.materials.conductors.insulators",
+   "front_en": "Electrical insulator",
+   "back_en": "A material or substance that is not a good conductor of electricity."
+  },
+  {
+   "id": "f.3349162b",
+   "concept": "c.materials.conductors.insulators",
+   "front_en": "What are some examples of electrical insulators?",
+   "back_en": "Plastic, rubber, glass, and most non-metal substances are electrical insulators."
+  },
+  {
+   "id": "f.05f3de31",
+   "concept": "c.materials.reversible.changes",
+   "front_en": "Reversible change",
+   "back_en": "A change that can be undone to make the original substance again."
+  },
+  {
+   "id": "f.e04aea16",
+   "concept": "c.materials.reversible.changes",
+   "front_en": "Why is melting ice a physical and reversible change?",
+   "back_en": "The ice only changes how it looks, and cooling can freeze water back to ice."
+  },
+  {
+   "id": "f.c7862f96",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "Solute",
+   "back_en": "The solid substance that dissolves in a liquid."
+  },
+  {
+   "id": "f.eef61934",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "What is a uniform solution?",
+   "back_en": "A solution that looks exactly the same throughout because the particles spread evenly."
+  },
+  {
+   "id": "f.e650200b",
+   "concept": "c.materials.reversible.factors",
+   "front_en": "Which two factors make a solid solute dissolve faster?",
+   "back_en": "Stirring the solution and heating the liquid make solids dissolve faster."
+  },
+  {
+   "id": "f.4a73f964",
+   "concept": "c.materials.reversible.factors",
+   "front_en": "How does temperature affect the particles in a solvent?",
+   "back_en": "Heating adds energy, making particles move faster and spread out more easily."
+  },
+  {
+   "id": "f.5379f397",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Reactants",
+   "back_en": "The starting substances that react together in a chemical reaction."
+  },
+  {
+   "id": "f.fe0a091f",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Products",
+   "back_en": "The new substances that are made in a chemical reaction."
+  },
+  {
+   "id": "f.03f1c09a",
+   "concept": "c.materials.chemical.evidence",
+   "front_en": "What evidence shows a chemical reaction happened when mixing vinegar and baking soda?",
+   "back_en": "You can see gas bubbles forming, which shows a gas is produced."
+  },
+  {
+   "id": "f.1378da88",
+   "concept": "c.materials.chemical.evidence",
+   "front_en": "What are three signs that a chemical reaction has taken place?",
+   "back_en": "Signs include colour changes, gas production, and temperature changes."
+  },
+  {
+   "id": "f.6851efc6",
+   "concept": "c.materials.chemical.examples",
+   "front_en": "What chemical reaction happens when an iron nail is left in water?",
+   "back_en": "The iron reacts with water and oxygen to make rust."
+  },
+  {
+   "id": "f.a147dcf5",
+   "concept": "c.materials.chemical.examples",
+   "front_en": "What chemical change happens when you burn a match?",
+   "back_en": "The wood burns and changes into a new black substance called carbon."
+  }
+ ],
  "quiz": [
   {
    "id": "q.2f6e0760",
@@ -745,5 +962,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T06:49:09+00:00"
+ "generated_at": "2026-09-03T07:05:08+00:00"
 }

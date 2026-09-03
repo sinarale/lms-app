@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.2471db86.css">
+  <link rel="stylesheet" href="../assets/tw.96bf2b1f.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -23,6 +23,9 @@
         secret: localStorage.getItem('lms_key') || '',
         cards: {},              // item_id → {n, wrong, box, ease, due, last_ts}
         screen: 'start',        // start | quiz | done
+        mode: 'quiz',           // quiz | cards | summary | map
+        revealed: false,        // flashcard: đã lật chưa
+        openMap: {},            // sơ đồ: nhánh nào đang mở
         queue: [], at: 0, picked: null, answered: false, wrongAgain: 0,
         log: [], shownAt: 0,
 
@@ -77,6 +80,7 @@
         },
 
         // ── Chọn câu cho phiên ────────────────────────────────────────────────
+        get allItems() { return [...this.data.quiz, ...(this.data.flashcards || [])]; },
         parentOf(cid) {
           const c = (this.data.concepts || []).find(x => x.id === cid);
           return c ? c.parent : null;
@@ -92,7 +96,7 @@
           seen.add(cid);
           if (this._cerr && this._cerr[cid] !== undefined) return this._cerr[cid];
           let n = 0, wrong = 0;
-          for (const q of this.data.quiz) {
+          for (const q of this.allItems) {
             if (q.concept !== cid) continue;
             const c = this.cards[q.id];
             if (c) { n += c.n; wrong += c.wrong; }
@@ -114,15 +118,37 @@
           const novel = !c || c.n === 0 ? 0.35 : 0;
           return 1.6 * err + 1.0 * overdue + 0.6 * this.conceptErr(q.concept) + novel + fresh;
         },
+        // ── Sơ đồ tư duy ──────────────────────────────────────────────────────
+        // Cây, KHÔNG phải ảnh: tìm kiếm được, diff được trong git, và chính nó
+        // là phân loại khái niệm mà conceptErr() cộng dồn lên.
+        children(pid) { return (this.data.concepts || []).filter(c => c.parent === pid); },
+        get roots() { return this.children(null); },
+        // Số câu và tỉ lệ sai của một nhánh, tính gộp cả nhánh con
+        branchStat(cid) {
+          const out = { n: 0, wrong: 0, items: 0 };
+          const walk = (id) => {
+            for (const q of this.allItems) {
+              if (q.concept !== id) continue;
+              out.items++;
+              const c = this.cards[q.id];
+              if (c) { out.n += c.n; out.wrong += c.wrong; }
+            }
+            this.children(id).forEach(k => walk(k.id));
+          };
+          walk(cid);
+          return out;
+        },
         conceptName(id) {
           const c = (this.data.concepts || []).find(x => x.id === id);
           return c ? (c.vi || c.en) : id;
         },
+        go(m) { this.mode = m; this.screen = m === 'quiz' || m === 'cards' ? 'start' : m; },
         start(n) {
           this._cerr = {};                       // xoá bộ nhớ đệm mỗi phiên
           const now = Math.floor(Date.now() / 1000);
           const seen = [], fresh = [];
-          for (const q of this.data.quiz) {
+          const pool = this.mode === 'cards' ? (this.data.flashcards || []) : this.data.quiz;
+          for (const q of pool) {
             (this.cards[q.id] && this.cards[q.id].n > 0 ? seen : fresh).push(q);
           }
           const due = seen.filter(q => this.cards[q.id].due <= now)
@@ -149,7 +175,7 @@
           }
           this.queue = q0;
           this.at = 0; this.log = []; this.picked = null; this.answered = false;
-          this.wrongAgain = 0;
+          this.wrongAgain = 0; this.revealed = false;
           this.screen = 'quiz'; this.shownAt = Date.now();
         },
         get q() { return this.queue[this.at] || null; },
@@ -199,6 +225,28 @@
         },
         get nDone() { return this.log.filter(x => x.ok).length; },
 
+        // ── Thẻ ghi nhớ ───────────────────────────────────────────────────────
+        // Người học tự chấm 0..3 (Lại / Khó / Được / Dễ) — cùng thang điểm với
+        // trắc nghiệm nên dùng chung sched() và chung lịch sử trong D1.
+        rate(g) {
+          if (!this.revealed) return;
+          const now = Math.floor(Date.now() / 1000);
+          const q = this.q;
+          const st = this.sched(q.id, this.cards[q.id], g, now);
+          const okAns = g >= 2;
+          this.log.push({ i: q.id, c: q.concept, ok: okAns ? 1 : 0, g,
+                          ms: Date.now() - this.shownAt, x: null,
+                          t: now, box: st.box, ease: st.ease, due: st.due });
+          const prev = this.cards[q.id] || { n: 0, wrong: 0, streak: 0 };
+          this.cards[q.id] = { ...prev, ...st, n: prev.n + 1,
+                               wrong: prev.wrong + (okAns ? 0 : 1),
+                               streak: okAns ? prev.streak + 1 : 0, last_ts: now };
+          if (!okAns && this.wrongAgain < 5) { this.queue.push(q); this.wrongAgain++; }
+          this.revealed = false;
+          this.at++; this.shownAt = Date.now();
+          if (this.at >= this.queue.length) { this.screen = 'done'; this.save(); }
+        },
+
         // ── Ghi kết quả ───────────────────────────────────────────────────────
         // Đệm vào localStorage TRƯỚC khi gửi. Mất mạng ở câu 19 mà mất cả phiên
         // là mất đúng thứ có giá trị nhất của tính năng này.
@@ -232,7 +280,7 @@
         // Khái niệm yếu nhất, ngưỡng n>=2 để không kết luận từ một lần sai
         weakConcepts() {
           const by = {};
-          for (const q of this.data.quiz) {
+          for (const q of this.allItems) {
             const c = this.cards[q.id];
             if (!c || !c.n) continue;
             (by[q.concept] = by[q.concept] || { id: q.concept, n: 0, wrong: 0 });
@@ -273,19 +321,40 @@
     </div>
   </header>
 
+  <!-- Thanh chế độ. Mọi class Tailwind ở đây là literal — nội dung đến từ JSON
+       nhưng class thì phải nằm sẵn trong HTML để Tailwind quét thấy lúc build. -->
+  <nav x-show="ready && data" x-cloak class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <div class="max-w-2xl mx-auto px-4 py-2 flex gap-1.5 overflow-x-auto">
+      <template x-for="m in [
+          {k:'summary', t:'📄 Tóm tắt'}, {k:'map', t:'🗺️ Sơ đồ'},
+          {k:'cards',   t:'🃏 Thẻ ghi nhớ'}, {k:'quiz', t:'✍️ Trắc nghiệm'}]" :key="m.k">
+        <button @click="go(m.k)"
+                :class="mode === m.k ? 'bg-indigo-600 text-white border-indigo-600'
+                                     : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'"
+                class="px-3 py-1.5 text-xs font-medium rounded-full border whitespace-nowrap transition-colors"
+                x-text="m.t"></button>
+      </template>
+    </div>
+  </nav>
+
   <main class="max-w-2xl mx-auto px-4 py-6">
     <p x-show="!ready" class="text-center text-sm text-slate-400 py-10">Đang tải…</p>
     <p x-show="ready && err && !data" x-cloak
        class="rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-800" x-text="err"></p>
 
     <!-- ── Màn hình bắt đầu ─────────────────────────────────────────────── -->
-    <template x-if="ready && data && screen === 'start'">
+    <template x-if="ready && data && screen === 'start' && (mode === 'quiz' || mode === 'cards')">
     <div class="space-y-4">
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
         <h2 class="font-semibold text-slate-900" x-text="data.concepts?.[0]?.en || 'Ôn tập'"></h2>
         <p class="mt-1 text-sm text-slate-500">
-          <span x-text="data.quiz.length"></span> câu hỏi ·
+          <span x-text="mode === 'cards' ? (data.flashcards || []).length : data.quiz.length"></span>
+          <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
           <span x-text="(data.concepts || []).length"></span> khái niệm
+        </p>
+        <p x-show="mode === 'cards' && !(data.flashcards || []).length" x-cloak
+           class="mt-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs text-slate-500">
+          Chưa có thẻ ghi nhớ cho môn này.
         </p>
         <p x-show="!online" x-cloak class="mt-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800">
           Chế độ chỉ đọc — vẫn làm bài được, nhưng kết quả không được lưu lại.
@@ -296,12 +365,14 @@
         </p>
         <div class="mt-4 flex gap-2">
           <button @click="start(10)"
-                  class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
-            Làm 10 câu
+                  :disabled="mode === 'cards' && !(data.flashcards || []).length"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
+            Làm 10
           </button>
           <button @click="start(20)"
-                  class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500">
-            Làm 20 câu
+                  :disabled="mode === 'cards' && !(data.flashcards || []).length"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">
+            Làm 20
           </button>
         </div>
       </div>
@@ -328,7 +399,7 @@
     </template>
 
     <!-- ── Làm bài ──────────────────────────────────────────────────────── -->
-    <template x-if="screen === 'quiz' && q">
+    <template x-if="screen === 'quiz' && q && mode === 'quiz'">
     <div class="space-y-4">
       <div class="flex items-center gap-3 text-xs text-slate-500">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
@@ -370,10 +441,110 @@
     </div>
     </template>
 
+    <!-- ── Thẻ ghi nhớ ──────────────────────────────────────────────────── -->
+    <template x-if="screen === 'quiz' && q && mode === 'cards'">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3 text-xs text-slate-500">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-indigo-500 transition-all duration-300"
+               :style="'width:' + Math.round(at / queue.length * 100) + '%'"></div>
+        </div>
+        <span x-text="(at + 1) + '/' + queue.length"></span>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col">
+        <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
+        <p class="mt-2 text-lg font-medium text-slate-900" x-text="q.front_en"></p>
+        <div x-show="revealed" x-cloak class="mt-4 pt-4 border-t border-slate-100">
+          <p class="text-slate-700" x-text="q.back_en"></p>
+        </div>
+        <button x-show="!revealed" @click="revealed = true"
+                class="mt-auto pt-6 text-sm font-medium text-indigo-600 hover:text-indigo-800 self-start">
+          Lật thẻ ↻
+        </button>
+      </div>
+
+      <!-- Tự chấm 0..3, cùng thang với trắc nghiệm nên dùng chung lịch ôn -->
+      <div x-show="revealed" x-cloak class="grid grid-cols-4 gap-2">
+        <button @click="rate(0)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">Lại</button>
+        <button @click="rate(1)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200">Khó</button>
+        <button @click="rate(2)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200">Được</button>
+        <button @click="rate(3)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">Dễ</button>
+      </div>
+    </div>
+    </template>
+
+    <!-- ── Sơ đồ tư duy ─────────────────────────────────────────────────── -->
+    <template x-if="ready && data && mode === 'map'">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <template x-for="r in roots" :key="r.id">
+        <div>
+          <p class="font-semibold text-slate-900" x-text="r.en"></p>
+          <ul class="mt-2 space-y-1">
+            <template x-for="c1 in children(r.id)" :key="c1.id">
+              <li>
+                <button @click="openMap[c1.id] = !openMap[c1.id]"
+                        class="w-full flex items-center gap-2 py-1.5 text-left group">
+                  <svg class="w-4 h-4 text-indigo-500 shrink-0 transition-transform duration-200"
+                       :class="openMap[c1.id] ? 'rotate-90' : ''"
+                       fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                  </svg>
+                  <span class="flex-1 text-sm font-medium text-slate-800 group-hover:text-indigo-700" x-text="c1.en"></span>
+                  <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                        :class="branchStat(c1.id).wrong > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'"
+                        x-text="branchStat(c1.id).items + ' mục'"></span>
+                </button>
+                <ul x-show="openMap[c1.id]" x-cloak class="ml-6 border-l border-slate-200 pl-3 space-y-1 pb-1">
+                  <template x-for="c2 in children(c1.id)" :key="c2.id">
+                    <li class="flex items-center gap-2 py-1">
+                      <span class="w-1.5 h-1.5 rounded-full shrink-0"
+                            :class="branchStat(c2.id).wrong > 0 ? 'bg-rose-400' : 'bg-slate-300'"></span>
+                      <span class="flex-1 text-sm text-slate-600" x-text="c2.en"></span>
+                      <span class="text-xs text-slate-400 shrink-0"
+                            x-text="branchStat(c2.id).n ? branchStat(c2.id).wrong + '/' + branchStat(c2.id).n + ' sai' : ''"></span>
+                    </li>
+                  </template>
+                </ul>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </div>
+    </template>
+
+    <!-- ── Tóm tắt ──────────────────────────────────────────────────────── -->
+    <template x-if="ready && data && mode === 'summary'">
+    <div class="space-y-3">
+      <p x-show="!(data.summary || []).length" x-cloak
+         class="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-500">
+        Chưa có tóm tắt cho môn này.
+      </p>
+      <template x-for="sec in (data.summary || [])" :key="sec.concept">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900" x-text="conceptName(sec.concept)"></h3>
+          <ul class="mt-2 space-y-1.5">
+            <template x-for="(p, i) in (sec.points_en || [])" :key="i">
+              <li class="flex gap-2 text-sm text-slate-700">
+                <span class="text-indigo-400 shrink-0">•</span><span x-text="p"></span>
+              </li>
+            </template>
+          </ul>
+          <div x-show="(sec.terms || []).length" x-cloak class="mt-3 flex flex-wrap gap-1.5">
+            <template x-for="t in (sec.terms || [])" :key="t">
+              <span class="px-2 py-0.5 text-xs rounded bg-indigo-50 text-indigo-700" x-text="t"></span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+    </template>
+
     <!-- ── Kết thúc ─────────────────────────────────────────────────────── -->
     <div x-show="screen === 'done'" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
       <p class="text-3xl font-bold text-slate-900"><span x-text="nDone"></span>/<span x-text="log.length"></span></p>
-      <p class="mt-1 text-sm text-slate-500">câu đúng</p>
+      <p class="mt-1 text-sm text-slate-500" x-text="mode === 'cards' ? 'thẻ đã thuộc' : 'câu đúng'"></p>
       <p x-show="err" x-cloak class="mt-3 text-xs text-amber-700" x-text="err"></p>
       <div class="mt-5 flex justify-center gap-2">
         <button @click="screen = 'start'"
