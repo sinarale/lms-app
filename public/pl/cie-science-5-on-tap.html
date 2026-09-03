@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.96bf2b1f.css">
+  <link rel="stylesheet" href="../assets/tw.d8198d8b.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -25,7 +25,9 @@
         screen: 'start',        // start | quiz | done
         mode: 'quiz',           // quiz | cards | summary | map
         revealed: false,        // flashcard: đã lật chưa
-        openMap: {},            // sơ đồ: nhánh nào đang mở
+        openMap: {},            // cây bên trái: nhánh nào đang mở
+        scope: null,            // khái niệm đang học; null = cả môn
+        navOpen: false,         // ngăn kéo cây trên màn hình hẹp
         queue: [], at: 0, picked: null, answered: false, wrongAgain: 0,
         log: [], shownAt: 0,
 
@@ -80,9 +82,9 @@
         },
 
         // ── Chọn câu cho phiên ────────────────────────────────────────────────
-        get allItems() { return [...this.data.quiz, ...(this.data.flashcards || [])]; },
+        get allItems() { return [...(this.data?.quiz || []), ...(this.data?.flashcards || [])]; },
         parentOf(cid) {
-          const c = (this.data.concepts || []).find(x => x.id === cid);
+          const c = (this.data?.concepts || []).find(x => x.id === cid);
           return c ? c.parent : null;
         },
         // Tỉ lệ sai của một khái niệm, cộng dồn lên cây. Đây là phần thưởng của
@@ -118,11 +120,48 @@
           const novel = !c || c.n === 0 ? 0.35 : 0;
           return 1.6 * err + 1.0 * overdue + 0.6 * this.conceptErr(q.concept) + novel + fresh;
         },
-        // ── Sơ đồ tư duy ──────────────────────────────────────────────────────
+        // ── Phạm vi học ───────────────────────────────────────────────────────
+        // Bấm vào Unit thì học cả Unit; bấm vào một mục con thì chỉ học mục đó.
+        // Làm bằng cách lấy toàn bộ nhánh con của khái niệm được chọn.
+        subtree(cid) {
+          if (this._sub && this._sub[cid]) return this._sub[cid];
+          const out = new Set([cid]);
+          const walk = (id) => this.children(id).forEach(k => { out.add(k.id); walk(k.id); });
+          walk(cid);
+          (this._sub = this._sub || {})[cid] = out;
+          return out;
+        },
+        inScope(cid) { return !this.scope || this.subtree(this.scope).has(cid); },
+        setScope(cid) {
+          this.scope = cid;
+          this.navOpen = false;
+          // Đang giữa phiên mà đổi phạm vi thì quay về màn hình bắt đầu, không
+          // thì hàng đợi cũ vẫn chạy tiếp với nội dung ngoài phạm vi vừa chọn.
+          if (this.screen !== 'start' && (this.mode === 'quiz' || this.mode === 'cards')) {
+            this.screen = 'start';
+          }
+        },
+        get scopeName() {
+          if (!this.scope) return 'Cả môn';
+          return this.label((this.data?.concepts || []).find(x => x.id === this.scope)) || this.scope;
+        },
+        get scopedQuiz() { return (this.data?.quiz || []).filter(q => this.inScope(q.concept)); },
+        get scopedCards() { return (this.data?.flashcards || []).filter(q => this.inScope(q.concept)); },
+        get scopedSummary() { return (this.data?.summary || []).filter(x => this.inScope(x.concept)); },
+
+        // ── Cây khái niệm ──────────────────────────────────────────────────────
         // Cây, KHÔNG phải ảnh: tìm kiếm được, diff được trong git, và chính nó
         // là phân loại khái niệm mà conceptErr() cộng dồn lên.
-        children(pid) { return (this.data.concepts || []).filter(c => c.parent === pid); },
+        // Dùng ?. ở mọi getter: Alpine ĐÁNH GIÁ biểu thức trong x-show dù đang
+        // ẩn, nên cây bên trái chạy trước khi fetch xong và data vẫn là null.
+        children(pid) { return (this.data?.concepts || []).filter(c => c.parent === pid); },
         get roots() { return this.children(null); },
+        // "Unit" = tầng ngay dưới gốc. Nếu cây chỉ có một gốc (một unit duy
+        // nhất) thì lấy chính các con của nó, để menu không hiện đúng một dòng.
+        get units() {
+          const r = this.roots;
+          return r.length === 1 ? this.children(r[0].id) : r;
+        },
         // Số câu và tỉ lệ sai của một nhánh, tính gộp cả nhánh con
         branchStat(cid) {
           const out = { n: 0, wrong: 0, items: 0 };
@@ -138,16 +177,26 @@
           walk(cid);
           return out;
         },
+        // Nhãn hiển thị: "2.1 Properties of substances". Số mục để RIÊNG trong
+        // trường `no` chứ không nhét vào `en` — bảng khoá khái niệm tra theo `en`,
+        // đổi nhãn là tách đôi lịch sử.
+        // "Unit 2 — Materials…" cho unit, "2.1 Properties…" cho mục con.
+        // Số mục đã tự mang dấu chấm nên đừng thêm dấu chấm nữa.
+        label(c) {
+          if (!c) return '';
+          if (!c.no) return c.en;
+          return c.no.includes('.') ? c.no + ' ' + c.en : 'Unit ' + c.no + ' — ' + c.en;
+        },
         conceptName(id) {
-          const c = (this.data.concepts || []).find(x => x.id === id);
-          return c ? (c.vi || c.en) : id;
+          const c = (this.data?.concepts || []).find(x => x.id === id);
+          return this.label(c) || id;
         },
         go(m) { this.mode = m; this.screen = m === 'quiz' || m === 'cards' ? 'start' : m; },
         start(n) {
           this._cerr = {};                       // xoá bộ nhớ đệm mỗi phiên
           const now = Math.floor(Date.now() / 1000);
           const seen = [], fresh = [];
-          const pool = this.mode === 'cards' ? (this.data.flashcards || []) : this.data.quiz;
+          const pool = this.mode === 'cards' ? this.scopedCards : this.scopedQuiz;
           for (const q of pool) {
             (this.cards[q.id] && this.cards[q.id].n > 0 ? seen : fresh).push(q);
           }
@@ -323,10 +372,16 @@
 
   <!-- Thanh chế độ. Mọi class Tailwind ở đây là literal — nội dung đến từ JSON
        nhưng class thì phải nằm sẵn trong HTML để Tailwind quét thấy lúc build. -->
-  <nav x-show="ready && data" x-cloak class="bg-white border-b border-slate-200 sticky top-0 z-10">
-    <div class="max-w-2xl mx-auto px-4 py-2 flex gap-1.5 overflow-x-auto">
+  <nav x-show="ready && data" x-cloak class="bg-white border-b border-slate-200 sticky top-0 z-20">
+    <div class="max-w-5xl mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto">
+      <!-- Màn hẹp: nút mở cây. Màn rộng: cây đã hiện sẵn nên ẩn nút đi. -->
+      <button @click="navOpen = !navOpen"
+              class="lg:hidden shrink-0 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-slate-300 text-slate-700 hover:border-indigo-400">
+        ☰ <span x-text="scopeName"></span>
+      </button>
+      <span class="lg:hidden w-px h-4 bg-slate-200 shrink-0"></span>
       <template x-for="m in [
-          {k:'summary', t:'📄 Tóm tắt'}, {k:'map', t:'🗺️ Sơ đồ'},
+          {k:'summary', t:'📄 Tóm tắt'},
           {k:'cards',   t:'🃏 Thẻ ghi nhớ'}, {k:'quiz', t:'✍️ Trắc nghiệm'}]" :key="m.k">
         <button @click="go(m.k)"
                 :class="mode === m.k ? 'bg-indigo-600 text-white border-indigo-600'
@@ -337,7 +392,66 @@
     </div>
   </nav>
 
-  <main class="max-w-2xl mx-auto px-4 py-6">
+  <div class="max-w-5xl mx-auto lg:flex lg:gap-6 lg:px-4">
+    <!-- Nền mờ khi mở ngăn kéo trên màn hẹp -->
+    <div x-show="navOpen" x-cloak @click="navOpen = false"
+         class="lg:hidden fixed inset-0 bg-slate-900/40 z-20"></div>
+
+    <!-- ── Cây chọn phần học ─────────────────────────────────────────────── -->
+    <!-- x-show chỉ điều khiển ngăn kéo trên màn hẹp; màn rộng thì `lg:!block`
+         ghi đè display:none mà x-show đặt. Không dùng window.innerWidth trong
+         x-show: giá trị đó không phản ứng, xoay máy tính bảng là kẹt trạng thái. -->
+    <aside x-show="navOpen" x-cloak
+           :class="navOpen ? 'fixed inset-y-0 left-0 w-72 z-30 overflow-y-auto shadow-xl' : ''"
+           class="lg:!block lg:static lg:w-60 lg:shrink-0 lg:z-auto lg:shadow-none bg-white lg:bg-transparent p-4 lg:pl-0 lg:py-6">
+      <p class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2">Phần học</p>
+      <button @click="setScope(null)"
+              :class="!scope ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100'"
+              class="w-full text-left px-2.5 py-1.5 rounded-lg text-sm font-medium">
+        Cả môn
+      </button>
+      <ul class="mt-1 space-y-0.5">
+        <template x-for="u in units" :key="u.id">
+          <li>
+            <div class="flex items-center gap-0.5">
+              <button @click="openMap[u.id] = !openMap[u.id]"
+                      class="shrink-0 p-1 text-indigo-500 hover:text-indigo-700"
+                      :aria-label="'Mở ' + u.en">
+                <svg class="w-3.5 h-3.5 transition-transform duration-200"
+                     :class="openMap[u.id] ? 'rotate-90' : ''"
+                     fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+              <button @click="setScope(u.id)"
+                      :class="scope === u.id ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100'"
+                      class="flex-1 min-w-0 text-left px-2 py-1.5 rounded-lg text-sm">
+                <span class="block truncate" x-text="label(u)"></span>
+              </button>
+            </div>
+            <ul x-show="openMap[u.id]" x-cloak class="ml-5 border-l border-slate-200 pl-1.5 space-y-0.5">
+              <template x-for="sec in children(u.id)" :key="sec.id">
+                <li>
+                  <button @click="setScope(sec.id)"
+                          :class="scope === sec.id ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-100'"
+                          class="w-full flex items-center gap-1.5 text-left px-2 py-1.5 rounded-lg text-xs">
+                    <span class="w-1.5 h-1.5 rounded-full shrink-0"
+                          :class="branchStat(sec.id).wrong > 0 ? 'bg-rose-400' : 'bg-slate-300'"></span>
+                    <span class="flex-1 min-w-0 truncate" x-text="label(sec)"></span>
+                    <span class="shrink-0 opacity-60" x-text="branchStat(sec.id).items || ''"></span>
+                  </button>
+                </li>
+              </template>
+              <li x-show="!children(u.id).length" x-cloak class="px-2 py-1.5 text-xs text-slate-400 italic">
+                chưa chia mục
+              </li>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </aside>
+
+  <main class="flex-1 min-w-0 px-4 lg:px-0 py-6">
     <p x-show="!ready" class="text-center text-sm text-slate-400 py-10">Đang tải…</p>
     <p x-show="ready && err && !data" x-cloak
        class="rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-800" x-text="err"></p>
@@ -346,13 +460,13 @@
     <template x-if="ready && data && screen === 'start' && (mode === 'quiz' || mode === 'cards')">
     <div class="space-y-4">
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-        <h2 class="font-semibold text-slate-900" x-text="data.concepts?.[0]?.en || 'Ôn tập'"></h2>
+        <h2 class="font-semibold text-slate-900" x-text="scopeName"></h2>
         <p class="mt-1 text-sm text-slate-500">
-          <span x-text="mode === 'cards' ? (data.flashcards || []).length : data.quiz.length"></span>
+          <span x-text="mode === 'cards' ? scopedCards.length : scopedQuiz.length"></span>
           <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
           <span x-text="(data.concepts || []).length"></span> khái niệm
         </p>
-        <p x-show="mode === 'cards' && !(data.flashcards || []).length" x-cloak
+        <p x-show="mode === 'cards' && !scopedCards.length" x-cloak
            class="mt-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs text-slate-500">
           Chưa có thẻ ghi nhớ cho môn này.
         </p>
@@ -365,12 +479,12 @@
         </p>
         <div class="mt-4 flex gap-2">
           <button @click="start(10)"
-                  :disabled="mode === 'cards' && !(data.flashcards || []).length"
+                  :disabled="!(mode === 'cards' ? scopedCards : scopedQuiz).length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
             Làm 10
           </button>
           <button @click="start(20)"
-                  :disabled="mode === 'cards' && !(data.flashcards || []).length"
+                  :disabled="!(mode === 'cards' ? scopedCards : scopedQuiz).length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">
             Làm 20
           </button>
@@ -474,54 +588,14 @@
     </div>
     </template>
 
-    <!-- ── Sơ đồ tư duy ─────────────────────────────────────────────────── -->
-    <template x-if="ready && data && mode === 'map'">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-      <template x-for="r in roots" :key="r.id">
-        <div>
-          <p class="font-semibold text-slate-900" x-text="r.en"></p>
-          <ul class="mt-2 space-y-1">
-            <template x-for="c1 in children(r.id)" :key="c1.id">
-              <li>
-                <button @click="openMap[c1.id] = !openMap[c1.id]"
-                        class="w-full flex items-center gap-2 py-1.5 text-left group">
-                  <svg class="w-4 h-4 text-indigo-500 shrink-0 transition-transform duration-200"
-                       :class="openMap[c1.id] ? 'rotate-90' : ''"
-                       fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                  </svg>
-                  <span class="flex-1 text-sm font-medium text-slate-800 group-hover:text-indigo-700" x-text="c1.en"></span>
-                  <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                        :class="branchStat(c1.id).wrong > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'"
-                        x-text="branchStat(c1.id).items + ' mục'"></span>
-                </button>
-                <ul x-show="openMap[c1.id]" x-cloak class="ml-6 border-l border-slate-200 pl-3 space-y-1 pb-1">
-                  <template x-for="c2 in children(c1.id)" :key="c2.id">
-                    <li class="flex items-center gap-2 py-1">
-                      <span class="w-1.5 h-1.5 rounded-full shrink-0"
-                            :class="branchStat(c2.id).wrong > 0 ? 'bg-rose-400' : 'bg-slate-300'"></span>
-                      <span class="flex-1 text-sm text-slate-600" x-text="c2.en"></span>
-                      <span class="text-xs text-slate-400 shrink-0"
-                            x-text="branchStat(c2.id).n ? branchStat(c2.id).wrong + '/' + branchStat(c2.id).n + ' sai' : ''"></span>
-                    </li>
-                  </template>
-                </ul>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </template>
-    </div>
-    </template>
-
     <!-- ── Tóm tắt ──────────────────────────────────────────────────────── -->
     <template x-if="ready && data && mode === 'summary'">
     <div class="space-y-3">
-      <p x-show="!(data.summary || []).length" x-cloak
+      <p x-show="!scopedSummary.length" x-cloak
          class="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-500">
         Chưa có tóm tắt cho môn này.
       </p>
-      <template x-for="sec in (data.summary || [])" :key="sec.concept">
+      <template x-for="sec in scopedSummary" :key="sec.concept">
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <h3 class="font-semibold text-slate-900" x-text="conceptName(sec.concept)"></h3>
           <ul class="mt-2 space-y-1.5">
@@ -558,5 +632,6 @@
       </div>
     </div>
   </main>
+  </div>
 </body>
 </html>

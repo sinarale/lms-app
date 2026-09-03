@@ -12,16 +12,52 @@
  },
  "concepts": [
   {
-   "id": "c.materials",
+   "id": "c.science5",
    "parent": null,
+   "en": "CIE Science 5",
+   "no": ""
+  },
+  {
+   "id": "c.u1",
+   "parent": "c.science5",
+   "en": "The human body",
+   "no": "1"
+  },
+  {
+   "id": "c.u1.the_circulatory_system",
+   "parent": "c.u1",
+   "en": "The circulatory system",
+   "no": "1.1"
+  },
+  {
+   "id": "c.u1.the_respiratory_system",
+   "parent": "c.u1",
+   "en": "The respiratory system",
+   "no": "1.2"
+  },
+  {
+   "id": "c.u1.the_reproductive_system",
+   "parent": "c.u1",
+   "en": "The reproductive system",
+   "no": "1.3"
+  },
+  {
+   "id": "c.u1.diseases",
+   "parent": "c.u1",
+   "en": "Diseases",
+   "no": "1.4"
+  },
+  {
+   "id": "c.materials",
+   "parent": "c.science5",
    "en": "Materials: properties and changes",
-   "pages": "35-62"
+   "no": "2"
   },
   {
    "id": "c.materials.properties",
    "parent": "c.materials",
    "en": "Properties of substances",
-   "pages": "35-41"
+   "no": "2.1"
   },
   {
    "id": "c.materials.properties.melting",
@@ -45,7 +81,7 @@
    "id": "c.materials.conductors",
    "parent": "c.materials",
    "en": "Thermal and electrical conductors",
-   "pages": "42-48"
+   "no": "2.2"
   },
   {
    "id": "c.materials.conductors.thermal",
@@ -69,7 +105,7 @@
    "id": "c.materials.reversible",
    "parent": "c.materials",
    "en": "Reversible changes",
-   "pages": "49-55"
+   "no": "2.3"
   },
   {
    "id": "c.materials.reversible.changes",
@@ -93,7 +129,7 @@
    "id": "c.materials.chemical",
    "parent": "c.materials",
    "en": "Chemical reactions",
-   "pages": "56-62"
+   "no": "2.4"
   },
   {
    "id": "c.materials.chemical.reactants_products",
@@ -112,6 +148,108 @@
    "parent": "c.materials.chemical",
    "en": "Examples of chemical reactions",
    "pages": "61-62"
+  },
+  {
+   "id": "c.u3",
+   "parent": "c.science5",
+   "en": "Rocks, the rock cycle and soil",
+   "no": "3"
+  },
+  {
+   "id": "c.u3.igneous_rocks",
+   "parent": "c.u3",
+   "en": "Igneous rocks",
+   "no": "3.1"
+  },
+  {
+   "id": "c.u3.sedimentary_rocks_and_fossil",
+   "parent": "c.u3",
+   "en": "Sedimentary rocks and fossils",
+   "no": "3.2"
+  },
+  {
+   "id": "c.u3.metamorphic_rocks_and_the_ro",
+   "parent": "c.u3",
+   "en": "Metamorphic rocks and the rock cycle",
+   "no": "3.3"
+  },
+  {
+   "id": "c.u3.soil",
+   "parent": "c.u3",
+   "en": "Soil",
+   "no": "3.4"
+  },
+  {
+   "id": "c.u4",
+   "parent": "c.science5",
+   "en": "Food chains and food webs",
+   "no": "4"
+  },
+  {
+   "id": "c.u4.food_chains_food_webs_and_en",
+   "parent": "c.u4",
+   "en": "Food chains, food webs and energy transfers",
+   "no": "4.1"
+  },
+  {
+   "id": "c.u4.harm_to_food_chains_and_food",
+   "parent": "c.u4",
+   "en": "Harm to food chains and food webs",
+   "no": "4.2"
+  },
+  {
+   "id": "c.u5",
+   "parent": "c.science5",
+   "en": "Forces and electricity",
+   "no": "5"
+  },
+  {
+   "id": "c.u5.mass_and_weight",
+   "parent": "c.u5",
+   "en": "Mass and weight",
+   "no": "5.1"
+  },
+  {
+   "id": "c.u5.the_effects_of_forces",
+   "parent": "c.u5",
+   "en": "The effects of forces",
+   "no": "5.2"
+  },
+  {
+   "id": "c.u5.floating_and_sinking",
+   "parent": "c.u5",
+   "en": "Floating and sinking",
+   "no": "5.3"
+  },
+  {
+   "id": "c.u5.different_circuits_and_circu",
+   "parent": "c.u5",
+   "en": "Different circuits and circuit diagrams",
+   "no": "5.4"
+  },
+  {
+   "id": "c.u6",
+   "parent": "c.science5",
+   "en": "Light and the Solar System",
+   "no": "6"
+  },
+  {
+   "id": "c.u6.reflection",
+   "parent": "c.u6",
+   "en": "Reflection",
+   "no": "6.1"
+  },
+  {
+   "id": "c.u6.refraction",
+   "parent": "c.u6",
+   "en": "Refraction",
+   "no": "6.2"
+  },
+  {
+   "id": "c.u6.the_solar_system",
+   "parent": "c.u6",
+   "en": "The Solar System",
+   "no": "6.3"
   }
  ],
  "summary": [
@@ -962,5 +1100,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T07:05:08+00:00"
+ "generated_at": "2026-09-03T07:27:19+00:00"
 }
