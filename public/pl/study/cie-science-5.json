@@ -426,7 +426,7 @@
      },
      {
       "aspect": "Best in the book",
-      "a": "Silver",
+      "a": "Silver (text) — copper in the table",
       "b": "Copper"
      },
      {
@@ -437,73 +437,67 @@
     ]
    },
    "checklist": {
-    "title": "Metals in order of how well they conduct heat",
+    "title": "How well substances conduct (book table, p.47)",
     "concept": "c.materials.conductors.thermal",
     "items": [
      {
-      "sign": "Silver",
-      "look_for": "The best metal for carrying heat.",
-      "book_example": "Value 420 in the book's table.",
-      "icon": "heat"
-     },
-     {
       "sign": "Copper",
-      "look_for": "Almost as good as silver.",
-      "book_example": "Copper bottoms on cooking pots.",
+      "look_for": "Heat 386 · Electricity 59 — best in the table for both.",
+      "book_example": "Used for connecting wires and pot bottoms.",
       "icon": "heat"
      },
      {
       "sign": "Aluminium",
-      "look_for": "Light, and conducts heat well.",
-      "book_example": "Aluminium cooking pans.",
+      "look_for": "Heat 237 · Electricity 37.",
+      "book_example": "Aluminium foil was tested in the circuit.",
       "icon": "heat"
+     },
+     {
+      "sign": "Graphite",
+      "look_for": "Heat 168 · Electricity 1 — conducts heat well but electricity poorly.",
+      "book_example": "Pencil graphite still lights the lamp dimly.",
+      "icon": "bar"
      },
      {
       "sign": "Brass",
-      "look_for": "A yellow metal, medium conductor.",
-      "book_example": "Car radiators that cool the engine.",
+      "look_for": "Heat 150 · Electricity 16.",
+      "book_example": "—",
       "icon": "heat"
      },
      {
-      "sign": "Iron",
-      "look_for": "Strong, conducts heat slowly.",
-      "book_example": "An iron nail.",
-      "icon": "heat"
-     },
-     {
-      "sign": "Stainless steel",
-      "look_for": "Conducts heat poorly for a metal.",
-      "book_example": "Value 15 — the lowest in the table.",
+      "sign": "Steel",
+      "look_for": "Heat 80 · Electricity 10 — lowest in the table.",
+      "book_example": "Steel paper clip, steel cup.",
       "icon": "heat"
      }
     ],
-    "note": "Silver scores 420 and stainless steel only 15 — a difference of nearly 30 times."
+    "note": "Units: W/m·K for heat. Silver is named in the text as the best conductor of heat, but it is not in this table."
    },
    "points": [
     {
-     "t": "Silver is the best conductor of heat, with a value of 420 in the book's table.",
+     "t": "Silver is the best conductor of heat (p.44). Non-metals like glass and plastic are poor conductors.",
      "icon": "fire",
      "concept": "c.materials.conductors.thermal"
     },
     {
-     "t": "Copper is used for connecting wires — it conducts electricity extremely well (value 59).",
+     "t": "A cold metal teaspoon in hot tea: the handle feels warm after a while — heat travels along the metal.",
+     "icon": "heat",
+     "concept": "c.materials.conductors.thermal"
+    },
+    {
+     "t": "Copper connecting wire carries electricity in the circuit; a steel paper clip and aluminium foil also make the lamp light.",
      "icon": "bolt",
      "concept": "c.materials.conductors.electrical"
     },
     {
-     "t": "A polystyrene foam cup keeps tea warm longest, compared with glass or steel cups.",
-     "icon": "shield",
-     "concept": "c.materials.conductors.insulators"
-    },
-    {
-     "t": "Pencil graphite is a non-metal that conducts electricity and can light a circuit lamp.",
+     "t": "Pencil graphite is a non-metal that conducts electricity — the lamp shines, but dimly.",
      "icon": "sparkle",
      "concept": "c.materials.conductors.electrical"
     },
     {
-     "t": "Stir hot soup with a metal spoon and heat travels up the spoon fast enough to burn your hand.",
-     "icon": "heat",
-     "concept": "c.materials.conductors.thermal"
+     "t": "Tea stays warm longest in a polystyrene foam cup, not a glass or stainless steel cup.",
+     "icon": "shield",
+     "concept": "c.materials.conductors.insulators"
     }
    ],
    "watch_out": [
@@ -513,8 +507,8 @@
      "concept": "c.materials.conductors.electrical"
     },
     {
-     "wrong": "Ice melts slower on a metal plate because metal feels colder than plastic.",
-     "right": "Ice melts much FASTER on metal — metal conducts heat into the ice quickly. It feels cold for the same reason.",
+     "wrong": "Food cooks slower in a metal dish than a glass dish.",
+     "right": "It cooks FASTER in metal — metal conducts heat into the food quickly (Check your progress, p.62).",
      "concept": "c.materials.conductors.thermal"
     },
     {
@@ -752,9 +746,9 @@
       "b": "Carbon dioxide gas + water"
      },
      {
-      "aspect": "Iron and sulfur",
-      "a": "Iron + sulfur",
-      "b": "Iron sulfide"
+      "aspect": "Limewater",
+      "a": "Limewater + carbon dioxide",
+      "b": "Calcium carbonate"
      }
     ]
    },
@@ -763,61 +757,55 @@
     "concept": "c.materials.chemical.evidence",
     "items": [
      {
-      "sign": "Gas bubbles",
-      "look_for": "You see bubbles of gas forming in the liquid.",
-      "book_example": "Vinegar + bicarbonate of soda in a jar.",
+      "sign": "A gas is produced",
+      "look_for": "You see bubbles forming.",
+      "book_example": "Vinegar + bicarbonate of soda in a jar (p.57).",
       "icon": "bubbles"
      },
      {
-      "sign": "Colour change",
-      "look_for": "The mixture turns a completely different colour.",
-      "book_example": "Starch added to yellow-brown iodine turns blue-black.",
+      "sign": "A colour change",
+      "look_for": "The mixture turns a different colour.",
+      "book_example": "Cornstarch added to water + iodine solution (p.58).",
       "icon": "swap"
      },
      {
-      "sign": "Temperature change",
-      "look_for": "The thermometer goes up or down.",
-      "book_example": "Vinegar on wire wool — wait five minutes.",
+      "sign": "A temperature change",
+      "look_for": "The thermometer reading changes.",
+      "book_example": "Vinegar on wire wool, wait five minutes (p.59).",
       "icon": "heat"
      },
      {
-      "sign": "Cloudy liquid",
-      "look_for": "A clear liquid turns cloudy as a solid forms.",
-      "book_example": "Breathe carbon dioxide through a straw into clear limewater.",
+      "sign": "A new solid forms",
+      "look_for": "A clear liquid turns cloudy.",
+      "book_example": "Breathe into limewater — calcium carbonate forms (p.58-59).",
       "icon": "cloud"
-     },
-     {
-      "sign": "Flame and light",
-      "look_for": "You see a bright flame or a glow.",
-      "book_example": "Magnesium burning in oxygen with a white flame.",
-      "icon": "fire"
      }
     ],
-    "note": "Boiling water also makes bubbles — one sign alone does not prove a chemical reaction. A new substance must be made."
+    "note": "The book asks for THREE ways (p.59 Q1): gas, colour change, temperature change. Boiling water also bubbles — a new substance must form."
    },
    "points": [
     {
-     "t": "Heat iron and sulfur together and they react to form a new solid: iron sulfide.",
-     "icon": "swap",
-     "concept": "c.materials.chemical.examples"
-    },
-    {
-     "t": "Bicarbonate of soda and vinegar react fast, producing bubbles of carbon dioxide gas.",
+     "t": "Vinegar + bicarbonate of soda: bubbles of gas straight away, and another product after five minutes.",
      "icon": "bubbles",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Blow carbon dioxide into clear limewater and it turns cloudy — calcium carbonate forms.",
+     "t": "Limewater + carbon dioxide → calcium carbonate: the clear liquid turns cloudy.",
      "icon": "cloud",
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Vinegar reacting with wire wool gives out heat — the thermometer rises after five minutes.",
+     "t": "Vinegar on wire wool: after five minutes the thermometer shows the temperature has changed.",
      "icon": "heat",
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Magnesium burning in oxygen makes a bright white flame and a new white powder.",
+     "t": "An iron nail in a saucer of water rusts after a few days — iron, water and oxygen react.",
+     "icon": "sparkle",
+     "concept": "c.materials.chemical.examples"
+    },
+    {
+     "t": "A burning candle: the melting wax is reversible, the burning wick is a chemical reaction (p.56).",
      "icon": "fire",
      "concept": "c.materials.chemical.examples"
     }
@@ -829,8 +817,8 @@
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "wrong": "The bright white flame IS the product when magnesium burns.",
-     "right": "The flame is energy. The product is the solid white powder left behind.",
+     "wrong": "Zara's fizzy tablet dissolving in water is just like sugar dissolving.",
+     "right": "The tablet FIZZES — gas is produced, so a chemical reaction is taking place (p.59 Q3).",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
@@ -1879,5 +1867,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T11:37:59+00:00"
+ "generated_at": "2026-09-03T12:00:15+00:00"
 }
