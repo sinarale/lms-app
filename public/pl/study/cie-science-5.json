@@ -110,20 +110,20 @@
   {
    "id": "c.materials.reversible.changes",
    "parent": "c.materials.reversible",
-   "en": "Reversible and irreversible changes",
-   "pages": "49-50"
+   "en": "Changes to substances",
+   "pages": "50"
   },
   {
    "id": "c.materials.reversible.dissolving",
    "parent": "c.materials.reversible",
-   "en": "Dissolving process",
+   "en": "Dissolving",
    "pages": "51-52"
   },
   {
    "id": "c.materials.reversible.factors",
    "parent": "c.materials.reversible",
-   "en": "Temperature and dissolving",
-   "pages": "53-55"
+   "en": "Can we make solids dissolve faster?",
+   "pages": "53-54"
   },
   {
    "id": "c.materials.chemical",
@@ -531,7 +531,8 @@
       "icon": "heat"
      }
     ],
-    "note": "Stirring and heating give the particles energy, so they move and spread out faster."
+    "note": "Stirring and heating give the particles energy, so they move and spread out faster.",
+    "concept": "c.materials.reversible.factors"
    },
    "points": [
     {
@@ -579,7 +580,8 @@
    ],
    "from_the_book": {
     "activity": "Stir a teaspoon of sugar into 100 ml of hot water and 100 ml of cold water, timing each with a stopwatch.",
-    "what_it_shows": "Sugar dissolves faster in hot water — heat gives the particles energy to move and spread quicker."
+    "what_it_shows": "Sugar dissolves faster in hot water — heat gives the particles energy to move and spread quicker.",
+    "concept": "c.materials.reversible.factors"
    },
    "glossary": [
     {
@@ -1777,5 +1779,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T11:17:00+00:00"
+ "generated_at": "2026-09-03T11:27:56+00:00"
 }
