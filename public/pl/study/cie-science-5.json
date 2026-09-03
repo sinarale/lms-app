@@ -255,8 +255,8 @@
  "summary": [
   {
    "concept": "c.materials.properties",
-   "big_en": "Every substance has its own melting temperature and its own boiling temperature.",
    "diagram": "particles",
+   "big_en": "Every substance has its own melting temperature and its own boiling temperature — that is how we tell it apart.",
    "compare": {
     "label_a": "Boiling",
     "label_b": "Evaporation",
@@ -267,61 +267,85 @@
       "b": "Only at the surface"
      },
      {
-      "aspect": "Speed",
-      "a": "Fast",
-      "b": "Slow"
+      "aspect": "Temperature",
+      "a": "Only at its boiling point",
+      "b": "At any temperature, even cool"
      },
      {
-      "aspect": "Temperature",
-      "a": "Only at its own boiling point",
-      "b": "At any temperature"
+      "aspect": "Speed",
+      "a": "Very fast",
+      "b": "Much slower"
      }
     ]
    },
+   "checklist": {
+    "title": "Properties of gases",
+    "concept": "c.materials.properties.gases",
+    "items": [
+     {
+      "sign": "Takes up space",
+      "look_for": "A gas fills the inside of its container.",
+      "book_example": "Two balloons blown up to the same size.",
+      "icon": "cloud"
+     },
+     {
+      "sign": "Has mass",
+      "look_for": "A gas has weight that pulls things down.",
+      "book_example": "Let air out of one balloon and the ruler tilts.",
+      "icon": "scale"
+     }
+    ],
+    "note": "We cannot feel air unless it is moving, as wind."
+   },
    "points": [
     {
-     "t": "Ice melts at 0 °C, but gold melts at 1064 °C.",
-     "icon": "ice"
+     "t": "Ice melts and becomes liquid water at 0 °C.",
+     "icon": "ice",
+     "concept": "c.materials.properties.melting"
     },
     {
-     "t": "Pure water boils at 100 °C, but vinegar boils at 118 °C.",
-     "icon": "fire"
+     "t": "Gold melts at a very high 1064 °C.",
+     "icon": "fire",
+     "concept": "c.materials.properties.melting"
+    },
+    {
+     "t": "Pure water boils at 100 °C.",
+     "icon": "drop",
+     "concept": "c.materials.properties.boiling_evaporation"
+    },
+    {
+     "t": "Vinegar boils at 118 °C.",
+     "icon": "beaker",
+     "concept": "c.materials.properties.boiling_evaporation"
     },
     {
      "t": "Liquid gold boils at 2856 °C.",
-     "icon": "heat"
-    },
-    {
-     "t": "Two matching balloons on a ruler balance show that gas has mass.",
-     "icon": "scale"
+     "icon": "heat",
+     "concept": "c.materials.properties.boiling_evaporation"
     }
    ],
    "watch_out": [
     {
-     "wrong": "Evaporation only happens when you heat a liquid.",
-     "right": "Evaporation can happen at any temperature, even in the cold."
+     "wrong": "A big block of ice melts at a higher temperature than a small ice cube.",
+     "right": "Melting point is a property of the substance — it is always the same, whatever the size.",
+     "concept": "c.materials.properties.melting"
     },
     {
-     "wrong": "Air is empty space and does not weigh anything.",
-     "right": "Air is made of gases, which take up space and have mass."
+     "wrong": "A liquid can only turn into gas when it boils on a hot stove.",
+     "right": "Liquids evaporate slowly at any temperature.",
+     "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "wrong": "Heat a bigger pan of water and its boiling point goes up.",
-     "right": "Water always boils at 100 °C, no matter how much of it you heat."
+     "wrong": "Air has no weight because it is invisible.",
+     "right": "Air is a gas — it has mass and takes up space.",
+     "concept": "c.materials.properties.gases"
     }
    ],
    "from_the_book": {
-    "activity": "Blow up two balloons to the same size, tie them to a ruler balance, then let the air out of one.",
-    "what_it_shows": "The balloon still full of air pulls its side down — gases have mass."
+    "activity": "Hang two blown-up balloons on a ruler balance, then let the air out of one.",
+    "what_it_shows": "The ruler tilts down on the side with the full balloon — gases have mass.",
+    "concept": "c.materials.properties.gases"
    },
-   "terms": [
-    "property",
-    "melting point",
-    "boiling point",
-    "matter",
-    "mass",
-    "evaporation"
-   ],
    "glossary": [
     {
      "term": "property",
@@ -377,80 +401,133 @@
      "example": "Water droplets forming on a cool surface when steam cools.",
      "concept": "c.materials.properties.boiling_evaporation"
     }
+   ],
+   "terms": [
+    "property",
+    "melting point",
+    "boiling point",
+    "matter",
+    "mass",
+    "evaporation"
    ]
   },
   {
    "concept": "c.materials.conductors",
-   "big_en": "Metals are super helpers: they let heat and electricity flow straight through.",
    "diagram": "conduction",
+   "big_en": "Metals let heat and electricity travel through them easily. Plastic and wood block them.",
    "compare": {
-    "label_a": "Metals — copper, iron",
-    "label_b": "Non-metals — plastic, wood",
+    "label_a": "Thermal conductors",
+    "label_b": "Electrical conductors",
     "rows": [
      {
-      "aspect": "Heat",
-      "a": "Travels through very fast",
-      "b": "Travels through very slowly"
+      "aspect": "What they carry",
+      "a": "Heat",
+      "b": "Electricity"
      },
      {
-      "aspect": "Electricity",
-      "a": "Passes through easily",
-      "b": "Is blocked"
+      "aspect": "Best in the book",
+      "a": "Silver",
+      "b": "Copper"
      },
      {
-      "aspect": "Used for",
-      "a": "Pans, so food heats fast",
-      "b": "Handles, so hands don't burn"
+      "aspect": "Everyday use",
+      "a": "Metal pots and pans",
+      "b": "Copper wire in circuits"
      }
     ]
    },
+   "checklist": {
+    "title": "Metals in order of how well they conduct heat",
+    "concept": "c.materials.conductors.thermal",
+    "items": [
+     {
+      "sign": "Silver",
+      "look_for": "The best metal for carrying heat.",
+      "book_example": "Value 420 in the book's table.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Copper",
+      "look_for": "Almost as good as silver.",
+      "book_example": "Copper bottoms on cooking pots.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Aluminium",
+      "look_for": "Light, and conducts heat well.",
+      "book_example": "Aluminium cooking pans.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Brass",
+      "look_for": "A yellow metal, medium conductor.",
+      "book_example": "Car radiators that cool the engine.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Iron",
+      "look_for": "Strong, conducts heat slowly.",
+      "book_example": "An iron nail.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Stainless steel",
+      "look_for": "Conducts heat poorly for a metal.",
+      "book_example": "Value 15 — the lowest in the table.",
+      "icon": "heat"
+     }
+    ],
+    "note": "Silver scores 420 and stainless steel only 15 — a difference of nearly 30 times."
+   },
    "points": [
     {
-     "t": "Silver is the best heat conductor — but pots aren't made of it because silver costs too much.",
-     "icon": "sparkle"
+     "t": "Silver is the best conductor of heat, with a value of 420 in the book's table.",
+     "icon": "fire",
+     "concept": "c.materials.conductors.thermal"
     },
     {
-     "t": "Some pots have a copper bottom: copper heats up quickly.",
-     "icon": "heat"
+     "t": "Copper is used for connecting wires — it conducts electricity extremely well (value 59).",
+     "icon": "bolt",
+     "concept": "c.materials.conductors.electrical"
     },
     {
-     "t": "Copper wires carry electricity, and even a steel paper clip can light a lamp.",
-     "icon": "bolt"
+     "t": "A polystyrene foam cup keeps tea warm longest, compared with glass or steel cups.",
+     "icon": "shield",
+     "concept": "c.materials.conductors.insulators"
     },
     {
-     "t": "Graphite in a pencil conducts too — a 2 cm piece lights the lamp brighter than a 10 cm piece.",
-     "icon": "bar"
+     "t": "Pencil graphite is a non-metal that conducts electricity and can light a circuit lamp.",
+     "icon": "sparkle",
+     "concept": "c.materials.conductors.electrical"
     },
     {
-     "t": "Hot tea stays warm longest in a polystyrene foam cup.",
-     "icon": "bubbles"
+     "t": "Stir hot soup with a metal spoon and heat travels up the spoon fast enough to burn your hand.",
+     "icon": "heat",
+     "concept": "c.materials.conductors.thermal"
     }
    ],
    "watch_out": [
     {
-     "wrong": "A metal dish feels warmer than a plastic dish when both hold an ice cube.",
-     "right": "The plastic feels warmer. Metal pulls heat away from your fingers faster, so it feels colder."
-    },
-    {
      "wrong": "Only metals can conduct electricity.",
-     "right": "Graphite inside a pencil is a non-metal and still lights a lamp."
+     "right": "Pencil graphite is a non-metal, yet it conducts electricity and lights a lamp.",
+     "concept": "c.materials.conductors.electrical"
     },
     {
-     "wrong": "A wooden spoon gets hot and burns your hand when you stir soup.",
-     "right": "Wood conducts heat poorly, so it stays cool and is safe to hold."
+     "wrong": "Ice melts slower on a metal plate because metal feels colder than plastic.",
+     "right": "Ice melts much FASTER on metal — metal conducts heat into the ice quickly. It feels cold for the same reason.",
+     "concept": "c.materials.conductors.thermal"
+    },
+    {
+     "wrong": "Plastic handles on pans are just for decoration.",
+     "right": "They are insulators — they block heat so you do not burn your hands.",
+     "concept": "c.materials.conductors.insulators"
     }
    ],
    "from_the_book": {
     "activity": "Metal spoon, plastic spoon, glass rod, pencil and polystyrene foam put into hot water, each with a bead stuck on using petroleum jelly.",
-    "what_it_shows": "The bead on the metal spoon falls off first — metal carries heat fastest and melts the jelly."
+    "what_it_shows": "The bead on the metal spoon falls off first; the bead on the polystyrene falls off last.",
+    "concept": "c.materials.conductors.thermal"
    },
-   "terms": [
-    "conduction",
-    "thermal conductor",
-    "electrical conductor",
-    "insulator",
-    "graphite"
-   ],
    "glossary": [
     {
      "term": "conduction",
@@ -488,6 +565,13 @@
      "example": "A lamp, a cell and copper connecting wires joined in a loop.",
      "concept": "c.materials.conductors.electrical"
     }
+   ],
+   "terms": [
+    "conduction",
+    "thermal conductor",
+    "electrical conductor",
+    "insulator",
+    "graphite"
    ]
   },
   {
@@ -651,16 +735,16 @@
   },
   {
    "concept": "c.materials.chemical",
-   "big_en": "Mix substances together and sometimes you get a brand new substance — one you cannot easily change back.",
    "diagram": "reaction",
+   "big_en": "When substances react, they join together to make completely new materials.",
    "compare": {
     "label_a": "Reactants",
     "label_b": "Products",
     "rows": [
      {
-      "aspect": "When",
-      "a": "Before the reaction",
-      "b": "After the reaction"
+      "aspect": "What they are",
+      "a": "The starting substances",
+      "b": "The brand-new substances made"
      },
      {
       "aspect": "Vinegar experiment",
@@ -668,51 +752,97 @@
       "b": "Carbon dioxide gas + water"
      },
      {
-      "aspect": "Limewater experiment",
-      "a": "Limewater + carbon dioxide",
-      "b": "Calcium carbonate"
+      "aspect": "Iron and sulfur",
+      "a": "Iron + sulfur",
+      "b": "Iron sulfide"
      }
     ]
    },
+   "checklist": {
+    "title": "Evidence for chemical reactions",
+    "concept": "c.materials.chemical.evidence",
+    "items": [
+     {
+      "sign": "Gas bubbles",
+      "look_for": "You see bubbles of gas forming in the liquid.",
+      "book_example": "Vinegar + bicarbonate of soda in a jar.",
+      "icon": "bubbles"
+     },
+     {
+      "sign": "Colour change",
+      "look_for": "The mixture turns a completely different colour.",
+      "book_example": "Starch added to yellow-brown iodine turns blue-black.",
+      "icon": "swap"
+     },
+     {
+      "sign": "Temperature change",
+      "look_for": "The thermometer goes up or down.",
+      "book_example": "Vinegar on wire wool — wait five minutes.",
+      "icon": "heat"
+     },
+     {
+      "sign": "Cloudy liquid",
+      "look_for": "A clear liquid turns cloudy as a solid forms.",
+      "book_example": "Breathe carbon dioxide through a straw into clear limewater.",
+      "icon": "cloud"
+     },
+     {
+      "sign": "Flame and light",
+      "look_for": "You see a bright flame or a glow.",
+      "book_example": "Magnesium burning in oxygen with a white flame.",
+      "icon": "fire"
+     }
+    ],
+    "note": "Boiling water also makes bubbles — one sign alone does not prove a chemical reaction. A new substance must be made."
+   },
    "points": [
     {
-     "t": "Vinegar + bicarbonate of soda bubbles up and makes carbon dioxide gas.",
-     "icon": "bubbles"
+     "t": "Heat iron and sulfur together and they react to form a new solid: iron sulfide.",
+     "icon": "swap",
+     "concept": "c.materials.chemical.examples"
     },
     {
-     "t": "Pour vinegar on wire wool in a beaker: after five minutes the thermometer shows the temperature has risen.",
-     "icon": "heat"
+     "t": "Bicarbonate of soda and vinegar react fast, producing bubbles of carbon dioxide gas.",
+     "icon": "bubbles",
+     "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Magnesium burns in oxygen with a bright white flame and leaves a white powder.",
-     "icon": "fire"
+     "t": "Blow carbon dioxide into clear limewater and it turns cloudy — calcium carbonate forms.",
+     "icon": "cloud",
+     "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Heat iron and sulfur together and you get a new substance: iron sulfide.",
-     "icon": "beaker"
+     "t": "Vinegar reacting with wire wool gives out heat — the thermometer rises after five minutes.",
+     "icon": "heat",
+     "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "An iron nail left in a saucer of water for a few days grows orange-brown rust.",
-     "icon": "sparkle"
+     "t": "Magnesium burning in oxygen makes a bright white flame and a new white powder.",
+     "icon": "fire",
+     "concept": "c.materials.chemical.examples"
     }
    ],
    "watch_out": [
     {
-     "wrong": "A candle melting is a chemical reaction.",
-     "right": "Melting wax is only a change of state. The burning wick is the chemical reaction."
+     "wrong": "Any bubbles mean a chemical reaction is happening.",
+     "right": "Boiling water makes bubbles too, but no new substance forms — that is a physical change.",
+     "concept": "c.materials.chemical.evidence"
     },
     {
-     "wrong": "Dissolving sugar is a chemical reaction because the sugar disappears.",
-     "right": "Dissolving is a physical change — evaporate the water and the sugar comes back."
+     "wrong": "The bright white flame IS the product when magnesium burns.",
+     "right": "The flame is energy. The product is the solid white powder left behind.",
+     "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "wrong": "Any bubbles in water mean a chemical reaction.",
-     "right": "Bubbles in boiling water are just water turning to gas. Bubbles from vinegar + baking soda are a real reaction."
+     "wrong": "Rust is just orange mud on a nail that washes off.",
+     "right": "Rust is a new substance, made when iron reacts with water and oxygen.",
+     "concept": "c.materials.chemical.examples"
     }
    ],
    "from_the_book": {
-    "activity": "Loosen some wire wool, put it in a beaker, pour vinegar on it and measure the temperature with a thermometer.",
-    "what_it_shows": "After five minutes the temperature rises — a chemical reaction can give out heat."
+    "activity": "Investigate evidence for chemical reactions: cornstarch with iodine, and limewater with carbon dioxide.",
+    "what_it_shows": "Yellow-brown iodine turns blue-black with starch; clear limewater turns cloudy with CO₂ — both are chemical reactions.",
+    "concept": "c.materials.chemical.evidence"
    },
    "glossary": [
     {
@@ -765,37 +895,7 @@
     "irreversible",
     "evidence",
     "rust"
-   ],
-   "checklist": {
-    "title": "Evidence for chemical reactions",
-    "items": [
-     {
-      "sign": "A gas is produced",
-      "look_for": "You see bubbles of gas forming in the liquid.",
-      "book_example": "Mix vinegar and bicarbonate of soda — gas bubbles form.",
-      "icon": "bubbles"
-     },
-     {
-      "sign": "A colour change",
-      "look_for": "The mixture turns a new colour.",
-      "book_example": "Mix cornstarch with iodine solution — it changes colour.",
-      "icon": "swap"
-     },
-     {
-      "sign": "A temperature change",
-      "look_for": "The thermometer goes up or down.",
-      "book_example": "Pour vinegar on wire wool — the temperature rises after five minutes.",
-      "icon": "heat"
-     },
-     {
-      "sign": "A liquid turns cloudy",
-      "look_for": "A clear liquid becomes cloudy.",
-      "book_example": "Breathe carbon dioxide into clear limewater — it turns cloudy.",
-      "icon": "cloud"
-     }
-    ],
-    "note": "One sign alone does not always prove a reaction — a new substance must be made."
-   }
+   ]
   }
  ],
  "glossary": [],
@@ -1779,5 +1879,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T11:27:56+00:00"
+ "generated_at": "2026-09-03T11:37:59+00:00"
 }
