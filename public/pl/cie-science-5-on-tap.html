@@ -23,7 +23,7 @@
         secret: localStorage.getItem('lms_key') || '',
         cards: {},              // item_id → {n, wrong, box, ease, due, last_ts}
         screen: 'start',        // start | quiz | done
-        queue: [], at: 0, picked: null, answered: false,
+        queue: [], at: 0, picked: null, answered: false, wrongAgain: 0,
         log: [], shownAt: 0,
 
         async init() {
@@ -54,28 +54,102 @@
           this.ready = true;
         },
 
+        // ── Lịch ôn giãn cách (Leitner + SM-2 rút gọn) ────────────────────────
+        // Tính bằng SỐ NGUYÊN từ đầu tới cuối: ease lưu ×100 để client và mọi
+        // phép dựng lại phía máy chủ ra cùng kết quả từng bit. Máy chủ kẹp lại
+        // mọi giá trị lần nữa, không tin client.
+        sched(id, c, g, now) {
+          const BOX = [0, 1, 2, 4, 8, 16, 32];   // số ngày theo bậc 1..6
+          let box = c ? c.box : 1, ease = c ? c.ease : 250;
+          if (g <= 1) {
+            box = Math.max(1, box - 1);
+            ease = Math.max(130, ease - 20);
+            return { box, ease, due: now + 600 };   // gặp lại NGAY trong phiên
+          }
+          box = Math.min(6, box + 1);
+          ease = Math.min(350, Math.max(130, ease + (g === 3 ? 10 : -10)));
+          // Nhiễu ±10% suy TẤT ĐỊNH từ id: để các mốc ôn không dồn hết vào một
+          // ngày, mà vẫn tính lại được y hệt khi phát lại lịch sử.
+          let h = 0;
+          for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+          const days = BOX[box] * ease / 250 * (1 + ((h % 21) - 10) / 100);
+          return { box, ease, due: now + Math.max(1, Math.round(days)) * 86400 };
+        },
+
         // ── Chọn câu cho phiên ────────────────────────────────────────────────
-        // GĐ 0: chỉ dùng tỉ lệ sai + tính mới, chưa dùng lịch ôn giãn cách.
+        parentOf(cid) {
+          const c = (this.data.concepts || []).find(x => x.id === cid);
+          return c ? c.parent : null;
+        },
+        // Tỉ lệ sai của một khái niệm, cộng dồn lên cây. Đây là phần thưởng của
+        // việc để sơ đồ tư duy dạng cây: yếu ở "properties" nâng điểm của MỌI câu
+        // nằm dưới nó, kể cả câu chưa gặp bao giờ — hệ thống khái quát hoá thay
+        // vì chỉ nhai lại đúng câu đã sai.
+        conceptErr(cid, seen) {
+          if (!cid) return 0;
+          seen = seen || new Set();
+          if (seen.has(cid)) return 0;              // chặn cây bị vòng
+          seen.add(cid);
+          if (this._cerr && this._cerr[cid] !== undefined) return this._cerr[cid];
+          let n = 0, wrong = 0;
+          for (const q of this.data.quiz) {
+            if (q.concept !== cid) continue;
+            const c = this.cards[q.id];
+            if (c) { n += c.n; wrong += c.wrong; }
+          }
+          const own = (wrong + 0.5) / (n + 1.0);
+          const p = this.parentOf(cid);
+          const v = p ? 0.65 * own + 0.35 * this.conceptErr(p, seen) : own;
+          (this._cerr = this._cerr || {})[cid] = v;
+          return v;
+        },
         // Làm trơn (+0.5/+1.0) là bắt buộc: thiếu nó thì một câu mới sai đúng
-        // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10.
-        score(q) {
+        // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10, và
+        // danh sách "điểm yếu" biến thành danh sách "câu mới gặp một lần".
+        score(q, now) {
           const c = this.cards[q.id];
-          if (!c) return 0.35;                       // câu chưa gặp
-          const err = (c.wrong + 0.5) / (c.n + 1.0);
-          return 1.6 * err;
+          const err = c ? (c.wrong + 0.5) / (c.n + 1.0) : 0.5;
+          const overdue = c ? Math.max(0, Math.min((now - c.due) / 86400, 14) / 14) : 0;
+          const fresh = c && (now - c.last_ts) < 600 ? -2.0 : 0;
+          const novel = !c || c.n === 0 ? 0.35 : 0;
+          return 1.6 * err + 1.0 * overdue + 0.6 * this.conceptErr(q.concept) + novel + fresh;
         },
         conceptName(id) {
           const c = (this.data.concepts || []).find(x => x.id === id);
           return c ? (c.vi || c.en) : id;
         },
         start(n) {
-          const all = [...this.data.quiz].sort((a, b) => this.score(b) - this.score(a));
-          // 60% theo điểm, phần còn lại trộn ngẫu nhiên — top-N thuần tạo ra
-          // phiên mà trẻ sai gần hết rồi bỏ, tính năng không ai mở thì vô dụng.
-          const head = all.slice(0, Math.ceil(n * 0.6));
-          const tail = all.slice(Math.ceil(n * 0.6)).sort(() => Math.random() - 0.5).slice(0, n - head.length);
-          this.queue = [...head, ...tail].sort(() => Math.random() - 0.5);
+          this._cerr = {};                       // xoá bộ nhớ đệm mỗi phiên
+          const now = Math.floor(Date.now() / 1000);
+          const seen = [], fresh = [];
+          for (const q of this.data.quiz) {
+            (this.cards[q.id] && this.cards[q.id].n > 0 ? seen : fresh).push(q);
+          }
+          const due = seen.filter(q => this.cards[q.id].due <= now)
+                          .sort((a, b) => this.score(b, now) - this.score(a, now));
+          const rest = seen.filter(q => this.cards[q.id].due > now)
+                           .sort((a, b) => this.score(b, now) - this.score(a, now));
+          // 60/25/15 là ràng buộc ĐỘNG LỰC, không phải sư phạm: top-N thuần tạo
+          // ra phiên mà đứa trẻ 10 tuổi sai 18/20 rồi bỏ. Tính năng không ai mở
+          // thì hiệu quả bằng 0.
+          const pick = [
+            ...due.slice(0, Math.ceil(n * 0.60)),
+            ...fresh.slice(0, Math.ceil(n * 0.25)),
+          ];
+          for (const q of [...due, ...rest, ...fresh]) {
+            if (pick.length >= n) break;
+            if (!pick.includes(q)) pick.push(q);
+          }
+          // Giãn sao cho hai câu liền nhau không cùng khái niệm, nếu xếp được
+          const q0 = pick.sort(() => Math.random() - 0.5);
+          for (let i = 1; i < q0.length; i++) {
+            if (q0[i].concept !== q0[i - 1].concept) continue;
+            const j = q0.findIndex((x, k) => k > i && x.concept !== q0[i - 1].concept);
+            if (j > 0) [q0[i], q0[j]] = [q0[j], q0[i]];
+          }
+          this.queue = q0;
           this.at = 0; this.log = []; this.picked = null; this.answered = false;
+          this.wrongAgain = 0;
           this.screen = 'quiz'; this.shownAt = Date.now();
         },
         get q() { return this.queue[this.at] || null; },
@@ -98,13 +172,26 @@
           if (this.answered) return;
           this.picked = c; this.answered = true;
           const okAns = this.isCorrect(c);
+          const now = Math.floor(Date.now() / 1000);
+          const g = okAns ? (Date.now() - this.shownAt > 20000 ? 2 : 3) : 0;
+          const q = this.q;
+          const st = this.sched(q.id, this.cards[q.id], g, now);
           this.log.push({
-            i: this.q.id, c: this.q.concept, ok: okAns ? 1 : 0,
-            g: okAns ? (Date.now() - this.shownAt > 20000 ? 2 : 3) : 0,
+            i: q.id, c: q.concept, ok: okAns ? 1 : 0, g,
             ms: Date.now() - this.shownAt,
             x: okAns ? null : c.key,
-            t: Math.floor(Date.now() / 1000),
+            t: now, box: st.box, ease: st.ease, due: st.due,
           });
+          // Cập nhật ngay tại chỗ để câu sau trong cùng phiên tính đúng
+          const prev = this.cards[q.id] || { n: 0, wrong: 0, streak: 0 };
+          this.cards[q.id] = {
+            ...prev, ...st, n: prev.n + 1,
+            wrong: prev.wrong + (okAns ? 0 : 1),
+            streak: okAns ? prev.streak + 1 : 0, last_ts: now,
+          };
+          // Sai thì đẩy lại CUỐI hàng đợi ngay trong phiên, không đợi hôm sau.
+          // Giới hạn 5 lần để một câu khó không kéo phiên dài vô tận.
+          if (!okAns && this.wrongAgain < 5) { this.queue.push(q); this.wrongAgain++; }
         },
         next() {
           this.at++; this.picked = null; this.answered = false; this.shownAt = Date.now();
@@ -141,6 +228,19 @@
           } catch (e) {
             this.err = 'Chưa lưu được kết quả — sẽ thử lại lần sau. (' + e.message + ')';
           }
+        },
+        // Khái niệm yếu nhất, ngưỡng n>=2 để không kết luận từ một lần sai
+        weakConcepts() {
+          const by = {};
+          for (const q of this.data.quiz) {
+            const c = this.cards[q.id];
+            if (!c || !c.n) continue;
+            (by[q.concept] = by[q.concept] || { id: q.concept, n: 0, wrong: 0 });
+            by[q.concept].n += c.n; by[q.concept].wrong += c.wrong;
+          }
+          return Object.values(by).filter(x => x.n >= 2 && x.wrong > 0)
+            .sort((a, b) => (b.wrong + 1) / (b.n + 3) - (a.wrong + 1) / (a.n + 3))
+            .slice(0, 3);
         },
         async askSecret() {
           const v = (prompt('Nhập mã bí mật để lưu kết quả ôn tập:') || '').trim();
@@ -211,10 +311,13 @@
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
           <h3 class="text-xs font-bold uppercase tracking-wide text-slate-400">Hay sai nhất</h3>
           <ul class="mt-2 space-y-1">
-            <template x-for="q in [...data.quiz].sort((a,b) => score(b) - score(a)).slice(0,3)" :key="q.id">
-              <li class="text-sm text-slate-600 flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0"></span>
-                <span class="truncate" x-text="conceptName(q.concept)"></span>
+            <template x-for="c in weakConcepts()" :key="c.id">
+              <li class="text-sm text-slate-600 flex items-center justify-between gap-2">
+                <span class="flex items-center gap-2 min-w-0">
+                  <span class="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0"></span>
+                  <span class="truncate" x-text="conceptName(c.id)"></span>
+                </span>
+                <span class="text-xs text-slate-400 shrink-0" x-text="c.wrong + '/' + c.n + ' sai'"></span>
               </li>
             </template>
           </ul>
@@ -238,7 +341,7 @@
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
         <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
         <p class="mt-1 font-medium text-slate-900" x-text="q.stem_en"></p>
-        <p class="mt-1 text-sm text-slate-500" x-text="q.stem_vi"></p>
+        <p x-show="q.stem_vi" class="mt-1 text-sm text-slate-500" x-text="q.stem_vi"></p>
 
         <div class="mt-4 space-y-2">
           <template x-for="c in choices" :key="c.key">
@@ -248,7 +351,7 @@
                             : (isCorrect(c) ? 'bg-emerald-50 border-emerald-400'
                                : (picked === c ? 'bg-rose-50 border-rose-400' : 'bg-white border-slate-200 opacity-60'))">
               <span class="text-sm text-slate-800" x-text="c.en"></span>
-              <span class="block text-xs text-slate-500" x-text="c.vi"></span>
+              <span x-show="c.vi" class="block text-xs text-slate-500" x-text="c.vi"></span>
             </button>
           </template>
         </div>
@@ -258,7 +361,7 @@
         <p class="font-medium" :class="isCorrect(picked) ? 'text-emerald-700' : 'text-rose-700'"
            x-text="isCorrect(picked) ? '✓ Đúng rồi!' : '✗ Chưa đúng'"></p>
         <p class="mt-1 text-sm text-slate-700" x-text="q.why_en"></p>
-        <p class="mt-0.5 text-sm text-slate-500" x-text="q.why_vi"></p>
+        <p x-show="q.why_vi" class="mt-0.5 text-sm text-slate-500" x-text="q.why_vi"></p>
         <button @click="next()"
                 class="mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
           Câu tiếp →

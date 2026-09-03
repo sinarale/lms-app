@@ -23,7 +23,7 @@
  */
 
 import { readSheet, writeCell } from "./sheet.js";
-import { readCards, writeSession } from "./study.js";
+import { readCards, writeSession, readStats } from "./study.js";
 
 const KEY = "progress";
 const MAX_ITEMS = 5000; // chặn ghi phình vô hạn
@@ -139,6 +139,27 @@ export default {
         }
       }
       return json({ error: "Method không hỗ trợ" }, 405);
+    }
+
+    if (pathname === "/api/study/stats") {
+      if (!env.STUDY_DB) return json({ error: "Chưa cấu hình STUDY_DB" }, 503);
+      if (request.method !== "GET") return json({ error: "Method không hỗ trợ" }, 405);
+      // Chặn bằng mã bí mật: hồ sơ điểm yếu của trẻ, không để đọc công khai.
+      const secret = env.LMS_SECRET || "";
+      if (!secret) return json({ error: "Chưa cấu hình LMS_SECRET" }, 503);
+      if ((request.headers.get("x-progress-key") || "") !== secret) {
+        return json({ error: "Mã bí mật không đúng" }, 401);
+      }
+      const user = url.searchParams.get("user") || "";
+      const course = url.searchParams.get("course") || "";
+      if (!/^[\w-]{1,32}$/.test(user) || !/^[\w-]{1,64}$/.test(course)) {
+        return json({ error: "Thiếu hoặc sai 'user'/'course'" }, 400);
+      }
+      try {
+        return json(await readStats(env, user, course));
+      } catch (e) {
+        return json({ error: String(e.message || e) }, 500);
+      }
     }
 
     if (pathname === "/api/study") {

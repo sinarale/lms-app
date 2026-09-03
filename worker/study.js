@@ -123,3 +123,37 @@ export async function writeSession(env, user, course, attempts) {
   await db.batch([insertAttempts, upsertCards]);
   return { ok: true, n: rows.length };
 }
+
+/**
+ * Khái niệm hay sai nhất + phương án sai em hay chọn.
+ *
+ * CHẶN BẰNG MÃ BÍ MẬT, khác /api/progress cho đọc công khai: đây là hồ sơ điểm
+ * yếu của một đứa trẻ có tên. robots.txt là che mắt, không phải kiểm soát truy cập.
+ *
+ * 2 câu lệnh, mỗi câu ≤4 tham số. Phép làm trơn (+1.0/+3.0) là bắt buộc: thiếu
+ * nó thì một câu mới sai đúng một lần (tỉ lệ 1,0) xếp trên một khái niệm yếu
+ * thật sai 6/10, và danh sách "điểm yếu" thành danh sách "mới gặp một lần".
+ */
+export async function readStats(env, user, course, minN = 2, limit = 20) {
+  const db = env.STUDY_DB;
+  const since = Math.floor(Date.now() / 1000) - 30 * 86400;
+  const [weak, chosen] = await db.batch([
+    db.prepare(
+      `SELECT concept_id, SUM(n) AS n, SUM(wrong) AS wrong, MIN(box) AS box,
+              MAX(last_ts) AS last_ts, COUNT(*) AS items,
+              (SUM(wrong) + 1.0) / (SUM(n) + 3.0) AS err
+         FROM card
+        WHERE user_id = ?1 AND course = ?2 AND n > 0
+        GROUP BY concept_id HAVING SUM(n) >= ?3
+        ORDER BY err DESC, wrong DESC LIMIT ?4`
+    ).bind(user, course, minN, limit),
+    db.prepare(
+      `SELECT concept_id, COUNT(*) AS wrong30,
+              group_concat(DISTINCT chose) AS chose
+         FROM attempt
+        WHERE user_id = ?1 AND course = ?2 AND ts >= ?3 AND correct = 0
+        GROUP BY concept_id ORDER BY wrong30 DESC LIMIT ?4`
+    ).bind(user, course, since, limit),
+  ]);
+  return { weak: weak.results || [], chosen: chosen.results || [] };
+}
