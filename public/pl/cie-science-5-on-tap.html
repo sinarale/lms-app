@@ -125,6 +125,12 @@
         get scopedItems() {
           return [...this.scopedQuiz, ...this.scopedCards];
         },
+        // Đếm khái niệm THỰC SỰ có bài trong phạm vi, không đếm cả cây. Nút trung
+        // gian (unit, mục) và khái niệm chưa có nội dung đều không tính — nếu tính,
+        // chọn mục nào cũng ra cùng một con số của toàn môn.
+        get scopedConcepts() {
+          return new Set(this.scopedItems.map(x => x.concept)).size;
+        },
 
         // Làm trơn (+0.5/+1.0) là bắt buộc: thiếu nó thì một câu mới sai đúng
         // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10, và
@@ -483,7 +489,7 @@
         <p class="mt-1 text-sm text-slate-500">
           <span x-text="mode === 'cards' ? scopedCards.length : scopedQuiz.length"></span>
           <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
-          <span x-text="(data.concepts || []).length"></span> khái niệm
+          <span x-text="scopedConcepts"></span> khái niệm
         </p>
         <div x-show="online && scopedItems.length" x-cloak class="mt-3">
           <div class="flex items-center gap-2 text-xs">
