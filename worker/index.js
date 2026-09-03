@@ -146,6 +146,8 @@ export default {
     //   1. "/" không còn tự tìm index.html  → trang chủ 404
     //   2. "/pl/x" (không đuôi) không còn tìm ra x.html → hỏng link đã lưu của
     //      người dùng từ trước khi đổi
+    //   3. "/pl" (thư mục, không đuôi) không còn tìm ra pl/index.html → hỏng
+    //      trang riêng của học sinh
     const asset = (path) => env.ASSETS.fetch(new Request(new URL(path, url), request));
 
     if (pathname.endsWith("/")) return asset(pathname + "index.html");
@@ -154,8 +156,12 @@ export default {
     // Chỉ thử thêm ".html" khi thật sự không thấy file, và chỉ với đường dẫn
     // không có đuôi — tránh đi tìm lần hai cho ảnh/PDF vốn đã 404 thật.
     if (res.status === 404 && !pathname.split("/").pop().includes(".")) {
-      const alt = await asset(pathname + ".html");
-      if (alt.status !== 404) return alt;
+      // Thử ".html" TRƯỚC "/index.html": nếu có cả pl.html lẫn pl/index.html thì
+      // file cụ thể phải thắng thư mục.
+      for (const alt of [pathname + ".html", pathname + "/index.html"]) {
+        const r = await asset(alt);
+        if (r.status !== 404) return r;
+      }
     }
     return res;
   },
