@@ -7,7 +7,7 @@
   <title>CIE ESL 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -29,6 +29,9 @@
     }
     // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
     // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    // `data-ts` nằm trên thẻ bọc [data-item], KHÔNG nằm trên thẻ tiêu đề bên
+    // trong — từ Alpine phải truyền $el.closest('[data-item]'), không thì
+    // dataset.ts là undefined và mục nào cũng bị coi là cũ (hỏng không báo lỗi).
     var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
     function isRecentEl(el) {
       var ts = el && +el.dataset.ts;
@@ -48,6 +51,7 @@
       var s = recentStats(done);
       return s.total ? Math.round(s.done / s.total * 100) : 0;
     }
+    // box phải là chính thẻ [data-module] (dùng $el.closest), vì hàm tìm mục con
     function moduleIsRecent(box) {
       return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
     }
@@ -361,7 +365,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2 - 1.3</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2 - 1.3</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 5
@@ -415,7 +419,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Complete the booklet on the past tense</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">Complete the booklet on the past tense</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -503,7 +507,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/1. 6Uv.02 - Use an increasing range of prepositions preceding nouns and adjectives in prepositional phrases..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 1. 6Uv.02 - Use an increasing range of prepositions preceding nouns and adjectives in prepositional phrases..pptx
               </a>
               
@@ -561,7 +565,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/2. 6Sor.01 - Link sentences using an increased range of connectives..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 2. 6Sor.01 - Link sentences using an increased range of connectives..pptx
               </a>
               
@@ -619,7 +623,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-2-1-3/3. Understand, with support most of the main points of short and extended texts.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 3. Understand, with support most of the main points of short and extended texts.pptx
               </a>
               
@@ -693,7 +697,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.english-grammar.at/online_exercises/prepositions/prep033.htm" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Preposition Practise
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -745,7 +749,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 - 1.1 + 1.2</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 1 - 1.1 + 1.2</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 8
@@ -799,7 +803,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Workbook pages 8 - 11</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">Workbook pages 8 - 11</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -886,7 +890,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/3. 6Ld.04 Understand, with support, most specific information and detail of short and extended talk.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 3. 6Ld.04 Understand, with support, most specific information and detail of short and extended talk.pptx
               </a>
               
@@ -944,7 +948,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/4. 6So.01 - Express opinions, feelings and reactions..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 4. 6So.01 - Express opinions, feelings and reactions..pptx
               </a>
               
@@ -1002,7 +1006,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/5-6. 6Ug.07 – Use present perfect forms to express recent, indefinite and unfinished past..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 5-6. 6Ug.07 – Use present perfect forms to express recent, indefinite and unfinished past..pptx
               </a>
               
@@ -1060,7 +1064,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/7. 6Rd.03 - Understand, with support, most of the detail of an argument in short and extended texts..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 7. 6Rd.03 - Understand, with support, most of the detail of an argument in short and extended texts..pptx
               </a>
               
@@ -1134,7 +1138,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Present Perfect Tense practice.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Present Perfect Tense practice.pdf
               </a>
               
@@ -1192,7 +1196,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Positive Present Perfect Tense Practise.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Positive Present Perfect Tense Practise.pdf
               </a>
               
@@ -1250,7 +1254,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-esl-5/week-1-1-1-1-2/Negative Present Perfect Tense Practise.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Negative Present Perfect Tense Practise.pdf
               </a>
               

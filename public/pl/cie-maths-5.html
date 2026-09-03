@@ -7,7 +7,7 @@
   <title>CIE Maths 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -29,6 +29,9 @@
     }
     // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
     // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    // `data-ts` nằm trên thẻ bọc [data-item], KHÔNG nằm trên thẻ tiêu đề bên
+    // trong — từ Alpine phải truyền $el.closest('[data-item]'), không thì
+    // dataset.ts là undefined và mục nào cũng bị coi là cũ (hỏng không báo lỗi).
     var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
     function isRecentEl(el) {
       var ts = el && +el.dataset.ts;
@@ -48,6 +51,7 @@
       var s = recentStats(done);
       return s.total ? Math.round(s.done / s.total * 100) : 0;
     }
+    // box phải là chính thẻ [data-module] (dùng $el.closest), vì hàm tìm mục con
     function moduleIsRecent(box) {
       return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
     }
@@ -361,7 +365,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 12
@@ -416,7 +420,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-15-25" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Complete Workbook pages 15-25
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -496,7 +500,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx
               </a>
               
@@ -554,7 +558,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/3. 6Nc.01 – Count on and count back in numbers of constant size.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 3. 6Nc.01 – Count on and count back in numbers of constant size.pptx
               </a>
               
@@ -612,7 +616,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx
               </a>
               
@@ -670,7 +674,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx
               </a>
               
@@ -744,7 +748,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.youtube.com/watch?v=lw-z4AGhzgU" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rounding Decimals - Youtube Video
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -804,7 +808,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://drive.google.com/open?id=1glbL52GB1KG5Z-T7Fr-HHNQ9CBiTvA2j&amp;usp=drive_copy" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rounding to the nearest whole number - Practice
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -864,7 +868,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://drive.google.com/open?id=1uvoRzYvMqwmPL3u3V5X6PichPzJkyKkS&amp;usp=drive_copy" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rounding to the nearest tenth - Practice
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -924,7 +928,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.sheppardsoftware.com/math/decimals/scooter-quest/rounding/" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rounding Decimals - Game
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -984,7 +988,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Complete the sequences.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Complete the sequences.pdf
               </a>
               
@@ -1042,7 +1046,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/tp2-m-161-super-sequences-activity-sheet_ver_6.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Super Sequences!
               </a>
               
@@ -1100,7 +1104,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf
               </a>
               
@@ -1150,7 +1154,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 - Unit 1.1 Place Value</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 1 - Unit 1.1 Place Value</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 11
@@ -1204,7 +1208,7 @@
               
               <!-- Văn bản nhúng: bấm để mở/đóng nội dung -->
               <button @click="o = !o" class="w-full text-left flex items-center gap-2">
-                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">Workbook pages 8-13</span>
+                <span class="text-sm text-slate-800 group-hover:text-indigo-700" :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">Workbook pages 8-13</span>
                 <svg class="w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0"
                      :class="o ? 'rotate-180' : ''"
                      fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -1291,7 +1295,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-1-unit-1-1-place-value/3. 6Np01 - Understand and explain the value of each digit in decimals.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 3.  6Np01 - Understand and explain the value of each digit in decimals.pptx
               </a>
               
@@ -1349,7 +1353,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-1-unit-1-1-place-value/4. 6Np.02 – Use knowledge of place value to multiply and divide whole numbers by 10, 100 and 1,000..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 4.  6Np.02 – Use knowledge of place value to multiply and divide whole numbers by 10, 100 and 1,000..pptx
               </a>
               
@@ -1407,7 +1411,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-1-unit-1-1-place-value/6. 6Np.03 – Compose, decompose and regroup numbers including decimals..pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 6.  6Np.03 – Compose, decompose and regroup numbers including decimals..pptx
               </a>
               
@@ -1481,7 +1485,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.youtube.com/watch?v=KG6ILNOiMgM" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Decimal Place Value - Youtube Video
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1541,7 +1545,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.youtube.com/watch?v=GfL0s6tCNV4" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Multiplying Decimals by 10, 100 and 1,000 - Youtube Video
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1601,7 +1605,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.youtube.com/watch?v=GfL0s6tCNV4" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Dividing Decimals by 10, 100 and 1,000 - Youtube Video
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1661,7 +1665,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://drive.google.com/file/d/1F9UoZ7-vECM_v6NTJxncjAvzI2f0sbGn/view?usp=drive_link" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Decimal Place Value Challenge - Worksheet with answers
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1721,7 +1725,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://drive.google.com/open?id=1o__fto7LFEXJ0pGh5OPzb7VkVkv7tgNb&amp;usp=drive_copy" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Multiplying and dividing decimals by 10, 100 and 1,000 - Worksheet with answers
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1781,7 +1785,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://docs.google.com/presentation/d/10xJCe3nURMINf-mq55pXcJNqUU_gniSJ/edit?usp=sharing&amp;ouid=111965366477095862136&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Decimals - Reasoning and Problem Solving
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1841,7 +1845,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://docs.google.com/presentation/d/1AwFVGRaLt0unnEtqGP3PpJaqq1KaFOev/edit?usp=sharing&amp;ouid=111965366477095862136&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Place Value - Reasoning and Problem Solving
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>

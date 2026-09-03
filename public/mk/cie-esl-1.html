@@ -7,7 +7,7 @@
   <title>CIE ESL 1 — MK</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -29,6 +29,9 @@
     }
     // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
     // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    // `data-ts` nằm trên thẻ bọc [data-item], KHÔNG nằm trên thẻ tiêu đề bên
+    // trong — từ Alpine phải truyền $el.closest('[data-item]'), không thì
+    // dataset.ts là undefined và mục nào cũng bị coi là cũ (hỏng không báo lỗi).
     var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
     function isRecentEl(el) {
       var ts = el && +el.dataset.ts;
@@ -48,6 +51,7 @@
       var s = recentStats(done);
       return s.total ? Math.round(s.done / s.total * 100) : 0;
     }
+    // box phải là chính thẻ [data-module] (dùng $el.closest), vì hàm tìm mục con
     function moduleIsRecent(box) {
       return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
     }
@@ -355,7 +359,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2: Unit 1 A day at school (24.8.2026 -28.8 2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2: Unit 1 A day at school (24.8.2026 -28.8 2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 4
@@ -410,7 +414,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-2-unit-1-a-day-at-school-24-8-2026-28-8-2026/G1_S2_ESL_classroom objects_plural.docx.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Homework - Week 2
               </a>
               
@@ -484,7 +488,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://www.youtube.com/watch?v=4PW3_LErVZk" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rhyming words - video
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -544,7 +548,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-2-unit-1-a-day-at-school-24-8-2026-28-8-2026/au-l-023-rhyming-words-activity-sheet-_ver_2.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Rhyming words - Worksheet
               </a>
               
@@ -602,7 +606,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-2-unit-1-a-day-at-school-24-8-2026-28-8-2026/t-e-1644318380-singular-and-plural-matching-activity_ver_1.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Singular &amp; Plural - Worksheet
               </a>
               
@@ -652,7 +656,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 : Getting to know the class (17.8.2026 - 21.8.2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 1 : Getting to know the class (17.8.2026 - 21.8.2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 4
@@ -707,7 +711,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-1-getting-to-know-the-class-17-8-2026-21-8-2026/Weekly Homework Worksheet in Blue and Black Simple.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Homework - Week 1
               </a>
               
@@ -781,7 +785,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://youtu.be/kDdg2M1_EuE?si=dcqVBItbdN51mjiV" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 ABC - Song
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -841,7 +845,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://youtu.be/36n93jvjkDs?si=Fe5cAWNpILdrm9_v" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Days of the week - Song
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -901,7 +905,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://youtu.be/Fe9bnYRzFvk?si=FgswmpO2HTS4H208" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Months of the year - Song
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>

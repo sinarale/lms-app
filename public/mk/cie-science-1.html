@@ -7,7 +7,7 @@
   <title>CIE Science 1 — MK</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -29,6 +29,9 @@
     }
     // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
     // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    // `data-ts` nằm trên thẻ bọc [data-item], KHÔNG nằm trên thẻ tiêu đề bên
+    // trong — từ Alpine phải truyền $el.closest('[data-item]'), không thì
+    // dataset.ts là undefined và mục nào cũng bị coi là cũ (hỏng không báo lỗi).
     var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
     function isRecentEl(el) {
       var ts = el && +el.dataset.ts;
@@ -48,6 +51,7 @@
       var s = recentStats(done);
       return s.total ? Math.round(s.done / s.total * 100) : 0;
     }
+    // box phải là chính thẻ [data-module] (dùng $el.closest), vì hàm tìm mục con
     function moduleIsRecent(box) {
       return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
     }
@@ -361,7 +365,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'"> Week 2: 4.2 Growing (24/08/2026-28/08/2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'"> Week 2: 4.2 Growing (24/08/2026-28/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 8
@@ -416,7 +420,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_1.2 Growing.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_4.2 Growing.pdf
               </a>
               
@@ -474,7 +478,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_1.2 Growing_Key Vocabulary.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_4.2 Growing_Key Vocabulary.pdf
               </a>
               
@@ -548,7 +552,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_HW_4.2 Growing.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_HW_4.2 Growing.pdf
               </a>
               
@@ -622,7 +626,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_WS_4.2 Growing.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_WS_4.2 Growing.pdf
               </a>
               
@@ -680,7 +684,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_WS_4.2 Growing_2.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_WS_4.2 Growing_2.pdf
               </a>
               
@@ -738,7 +742,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-2-4-2-growing-24-08-2026-28-08-2026/G1_Science_W2_Key Vocabulary Practice Writing.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_Science_W2_Key Vocabulary Practice Writing.pdf
               </a>
               
@@ -812,7 +816,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/37970075/the-human-life-cycle" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 The Stage of Humans
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -872,7 +876,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/48875/science/animals-and-their-babies" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Adult and Young
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -924,7 +928,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1: 4.1 Comparing Animals (17/08/2026-21/08/2026)</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 1: 4.1 Comparing Animals (17/08/2026-21/08/2026)</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 9
@@ -979,7 +983,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/G1_W1_4.1 Comparing Animals.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_W1_4.1 Comparing Animals.pdf
               </a>
               
@@ -1037,7 +1041,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Mammals Poster.png" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Mammals Poster.png
               </a>
               
@@ -1095,7 +1099,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Birds Poster.png" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Birds Poster.png
               </a>
               
@@ -1153,7 +1157,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Key Vocabulary and Spelling Practice.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Key Vocabulary and Spelling Practice.pdf
               </a>
               
@@ -1227,7 +1231,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/G1_W1_HW_Comparing Animals.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1_W1_HW_Comparing Animals.pdf
               </a>
               
@@ -1301,7 +1305,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Comapring Animals Practice Worksheet.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Comapring Animals Practice Worksheet.pdf
               </a>
               
@@ -1359,7 +1363,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-4-1-comparing-animals-17-08-2026-21-08-2026/Unit 4.1 Comapring Animals Practice Worksheet_Answer Key.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Unit 4.1 Comapring Animals Practice Worksheet_Answer Key.pdf
               </a>
               
@@ -1433,7 +1437,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/78496393/birds-and-mammals" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Sorting Mammals and Animals
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1493,7 +1497,7 @@
               <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
               <a href="https://wordwall.net/resource/17190264/science/mammals-and-birds" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Characteristics of Mammals and Birds
                 <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -1545,7 +1549,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Workbook Answers</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Workbook Answers</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 1
@@ -1584,7 +1588,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/workbook-answers/P_Science_2_workbook_answers.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 P_Science_2_workbook_answers.pdf
               </a>
               
@@ -1634,7 +1638,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">WEEK 1: Environments and Habitats   18/08/2025 - 22/08/2025</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 1
@@ -1673,7 +1677,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-science-1/week-1-environments-and-habitats-18-08-2025-22-08-2025/Science 1 Week 1 - Environments and Habitats.pdf" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Science 1 Week 1 - Environments and Habitats.pdf
               </a>
               

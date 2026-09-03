@@ -7,7 +7,7 @@
   <title>CIE Maths 1 — MK</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.4a4df6b3.css">
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -29,6 +29,9 @@
     }
     // ── Mốc "7 ngày gần nhất" ───────────────────────────────────────────────
     // So bằng giờ trình duyệt nên luôn đúng tương đối với lúc người xem mở trang.
+    // `data-ts` nằm trên thẻ bọc [data-item], KHÔNG nằm trên thẻ tiêu đề bên
+    // trong — từ Alpine phải truyền $el.closest('[data-item]'), không thì
+    // dataset.ts là undefined và mục nào cũng bị coi là cũ (hỏng không báo lỗi).
     var RECENT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
     function isRecentEl(el) {
       var ts = el && +el.dataset.ts;
@@ -48,6 +51,7 @@
       var s = recentStats(done);
       return s.total ? Math.round(s.done / s.total * 100) : 0;
     }
+    // box phải là chính thẻ [data-module] (dùng $el.closest), vì hàm tìm mục con
     function moduleIsRecent(box) {
       return Array.from(box.querySelectorAll('[data-item][data-ts]')).some(isRecentEl);
     }
@@ -349,7 +353,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 2 (24.08.26-28.08.26) Unit 1: Numbers to 100</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2 (24.08.26-28.08.26) Unit 1: Numbers to 100</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 2
@@ -404,7 +408,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-2-24-08-26-28-08-26-unit-1-numbers-to-100/G1 Maths Homework Wk2.docx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1 Maths Homework Wk2.docx
               </a>
               
@@ -478,7 +482,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-2-24-08-26-28-08-26-unit-1-numbers-to-100/Maths Daily Practice Grade 1 - Week 2.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Maths Daily Practice Grade 1 - Week 2.pptx
               </a>
               
@@ -528,7 +532,7 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el) ? 'font-bold' : 'font-semibold'">Week 1 (17.08.26-21.08.26) Unit 1: Numbers to 100</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 1 (17.08.26-21.08.26) Unit 1: Numbers to 100</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
                 :class="moduleDone($el.closest('[data-module]'), p.done) === 2
@@ -583,7 +587,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-1-17-08-26-21-08-26-unit-1-numbers-to-100/G1 Maths Homework Wk1.docx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 G1 Maths Homework Wk1.docx
               </a>
               
@@ -657,7 +661,7 @@
               <!-- Tài liệu đã tải về local -->
               <a href="https://sinarale.github.io/lms/mk/materials/cie-maths-1/week-1-17-08-26-21-08-26-unit-1-numbers-to-100/Maths Daily Practice Grade 1 - Week 1.pptx" target="_blank" rel="noopener"
                  class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el) ? 'font-bold' : 'font-medium'">
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
                 Maths Daily Practice Grade 1 - Week 1.pptx
               </a>
               
