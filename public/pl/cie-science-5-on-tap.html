@@ -109,6 +109,23 @@
           (this._cerr = this._cerr || {})[cid] = v;
           return v;
         },
+        // ── Nghỉ hưu câu đã thuộc ─────────────────────────────────────────────
+        // SUY RA từ card chứ không ghi vào file nội dung: thuộc bài là trạng thái
+        // của NGƯỜI HỌC, không phải thuộc tính của câu hỏi. Ghi vào nội dung thì
+        // một học sinh thuộc sẽ làm câu đó biến mất với học sinh khác.
+        //
+        // Câu đã thuộc vẫn được ôn, nhưng CHỈ khi thật sự đến hạn (bậc 6 ≈ 32
+        // ngày) và không bao giờ chen vào phần ưu tiên. Thiếu bước này thì bộ
+        // thẻ phình mãi và mỗi phiên càng lúc càng toàn bài đã thuộc.
+        retired(q) {
+          const c = this.cards[q.id];
+          return !!c && c.n >= 8 && c.box >= 5 && c.wrong / c.n <= 0.10;
+        },
+        get nRetired() { return this.scopedItems.filter(q => this.retired(q)).length; },
+        get scopedItems() {
+          return [...this.scopedQuiz, ...this.scopedCards];
+        },
+
         // Làm trơn (+0.5/+1.0) là bắt buộc: thiếu nó thì một câu mới sai đúng
         // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10, và
         // danh sách "điểm yếu" biến thành danh sách "câu mới gặp một lần".
@@ -200,10 +217,12 @@
           for (const q of pool) {
             (this.cards[q.id] && this.cards[q.id].n > 0 ? seen : fresh).push(q);
           }
-          const due = seen.filter(q => this.cards[q.id].due <= now)
-                          .sort((a, b) => this.score(b, now) - this.score(a, now));
-          const rest = seen.filter(q => this.cards[q.id].due > now)
-                           .sort((a, b) => this.score(b, now) - this.score(a, now));
+          const by = (a, b) => this.score(b, now) - this.score(a, now);
+          const act = seen.filter(q => !this.retired(q));
+          const due = act.filter(q => this.cards[q.id].due <= now).sort(by);
+          const rest = act.filter(q => this.cards[q.id].due > now).sort(by);
+          // Câu đã thuộc chỉ vào hàng đợi khi ĐẾN HẠN; chưa tới hạn thì đứng ngoài hẳn.
+          const retDue = seen.filter(q => this.retired(q) && this.cards[q.id].due <= now).sort(by);
           // 60/25/15 là ràng buộc ĐỘNG LỰC, không phải sư phạm: top-N thuần tạo
           // ra phiên mà đứa trẻ 10 tuổi sai 18/20 rồi bỏ. Tính năng không ai mở
           // thì hiệu quả bằng 0.
@@ -211,7 +230,7 @@
             ...due.slice(0, Math.ceil(n * 0.60)),
             ...fresh.slice(0, Math.ceil(n * 0.25)),
           ];
-          for (const q of [...due, ...rest, ...fresh]) {
+          for (const q of [...due, ...retDue, ...rest, ...fresh]) {
             if (pick.length >= n) break;
             if (!pick.includes(q)) pick.push(q);
           }
@@ -466,6 +485,17 @@
           <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
           <span x-text="(data.concepts || []).length"></span> khái niệm
         </p>
+        <div x-show="online && scopedItems.length" x-cloak class="mt-3">
+          <div class="flex items-center gap-2 text-xs">
+            <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+              <div class="h-full bg-emerald-500 transition-all duration-300"
+                   :style="'width:' + Math.round(nRetired / scopedItems.length * 100) + '%'"></div>
+            </div>
+            <span class="text-slate-500 whitespace-nowrap">
+              <span x-text="nRetired"></span>/<span x-text="scopedItems.length"></span> đã thuộc
+            </span>
+          </div>
+        </div>
         <p x-show="mode === 'cards' && !scopedCards.length" x-cloak
            class="mt-3 rounded-lg bg-slate-50 border border-slate-200 px-3 py-2 text-xs text-slate-500">
           Chưa có thẻ ghi nhớ cho môn này.
