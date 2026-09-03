@@ -1864,8 +1864,170 @@
    "answer": "d",
    "why_en": "We use copper in electric wires because it conducts electricity well (it is an electrical conductor). Silver is the best conductor of heat, but copper wires are used for circuits.",
    "difficulty": 2
+  },
+  {
+   "id": "q.65ad8ba9",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": 57,
+   "stem_en": "You pour vinegar into a jar and add a teaspoon of bicarbonate of soda. Which substances are the reactants?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The gas bubbles"
+    },
+    {
+     "key": "b",
+     "en": "The jar and the spoon"
+    },
+    {
+     "key": "c",
+     "en": "Vinegar and bicarbonate of soda"
+    },
+    {
+     "key": "d",
+     "en": "Water only"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The reactants are the substances that react together — here vinegar and bicarbonate of soda (p.57).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.bc0f6ebc",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": 56,
+   "stem_en": "Your teacher holds a metal spoon over a burning candle. Which change is a chemical reaction?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The wax melting and running down the candle"
+    },
+    {
+     "key": "b",
+     "en": "The wick burning away"
+    },
+    {
+     "key": "c",
+     "en": "The spoon getting warm"
+    },
+    {
+     "key": "d",
+     "en": "The wax going hard again when it cools"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Melting and cooling wax are reversible changes of state. Only the burning wick forms new substances (p.56).",
+   "difficulty": 2
+  },
+  {
+   "id": "q.2a82e23c",
+   "concept": "c.materials.chemical.evidence",
+   "page": 58,
+   "stem_en": "You add a spoon of cornstarch to water with three droppers of iodine solution and stir. What evidence of a chemical reaction do you see?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A colour change"
+    },
+    {
+     "key": "b",
+     "en": "The water boils"
+    },
+    {
+     "key": "c",
+     "en": "The beaker gets very cold"
+    },
+    {
+     "key": "d",
+     "en": "Nothing happens"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The iodine solution changes colour when cornstarch is added — a colour change is evidence of a reaction (p.58).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.d418fba2",
+   "concept": "c.materials.chemical.evidence",
+   "page": 58,
+   "stem_en": "You breathe through a straw into clear limewater. Which gas in your breath reacts, and what do you see?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Oxygen — the limewater turns blue"
+    },
+    {
+     "key": "b",
+     "en": "Carbon dioxide — the limewater turns cloudy"
+    },
+    {
+     "key": "c",
+     "en": "Nitrogen — the limewater fizzes"
+    },
+    {
+     "key": "d",
+     "en": "Water vapour — the limewater disappears"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Carbon dioxide in your breath reacts with limewater to form calcium carbonate, which makes it cloudy (p.58-59).",
+   "difficulty": 2
+  },
+  {
+   "id": "q.fdbd564a",
+   "concept": "c.materials.chemical.evidence",
+   "page": 59,
+   "stem_en": "In investigation B you pour vinegar on wire wool, put in a thermometer, and wait five minutes. What are you looking for?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A change in the thermometer reading"
+    },
+    {
+     "key": "b",
+     "en": "The wire wool turning into liquid"
+    },
+    {
+     "key": "c",
+     "en": "The vinegar evaporating"
+    },
+    {
+     "key": "d",
+     "en": "Bubbles of oxygen"
+    }
+   ],
+   "answer": "a",
+   "why_en": "A temperature change is evidence that a chemical reaction has taken place (p.59).",
+   "difficulty": 2
+  },
+  {
+   "id": "q.a678ae68",
+   "concept": "c.materials.chemical.examples",
+   "page": 59,
+   "stem_en": "Zara drops a fizzy tablet into a glass of water. What evidence will she have that a chemical reaction is taking place?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The water gets warmer only"
+    },
+    {
+     "key": "b",
+     "en": "The tablet floats"
+    },
+    {
+     "key": "c",
+     "en": "The water changes to blue"
+    },
+    {
+     "key": "d",
+     "en": "Bubbles of gas are produced"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The fizzing is gas being produced — one of the signs of a chemical reaction (p.59 Q3).",
+   "difficulty": 1
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T12:00:15+00:00"
+ "generated_at": "2026-09-03T12:06:08+00:00"
 }
