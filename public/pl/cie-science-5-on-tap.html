@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.b6ed64a2.css">
+  <link rel="stylesheet" href="../assets/tw.db69b9e7.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -25,6 +25,10 @@
         screen: 'start',        // start | quiz | done
         mode: 'quiz',           // quiz | cards | summary | map
         revealed: false,        // flashcard: đã lật chưa
+        learnAt: 0,             // chế độ Học: đang xem thẻ thứ mấy
+        seen: {},               // chế độ Kiểm tra: id → 'known' | 'again' (trong phiên)
+        tStats: { n: 0, known: 0 },
+        lastId: null,
         openMap: {},            // cây bên trái: nhánh nào đang mở
         scope: null,            // khái niệm đang học; null = cả môn
         navOpen: false,         // ngăn kéo cây trên màn hình hẹp
@@ -317,7 +321,69 @@
         },
         get nDone() { return this.log.filter(x => x.ok).length; },
 
-        // ── Thẻ ghi nhớ ───────────────────────────────────────────────────────
+        // ── Thẻ ghi nhớ: HỌC ───────────────────────────────────────────────────
+        // Xem lần lượt, hiện cả hai mặt, không chấm. Thứ tự theo cây khái niệm.
+        get learnDeck() {
+          const order = {}; (this.data?.concepts || []).forEach((c, i) => order[c.id] = i);
+          return [...this.scopedCards].sort((a, b) => (order[a.concept] ?? 999) - (order[b.concept] ?? 999));
+        },
+        startLearn() { this.learnAt = 0; this.screen = 'learn'; },
+        get learnCard() { return this.learnDeck[this.learnAt] || null; },
+
+        // ── Thẻ ghi nhớ: KIỂM TRA ──────────────────────────────────────────────
+        // Quay vòng vô hạn. Mỗi lượt CHỌN NGẪU NHIÊN CÓ TRỌNG SỐ: thẻ vừa đánh
+        // "cần kiểm tra lại" nặng hơn hẳn, thẻ "đã thuộc" nhẹ đi, thẻ chưa gặp
+        // trong phiên thì dựa vào tỉ lệ sai đã lưu. Không lặp thẻ vừa hiện.
+        weight(q) {
+          const st = this.seen[q.id];
+          if (st === 'again') return 4.0;
+          if (st === 'known') return 0.25;
+          if (this.retired(q)) return 0.15;
+          const c = this.cards[q.id];
+          const err = c ? (c.wrong + 0.5) / (c.n + 1.0) : 0.5;
+          return 1.0 + 3.0 * err;
+        },
+        pickWeighted() {
+          let pool = this.scopedCards.filter(q => q.id !== this.lastId);
+          if (!pool.length) pool = this.scopedCards;
+          const total = pool.reduce((a, q) => a + this.weight(q), 0);
+          let r = Math.random() * total;
+          for (const q of pool) { r -= this.weight(q); if (r <= 0) return q; }
+          return pool[pool.length - 1];
+        },
+        startTest() {
+          this._cerr = {}; this.seen = {}; this.tStats = { n: 0, known: 0 };
+          this.lastId = null; this.log = []; this.revealed = false;
+          this.queue = [this.pickWeighted()]; this.at = 0;
+          this.shownAt = Date.now(); this.screen = 'test';
+        },
+        // known=true → điểm 3 ("Đã thuộc"), false → điểm 0 ("Cần kiểm tra lại").
+        // Cùng thang với trắc nghiệm nên D1 và lịch ôn giãn cách dùng chung.
+        mark(known) {
+          if (!this.revealed) return;
+          const g = known ? 3 : 0;
+          const now = Math.floor(Date.now() / 1000);
+          const q = this.q;
+          const st = this.sched(q.id, this.cards[q.id], g, now);
+          this.log.push({ i: q.id, c: q.concept, ok: known ? 1 : 0, g,
+                          ms: Date.now() - this.shownAt, x: null,
+                          t: now, box: st.box, ease: st.ease, due: st.due });
+          const prev = this.cards[q.id] || { n: 0, wrong: 0, streak: 0 };
+          this.cards[q.id] = { ...prev, ...st, n: prev.n + 1,
+                               wrong: prev.wrong + (known ? 0 : 1),
+                               streak: known ? prev.streak + 1 : 0, last_ts: now };
+          this.seen[q.id] = known ? 'known' : 'again';
+          this.tStats.n++; if (known) this.tStats.known++;
+          this.lastId = q.id;
+          if (this.log.length >= 5) this.save();   // lưu định kỳ: vòng vô hạn không có "kết thúc" để chờ
+          this.queue = [this.pickWeighted()]; this.at = 0;
+          this.revealed = false; this.shownAt = Date.now();
+        },
+        get nAgain() { return Object.values(this.seen).filter(v => v === 'again').length; },
+        get nUnseen() { return this.scopedCards.filter(q => !this.seen[q.id]).length; },
+        finishTest() { this.save(); this.screen = 'done'; },
+
+        // ── Thẻ ghi nhớ (cũ) ──────────────────────────────────────────────────
         // Người học tự chấm 0..3 (Lại / Khó / Được / Dễ) — cùng thang điểm với
         // trắc nghiệm nên dùng chung sched() và chung lịch sử trong D1.
         rate(g) {
@@ -346,6 +412,7 @@
         async save() {
           if (!this.log.length) return;
           const pending = [...this.buf(), ...this.log];
+          this.log = [];   // ĐÃ chuyển sang buffer — không xoá thì lần save sau ghi trùng
           localStorage.setItem('lms_study_buf', JSON.stringify(pending));
           await this.flushBuffer();
         },
@@ -573,7 +640,13 @@
           <button @click="askSecret()" class="underline hover:text-indigo-600">Nhập mã bí mật</button>
           để lưu kết quả và được gợi ý ôn đúng chỗ hay sai.
         </p>
-        <div class="mt-4 flex gap-2">
+        <div x-show="mode === 'cards'" x-cloak class="mt-4 flex gap-2">
+          <button @click="startLearn()" :disabled="!scopedCards.length"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">📖 Học</button>
+          <button @click="startTest()" :disabled="!scopedCards.length"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">✍️ Kiểm tra</button>
+        </div>
+        <div x-show="mode === 'quiz'" class="mt-4 flex gap-2">
           <button @click="start(10)"
                   :disabled="!(mode === 'cards' ? scopedCards : scopedQuiz).length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
@@ -651,36 +724,60 @@
     </div>
     </template>
 
-    <!-- ── Thẻ ghi nhớ ──────────────────────────────────────────────────── -->
-    <template x-if="screen === 'quiz' && q && mode === 'cards'">
+    <!-- ── Thẻ ghi nhớ: HỌC ─────────────────────────────────────────────── -->
+    <template x-if="screen === 'learn' && learnCard">
     <div class="space-y-4">
       <div class="flex items-center gap-3 text-xs text-slate-500">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-indigo-500 transition-all duration-300"
-               :style="'width:' + Math.round(at / queue.length * 100) + '%'"></div>
+               :style="'width:' + Math.round((learnAt + 1) / learnDeck.length * 100) + '%'"></div>
         </div>
-        <span x-text="(at + 1) + '/' + queue.length"></span>
+        <span x-text="(learnAt + 1) + '/' + learnDeck.length"></span>
       </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-xs text-slate-400" x-text="conceptName(learnCard.concept)"></p>
+        <p class="mt-2 text-lg font-medium text-slate-900" x-text="learnCard.front_en"></p>
+        <div class="mt-4 pt-4 border-t border-slate-100">
+          <p class="text-slate-700" x-text="learnCard.back_en"></p>
+          <p x-show="learnCard.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="learnCard.example_en"></p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button @click="learnAt = Math.max(0, learnAt - 1)" :disabled="learnAt === 0"
+                class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">← Trước</button>
+        <button x-show="learnAt < learnDeck.length - 1" @click="learnAt++"
+                class="flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Tiếp →</button>
+        <button x-show="learnAt >= learnDeck.length - 1" x-cloak @click="startTest()"
+                class="flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">✍️ Bắt đầu kiểm tra</button>
+        <button @click="screen = 'start'" class="px-3 py-2 text-sm text-slate-500 hover:text-indigo-600">Thoát</button>
+      </div>
+    </div>
+    </template>
 
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col">
+    <!-- ── Thẻ ghi nhớ: KIỂM TRA (quay vòng vô hạn, ngẫu nhiên có trọng số) ── -->
+    <template x-if="screen === 'test' && q">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <span><span class="font-semibold text-slate-700" x-text="tStats.known"></span>/<span x-text="tStats.n"></span> đã thuộc</span>
+        <span><span class="font-semibold text-rose-600" x-text="nAgain"></span> cần xem lại · <span x-text="nUnseen"></span> chưa gặp</span>
+      </div>
+      <!-- Bấm vào thẻ để lật -->
+      <button @click="revealed = true" :class="revealed ? 'cursor-default' : 'cursor-pointer hover:border-indigo-400'"
+              class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col transition-colors">
         <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
         <p class="mt-2 text-lg font-medium text-slate-900" x-text="q.front_en"></p>
         <div x-show="revealed" x-cloak class="mt-4 pt-4 border-t border-slate-100">
           <p class="text-slate-700" x-text="q.back_en"></p>
           <p x-show="q.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="q.example_en"></p>
         </div>
-        <button x-show="!revealed" @click="revealed = true"
-                class="mt-auto pt-6 text-sm font-medium text-indigo-600 hover:text-indigo-800 self-start">
-          Lật thẻ ↻
-        </button>
+        <p x-show="!revealed" class="mt-auto pt-6 text-sm text-indigo-600">Bấm để xem đáp án ↻</p>
+      </button>
+      <div x-show="revealed" x-cloak class="grid grid-cols-2 gap-2">
+        <button @click="mark(false)" class="px-3 py-3 text-sm font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">↻ Cần kiểm tra lại</button>
+        <button @click="mark(true)"  class="px-3 py-3 text-sm font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">✓ Đã thuộc</button>
       </div>
-
-      <!-- Tự chấm 0..3, cùng thang với trắc nghiệm nên dùng chung lịch ôn -->
-      <div x-show="revealed" x-cloak class="grid grid-cols-4 gap-2">
-        <button @click="rate(0)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">Lại</button>
-        <button @click="rate(1)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200">Khó</button>
-        <button @click="rate(2)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200">Được</button>
-        <button @click="rate(3)" class="px-2 py-2.5 text-xs font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">Dễ</button>
+      <div class="text-center">
+        <button @click="finishTest()" class="text-sm text-slate-500 hover:text-indigo-600 underline">Kết thúc</button>
       </div>
     </div>
     </template>
@@ -973,7 +1070,7 @@
 
     <!-- ── Kết thúc ─────────────────────────────────────────────────────── -->
     <div x-show="screen === 'done'" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
-      <p class="text-3xl font-bold text-slate-900"><span x-text="nDone"></span>/<span x-text="log.length"></span></p>
+      <p class="text-3xl font-bold text-slate-900"><span x-text="mode === 'cards' ? tStats.known : nDone"></span>/<span x-text="mode === 'cards' ? tStats.n : log.length"></span></p>
       <p class="mt-1 text-sm text-slate-500" x-text="mode === 'cards' ? 'thẻ đã thuộc' : 'câu đúng'"></p>
       <p x-show="err" x-cloak class="mt-3 text-xs text-amber-700" x-text="err"></p>
       <div class="mt-5 flex justify-center gap-2">
