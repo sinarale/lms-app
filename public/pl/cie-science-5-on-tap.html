@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.25448956.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -815,6 +815,31 @@
               </div>
             </template>
           </div>
+
+          <!-- ── Checklist: một tập hợp mà sách liệt kê ───────────────────────
+               Khác thẻ ý ở chỗ đây là MỘT bộ phải nhớ đủ (dấu hiệu phản ứng hoá
+               học, các yếu tố làm tan nhanh…). Khuôn "ý rời + đối chiếu" không
+               có chỗ cho dạng này, nên mục 2.4 từng bị rơi mất phần bằng chứng. -->
+          <template x-if="sec.checklist">
+          <div class="px-5 pb-4">
+            <p class="text-xs font-bold uppercase tracking-wide text-emerald-700 mb-2">
+              ✅ <span x-text="sec.checklist.title"></span>
+            </p>
+            <ol class="space-y-2">
+              <template x-for="(it, i) in sec.checklist.items" :key="i">
+                <li class="flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2.5">
+                  <svg class="w-6 h-6 shrink-0 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900" x-text="it.sign"></p>
+                    <p class="text-sm text-slate-700" x-text="it.look_for"></p>
+                    <p x-show="it.book_example" class="mt-0.5 text-xs text-slate-500 italic" x-text="it.book_example"></p>
+                  </div>
+                </li>
+              </template>
+            </ol>
+            <p x-show="sec.checklist.note" class="mt-2 text-xs text-emerald-800 bg-emerald-100 rounded px-3 py-1.5" x-text="sec.checklist.note"></p>
+          </div>
+          </template>
 
           <!-- ── Dễ nhầm chỗ này ──────────────────────────────────────────
                Phần đắt nhất của cả trang: nêu đúng điều trẻ hay nghĩ sai rồi mới
