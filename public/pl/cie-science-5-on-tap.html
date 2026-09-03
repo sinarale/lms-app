@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.d8198d8b.css">
+  <link rel="stylesheet" href="../assets/tw.815312fa.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -210,6 +210,12 @@
           if (!c.no) return c.en;
           return c.no.includes('.') ? c.no + ' ' + c.en : 'Unit ' + c.no + ' — ' + c.en;
         },
+        // Chấp nhận cả hai dạng: points_en là mảng chuỗi (bản cũ, môn khác),
+        // points là mảng {t, icon}. Không ép migrate toàn bộ chỉ vì một môn.
+        points(sec) {
+          if (Array.isArray(sec.points)) return sec.points;
+          return (sec.points_en || []).map(t => ({ t, icon: 'cube' }));
+        },
         conceptName(id) {
           const c = (this.data?.concepts || []).find(x => x.id === id);
           return this.label(c) || id;
@@ -380,6 +386,48 @@
      con `p` chứ không phải gốc x-data.) -->
 <body class="bg-slate-100 text-slate-800 min-h-screen"
       x-data="studyStore('pl', 'cie-science-5')">
+  <!-- ── Bộ biểu tượng ────────────────────────────────────────────────────────
+       SVG nội tuyến, không gọi ảnh ngoài: không thêm request, phóng to không vỡ,
+       và mở bằng file:// vẫn hiện. Định nghĩa một lần trong <defs>, chỗ dùng chỉ
+       tham chiếu bằng <use> — JSON chỉ mang TÊN biểu tượng, không mang markup.  -->
+  <svg class="hidden" aria-hidden="true"><defs>
+    <g id="i-cube" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></g>
+    <g id="i-ice" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M12 2v20M4 7l16 10M20 7L4 17"/><path d="M12 6l-2-2m2 2l2-2m-2 14l-2 2m2-2l2 2"/></g>
+    <g id="i-fire" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M12 3s5 4 5 9a5 5 0 01-10 0c0-2 1-3 1-3s1 2 2 2c1.5 0 1-4 2-8z"/></g>
+    <g id="i-cloud" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M6 16a4 4 0 011-7.9A5 5 0 0117 8a3.5 3.5 0 011 6.9"/><path d="M8 20v1M12 19v2M16 20v1"/></g>
+    <g id="i-scale" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M12 4v16M6 20h12M4 9h16M4 9l-2 5a3 3 0 006 0L6 9M18 9l-2 5a3 3 0 006 0l-2-5"/></g>
+    <!-- Dòng nhiệt chảy sang phải. KHÔNG thêm vạch đứng ở cuối: mũi tên đâm vào
+         vạch đọc ra là "bị chặn", ngược hẳn nghĩa cần diễn đạt. -->
+    <g id="i-heat" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12h15m0 0l-4-4m4 4l-4 4"/><path d="M4 7h8M4 17h8"/></g>
+    <g id="i-bar" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <rect x="3" y="9" width="18" height="6" rx="1.5"/><path d="M8 9v6M13 9v6"/></g>
+    <g id="i-bolt" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M13 3L5 13h6l-1 8 8-10h-6l1-8z"/></g>
+    <g id="i-shield" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/></g>
+    <g id="i-swap" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 9h14l-3-3M19 15H5l3 3"/></g>
+    <g id="i-beaker" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M9 3h6M10 3v6l-5 9a2 2 0 002 3h10a2 2 0 002-3l-5-9V3"/><path d="M7 15h10"/></g>
+    <g id="i-drop" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <path d="M12 3s6 6.5 6 10a6 6 0 01-12 0c0-3.5 6-10 6-10z"/></g>
+    <g id="i-sparkle" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/><path d="M18 16l.9 2.1L21 19l-2.1.9L18 22l-.9-2.1L15 19l2.1-.9L18 16z"/></g>
+    <g id="i-arrow" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h15m0 0l-5-5m5 5l-5 5"/></g>
+    <g id="i-lock" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+      <rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></g>
+    <g id="i-bubbles" fill="none" stroke="currentColor" stroke-width="1.8">
+      <circle cx="9" cy="14" r="3.5"/><circle cx="16" cy="9" r="2.5"/><circle cx="16.5" cy="16.5" r="1.5"/></g>
+  </defs></svg>
+
+
 
   <header class="bg-indigo-600 text-white">
     <div class="max-w-2xl mx-auto px-4 py-5 flex items-center gap-3">
@@ -624,29 +672,116 @@
     </div>
     </template>
 
-    <!-- ── Tóm tắt ──────────────────────────────────────────────────────── -->
+    <!-- ── Tóm tắt dạng trực quan ────────────────────────────────────────
+         Không dựng tên class từ JSON: Tailwind quét HTML lúc build, class ghép
+         chuỗi sẽ bị cắt mất. JSON chỉ mang TÊN biểu tượng và TÊN sơ đồ; markup
+         nằm sẵn ở đây.                                                        -->
     <template x-if="ready && data && mode === 'summary'">
-    <div class="space-y-3">
+    <div class="space-y-5">
       <p x-show="!scopedSummary.length" x-cloak
          class="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-500">
-        Chưa có tóm tắt cho môn này.
+        Chưa có tóm tắt cho phần này.
       </p>
+
       <template x-for="sec in scopedSummary" :key="sec.concept">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-          <h3 class="font-semibold text-slate-900" x-text="conceptName(sec.concept)"></h3>
-          <ul class="mt-2 space-y-1.5">
-            <template x-for="(p, i) in (sec.points_en || [])" :key="i">
-              <li class="flex gap-2 text-sm text-slate-700">
-                <span class="text-indigo-400 shrink-0">•</span><span x-text="p"></span>
-              </li>
-            </template>
-          </ul>
-          <div x-show="(sec.terms || []).length" x-cloak class="mt-3 flex flex-wrap gap-1.5">
-            <template x-for="t in (sec.terms || [])" :key="t">
-              <span class="px-2 py-0.5 text-xs rounded bg-indigo-50 text-indigo-700" x-text="t"></span>
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="px-5 py-3 bg-indigo-50 border-b border-indigo-100">
+            <h3 class="font-semibold text-indigo-900" x-text="conceptName(sec.concept)"></h3>
+          </div>
+
+          <!-- Ý lớn: một câu, chữ to, để nhớ được cả mục -->
+          <p x-show="sec.big_en" x-cloak
+             class="px-5 py-4 text-base font-medium text-slate-800 leading-snug" x-text="sec.big_en"></p>
+
+          <!-- ── Sơ đồ: ba trạng thái của chất, theo mô hình hạt ────────────
+               Vẽ thẳng, KHÔNG dùng x-for: <template> bên trong <svg> nằm ở không
+               gian tên SVG nên không phải HTMLTemplateElement, Alpine không clone
+               được và ném "importNode: parameter 1 is not of type 'Node'".      -->
+          <div x-show="sec.diagram === 'particles'" x-cloak class="px-5 pb-4">
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                <svg viewBox="0 0 24 24" class="w-full h-16 text-indigo-600" fill="currentColor"><circle cx="6" cy="6" r="2.1"/><circle cx="12" cy="6" r="2.1"/><circle cx="18" cy="6" r="2.1"/><circle cx="6" cy="12" r="2.1"/><circle cx="12" cy="12" r="2.1"/><circle cx="18" cy="12" r="2.1"/><circle cx="6" cy="18" r="2.1"/><circle cx="12" cy="18" r="2.1"/><circle cx="18" cy="18" r="2.1"/></svg>
+                <p class="mt-1 text-xs font-semibold text-slate-700">Solid</p>
+                <p class="text-[11px] text-slate-500">packed, fixed</p>
+              </div>
+              <div class="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                <svg viewBox="0 0 24 24" class="w-full h-16 text-sky-500" fill="currentColor"><circle cx="6" cy="7" r="2.1"/><circle cx="13" cy="6" r="2.1"/><circle cx="19" cy="9" r="2.1"/><circle cx="7" cy="13" r="2.1"/><circle cx="14" cy="12" r="2.1"/><circle cx="19" cy="16" r="2.1"/><circle cx="6" cy="18" r="2.1"/><circle cx="13" cy="19" r="2.1"/></svg>
+                <p class="mt-1 text-xs font-semibold text-slate-700">Liquid</p>
+                <p class="text-[11px] text-slate-500">close, sliding</p>
+              </div>
+              <div class="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                <svg viewBox="0 0 24 24" class="w-full h-16 text-amber-500" fill="currentColor"><circle cx="5" cy="5" r="2.1"/><circle cx="17" cy="7" r="2.1"/><circle cx="10" cy="11" r="2.1"/><circle cx="20" cy="14" r="2.1"/><circle cx="6" cy="17" r="2.1"/><circle cx="14" cy="19" r="2.1"/></svg>
+                <p class="mt-1 text-xs font-semibold text-slate-700">Gas</p>
+                <p class="text-[11px] text-slate-500">far apart, fast</p>
+              </div>
+            </div>
+            <div class="mt-2 flex justify-around text-[11px] text-slate-500">
+              <span>← freezing · melting →</span>
+              <span>← condensing · boiling →</span>
+            </div>
+          </div>
+
+          <!-- ── Sơ đồ: dẫn nhiệt / cách nhiệt ────────────────────────────── -->
+          <div x-show="sec.diagram === 'conduction'" x-cloak class="px-5 pb-4 space-y-2">
+            <div class="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
+              <span class="text-xs font-semibold text-emerald-800 w-16 shrink-0">Metal</span>
+              <svg class="w-5 h-5 text-emerald-600 shrink-0"><use href="#i-heat"/></svg>
+              <span class="flex-1 h-2 rounded-full bg-gradient-to-r from-rose-400 to-amber-300"></span>
+              <span class="text-xs text-emerald-800 shrink-0">heat passes</span>
+            </div>
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+              <span class="text-xs font-semibold text-slate-700 w-16 shrink-0">Plastic</span>
+              <svg class="w-5 h-5 text-slate-400 shrink-0"><use href="#i-shield"/></svg>
+              <span class="flex-1 h-2 rounded-full bg-gradient-to-r from-rose-400 via-slate-300 to-slate-200"></span>
+              <span class="text-xs text-slate-500 shrink-0">heat blocked</span>
+            </div>
+          </div>
+
+          <!-- ── Sơ đồ: đảo ngược được / không đảo ngược được ─────────────── -->
+          <div x-show="sec.diagram === 'reversible'" x-cloak class="px-5 pb-4 space-y-2">
+            <div class="flex items-center justify-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-3">
+              <span class="text-sm font-medium text-slate-800">Ice</span>
+              <svg class="w-6 h-6 text-emerald-600"><use href="#i-swap"/></svg>
+              <span class="text-sm font-medium text-slate-800">Water</span>
+              <span class="text-xs text-emerald-700 ml-1">reversible</span>
+            </div>
+            <div class="flex items-center justify-center gap-3 rounded-lg border border-rose-200 bg-rose-50 px-3 py-3">
+              <span class="text-sm font-medium text-slate-800">Flour + eggs</span>
+              <svg class="w-6 h-6 text-rose-500"><use href="#i-arrow"/></svg>
+              <span class="text-sm font-medium text-slate-800">Cake</span>
+              <span class="text-xs text-rose-700 ml-1">no way back</span>
+            </div>
+          </div>
+
+          <!-- ── Sơ đồ: chất tham gia → sản phẩm ──────────────────────────── -->
+          <div x-show="sec.diagram === 'reaction'" x-cloak class="px-5 pb-4">
+            <div class="flex items-center gap-2 flex-wrap justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-3">
+              <template x-for="r in ['Iron', 'Water', 'Oxygen']" :key="r">
+                <span class="px-2 py-1 text-xs rounded bg-white border border-slate-300 text-slate-700" x-text="r"></span>
+              </template>
+              <svg class="w-6 h-6 text-indigo-500 mx-1"><use href="#i-arrow"/></svg>
+              <span class="px-2 py-1 text-xs rounded bg-amber-100 border border-amber-300 text-amber-800 font-medium">Rust</span>
+            </div>
+            <p class="mt-1.5 text-center text-[11px] text-slate-500">reactants → product (new substance)</p>
+          </div>
+
+          <!-- ── Các ý cần nhớ: mỗi ý một thẻ kèm biểu tượng ──────────────── -->
+          <div class="px-5 pb-4 grid gap-2 sm:grid-cols-2">
+            <template x-for="(pt, i) in points(sec)" :key="i">
+              <div class="flex gap-2.5 rounded-lg border border-slate-200 p-3">
+                <svg class="w-5 h-5 shrink-0 mt-0.5 text-indigo-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
+                <p class="text-sm text-slate-700 leading-snug" x-text="pt.t"></p>
+              </div>
             </template>
           </div>
-        </div>
+
+          <!-- ── Thuật ngữ ────────────────────────────────────────────────── -->
+          <div x-show="(sec.terms || []).length" x-cloak class="px-5 pb-5 flex flex-wrap gap-1.5">
+            <template x-for="t in (sec.terms || [])" :key="t">
+              <span class="px-2 py-0.5 text-xs rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100" x-text="t"></span>
+            </template>
+          </div>
+        </section>
       </template>
     </div>
     </template>

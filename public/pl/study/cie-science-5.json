@@ -255,12 +255,29 @@
  "summary": [
   {
    "concept": "c.materials.properties",
-   "points_en": [
-    "Solid, liquid, and gas are the three states of matter.",
-    "The melting point is the temperature at which a solid becomes a liquid.",
-    "The boiling point is the temperature at which particles throughout a liquid have enough energy to change to a gas.",
-    "All matter has mass and takes up space, even gases like air.",
-    "Boiling happens throughout a liquid, while evaporation only happens at the surface."
+   "big_en": "Everything is made of tiny particles. Heating and cooling change how they move.",
+   "diagram": "particles",
+   "points": [
+    {
+     "t": "Solid, liquid and gas are the three states of matter.",
+     "icon": "cube"
+    },
+    {
+     "t": "Melting point: the temperature where a solid becomes a liquid.",
+     "icon": "ice"
+    },
+    {
+     "t": "Boiling point: the temperature where a liquid becomes a gas.",
+     "icon": "fire"
+    },
+    {
+     "t": "All matter has mass and takes up space, even air.",
+     "icon": "scale"
+    },
+    {
+     "t": "Boiling happens all through a liquid. Evaporation happens only at the surface.",
+     "icon": "cloud"
+    }
    ],
    "terms": [
     "property",
@@ -273,29 +290,63 @@
   },
   {
    "concept": "c.materials.conductors",
-   "points_en": [
-    "Conduction is the transfer of heat energy from one object to another.",
-    "Materials that conduct heat well are called thermal conductors.",
-    "Materials that conduct electricity well are called electrical conductors.",
-    "Metals are very good conductors of both heat and electricity.",
-    "Materials that are not good conductors of heat or electricity are called insulators."
+   "big_en": "Some materials let heat and electricity pass through. Others block them.",
+   "diagram": "conduction",
+   "points": [
+    {
+     "t": "Conduction is heat energy moving from one object to another.",
+     "icon": "heat"
+    },
+    {
+     "t": "Thermal conductors let heat through. Silver is the best.",
+     "icon": "bar"
+    },
+    {
+     "t": "Electrical conductors let electricity through. Copper is used in wires.",
+     "icon": "bolt"
+    },
+    {
+     "t": "Metals conduct both heat and electricity well.",
+     "icon": "bar"
+    },
+    {
+     "t": "Insulators block heat or electricity. Plastic and rubber are insulators.",
+     "icon": "shield"
+    }
    ],
    "terms": [
     "conduction",
-    "thermal conductors",
-    "electrical conductors",
-    "insulators",
-    "metals"
+    "thermal conductor",
+    "electrical conductor",
+    "insulator",
+    "metal"
    ]
   },
   {
    "concept": "c.materials.reversible",
-   "points_en": [
-    "A physical change changes how a substance looks but does not make a new substance.",
-    "A reversible change is a change that can be undone to get the original substance back.",
-    "Melting ice to make water and freezing water back to ice is a reversible change.",
-    "Dissolving a solid substance in a liquid is also a reversible change.",
-    "The substance that dissolves is the solute, and the liquid it dissolves in is the solvent."
+   "big_en": "A reversible change can be undone. You get the original substance back.",
+   "diagram": "reversible",
+   "points": [
+    {
+     "t": "A physical change alters how something looks, but makes no new substance.",
+     "icon": "swap"
+    },
+    {
+     "t": "A reversible change can be undone to get the original back.",
+     "icon": "swap"
+    },
+    {
+     "t": "Ice melts to water, and water freezes back to ice.",
+     "icon": "ice"
+    },
+    {
+     "t": "Dissolving a solid in a liquid is reversible.",
+     "icon": "beaker"
+    },
+    {
+     "t": "The solid that dissolves is the solute. The liquid is the solvent.",
+     "icon": "drop"
+    }
    ],
    "terms": [
     "physical change",
@@ -308,20 +359,36 @@
   },
   {
    "concept": "c.materials.chemical",
-   "points_en": [
-    "In a chemical reaction, substances react together to form new substances.",
-    "The starting substances are reactants, and the new substances made are products.",
-    "Chemical reactions are irreversible, meaning they cannot be easily changed back.",
-    "Burning wood, rusting iron nails, and baking cakes are chemical reactions.",
-    "Evidence of a reaction includes gas bubbles, colour changes, and temperature changes."
+   "big_en": "In a chemical reaction, new substances are made and you cannot go back.",
+   "diagram": "reaction",
+   "points": [
+    {
+     "t": "Substances react together to form completely new substances.",
+     "icon": "sparkle"
+    },
+    {
+     "t": "Starting substances are reactants. New ones made are products.",
+     "icon": "arrow"
+    },
+    {
+     "t": "Chemical reactions are irreversible — you cannot get the originals back.",
+     "icon": "lock"
+    },
+    {
+     "t": "Burning wood, rusting nails and baking a cake are chemical reactions.",
+     "icon": "fire"
+    },
+    {
+     "t": "Signs of a reaction: gas bubbles, colour change, temperature change.",
+     "icon": "bubbles"
+    }
    ],
    "terms": [
     "chemical reaction",
-    "reactants",
-    "products",
+    "reactant",
+    "product",
     "irreversible",
-    "evidence",
-    "react"
+    "evidence"
    ]
   }
  ],
@@ -1100,5 +1167,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T07:27:19+00:00"
+ "generated_at": "2026-09-03T08:08:54+00:00"
 }
