@@ -152,6 +152,10 @@ export async function readStats(env, user, course, minN = 2, limit = 20) {
               group_concat(DISTINCT chose) AS chose
          FROM attempt
         WHERE user_id = ?1 AND course = ?2 AND ts >= ?3 AND correct = 0
+          -- Chỉ trắc nghiệm mới có phương án nhiễu. Thẻ ghi nhớ sai thì chose là
+          -- NULL, đưa vào chỉ làm nhiễu prompt sinh lại: cả giá trị của truy vấn
+          -- này nằm ở chỗ nói được "em chọn nhầm CÁI GÌ".
+          AND chose IS NOT NULL
         GROUP BY concept_id ORDER BY wrong30 DESC LIMIT ?4`
     ).bind(user, course, since, limit),
   ]);
