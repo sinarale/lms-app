@@ -4,6 +4,7 @@
  * Định tuyến:
  *   /api/progress  → API tiến độ học tập (đọc/ghi Workers KV)
  *   /api/study     → lịch ôn + kết quả làm bài (đọc/ghi D1)
+ *   /api/tts       → đọc to bằng Google TTS, sinh lúc bấm, cache ở edge
  *   còn lại        → trả file tĩnh từ binding ASSETS (thư mục dist/)
  *
  * API:
@@ -24,6 +25,7 @@
 
 import { readSheet, writeCell } from "./sheet.js";
 import { readCards, writeSession, readStats } from "./study.js";
+import { handleTts } from "./tts.js";
 
 const KEY = "progress";
 const MAX_ITEMS = 5000; // chặn ghi phình vô hạn
@@ -140,6 +142,8 @@ export default {
       }
       return json({ error: "Method không hỗ trợ" }, 405);
     }
+
+    if (pathname === "/api/tts") return handleTts(request, env, url);
 
     if (pathname === "/api/study/stats") {
       if (!env.STUDY_DB) return json({ error: "Chưa cấu hình STUDY_DB" }, 503);
