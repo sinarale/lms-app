@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Ôn tập · CIE Science 5</title>
+  <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
+       thay dòng này bằng Tailwind CDN. -->
+  <link rel="stylesheet" href="../assets/tw.2471db86.css">
+  <script defer src="../assets/alpine.63d2636a.js"></script>
+  <script>
+    // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
+    // Trang này KHÔNG nhúng câu hỏi vào HTML: Tailwind quét dist/**/*.html lúc
+    // build nên nhúng vào chỉ làm trang phình, còn class thì vẫn phải nằm sẵn
+    // trong template dù nội dung đến từ đâu. Vì vậy MỌI class Tailwind ở dưới
+    // đều là chuỗi literal — tuyệt đối không ghép kiểu 'bg-' + màu + '-100',
+    // Tailwind không nhìn thấy và sẽ cắt mất.
+    function studyStore(user, course) {
+      return {
+        user, course,
+        data: null, err: '', ready: false, online: false,
+        secret: localStorage.getItem('lms_key') || '',
+        cards: {},              // item_id → {n, wrong, box, ease, due, last_ts}
+        screen: 'start',        // start | quiz | done
+        queue: [], at: 0, picked: null, answered: false,
+        log: [], shownAt: 0,
+
+        async init() {
+          try {
+            const r = await fetch('study/cie-science-5.json', { headers: { accept: 'application/json' } });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            this.data = await r.json();
+          } catch (e) {
+            this.err = 'Không tải được học liệu ôn tập.';
+            this.ready = true;
+            return;
+          }
+          // Lịch ôn: không có cũng học được, chỉ là không ghi lại (mở file cục
+          // bộ, hoặc bản trên GitHub Pages). Không báo lỗi.
+          try {
+            const r = await fetch(`/api/study?user=${this.user}&course=${this.course}`,
+                                  { headers: { accept: 'application/json' } });
+            if (r.ok) {
+              const d = await r.json();
+              const ix = Object.fromEntries(d.cols.map((c, i) => [c, i]));
+              for (const row of d.rows) {
+                this.cards[row[ix.item_id]] = Object.fromEntries(d.cols.map((c, i) => [c, row[i]]));
+              }
+              this.online = true;
+            }
+          } catch (e) { /* chế độ chỉ đọc */ }
+          this.flushBuffer();
+          this.ready = true;
+        },
+
+        // ── Chọn câu cho phiên ────────────────────────────────────────────────
+        // GĐ 0: chỉ dùng tỉ lệ sai + tính mới, chưa dùng lịch ôn giãn cách.
+        // Làm trơn (+0.5/+1.0) là bắt buộc: thiếu nó thì một câu mới sai đúng
+        // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10.
+        score(q) {
+          const c = this.cards[q.id];
+          if (!c) return 0.35;                       // câu chưa gặp
+          const err = (c.wrong + 0.5) / (c.n + 1.0);
+          return 1.6 * err;
+        },
+        conceptName(id) {
+          const c = (this.data.concepts || []).find(x => x.id === id);
+          return c ? (c.vi || c.en) : id;
+        },
+        start(n) {
+          const all = [...this.data.quiz].sort((a, b) => this.score(b) - this.score(a));
+          // 60% theo điểm, phần còn lại trộn ngẫu nhiên — top-N thuần tạo ra
+          // phiên mà trẻ sai gần hết rồi bỏ, tính năng không ai mở thì vô dụng.
+          const head = all.slice(0, Math.ceil(n * 0.6));
+          const tail = all.slice(Math.ceil(n * 0.6)).sort(() => Math.random() - 0.5).slice(0, n - head.length);
+          this.queue = [...head, ...tail].sort(() => Math.random() - 0.5);
+          this.at = 0; this.log = []; this.picked = null; this.answered = false;
+          this.screen = 'quiz'; this.shownAt = Date.now();
+        },
+        get q() { return this.queue[this.at] || null; },
+        // Xáo phương án mỗi lần hiện: bộ sinh hay dồn đáp án vào một chữ cái
+        // (lô đầu 13/20 là "b"), xáo thì không đoán mò theo vị trí được. An toàn
+        // vì id băm theo NỘI DUNG đáp án đúng, không theo chữ cái.
+        get choices() {
+          const q = this.q;
+          if (!q) return [];
+          if (!q._shuffled) {
+            q._shuffled = [...q.choices].sort(() => Math.random() - 0.5);
+          }
+          return q._shuffled;
+        },
+        // Phải chịu được null: khối phản hồi dùng x-show nên Alpine vẫn đánh giá
+        // isCorrect(picked) lúc chưa chọn gì.
+        isCorrect(c) { return !!c && !!this.q && c.key === this.q.answer; },
+
+        pick(c) {
+          if (this.answered) return;
+          this.picked = c; this.answered = true;
+          const okAns = this.isCorrect(c);
+          this.log.push({
+            i: this.q.id, c: this.q.concept, ok: okAns ? 1 : 0,
+            g: okAns ? (Date.now() - this.shownAt > 20000 ? 2 : 3) : 0,
+            ms: Date.now() - this.shownAt,
+            x: okAns ? null : c.key,
+            t: Math.floor(Date.now() / 1000),
+          });
+        },
+        next() {
+          this.at++; this.picked = null; this.answered = false; this.shownAt = Date.now();
+          if (this.at >= this.queue.length) { this.screen = 'done'; this.save(); }
+        },
+        get nDone() { return this.log.filter(x => x.ok).length; },
+
+        // ── Ghi kết quả ───────────────────────────────────────────────────────
+        // Đệm vào localStorage TRƯỚC khi gửi. Mất mạng ở câu 19 mà mất cả phiên
+        // là mất đúng thứ có giá trị nhất của tính năng này.
+        buf() { try { return JSON.parse(localStorage.getItem('lms_study_buf') || '[]'); } catch { return []; } },
+        async save() {
+          if (!this.log.length) return;
+          const pending = [...this.buf(), ...this.log];
+          localStorage.setItem('lms_study_buf', JSON.stringify(pending));
+          await this.flushBuffer();
+        },
+        async flushBuffer() {
+          const pending = this.buf();
+          if (!pending.length || !this.online || !this.secret) return;
+          try {
+            const r = await fetch(`/api/study?user=${this.user}&course=${this.course}`, {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'x-progress-key': this.secret },
+              body: JSON.stringify({ attempts: pending }),
+            });
+            if (r.status === 401) {
+              this.secret = ''; localStorage.removeItem('lms_key');
+              throw new Error('Mã bí mật không đúng');
+            }
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            localStorage.removeItem('lms_study_buf');   // chỉ xoá khi CHẮC đã ghi
+            this.err = '';
+          } catch (e) {
+            this.err = 'Chưa lưu được kết quả — sẽ thử lại lần sau. (' + e.message + ')';
+          }
+        },
+        async askSecret() {
+          const v = (prompt('Nhập mã bí mật để lưu kết quả ôn tập:') || '').trim();
+          if (!v) return;
+          this.secret = v; localStorage.setItem('lms_key', v);
+          await this.flushBuffer();
+        },
+      };
+    }
+  </script>
+</head>
+<!-- KHÔNG thêm x-init="init()": Alpine 3 TỰ gọi phương thức init() của object
+     x-data. Thêm nữa là chạy hai lần — hai lượt GET và, tệ hơn, hai lượt POST
+     ghi trùng cả phiên vào D1. (course.html không dính vì init nằm trong object
+     con `p` chứ không phải gốc x-data.) -->
+<body class="bg-slate-100 text-slate-800 min-h-screen"
+      x-data="studyStore('pl', 'cie-science-5')">
+
+  <header class="bg-indigo-600 text-white">
+    <div class="max-w-2xl mx-auto px-4 py-5 flex items-center gap-3">
+      <a href="cie-science-5.html" class="shrink-0 text-indigo-200 hover:text-white" title="Về trang môn học">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <div class="min-w-0">
+        <h1 class="text-lg font-bold truncate">📖 Ôn tập</h1>
+        <p class="text-xs text-indigo-200 truncate">CIE Science 5 · PL</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-6">
+    <p x-show="!ready" class="text-center text-sm text-slate-400 py-10">Đang tải…</p>
+    <p x-show="ready && err && !data" x-cloak
+       class="rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-800" x-text="err"></p>
+
+    <!-- ── Màn hình bắt đầu ─────────────────────────────────────────────── -->
+    <template x-if="ready && data && screen === 'start'">
+    <div class="space-y-4">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <h2 class="font-semibold text-slate-900" x-text="data.concepts?.[0]?.en || 'Ôn tập'"></h2>
+        <p class="mt-1 text-sm text-slate-500">
+          <span x-text="data.quiz.length"></span> câu hỏi ·
+          <span x-text="(data.concepts || []).length"></span> khái niệm
+        </p>
+        <p x-show="!online" x-cloak class="mt-3 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2 text-xs text-amber-800">
+          Chế độ chỉ đọc — vẫn làm bài được, nhưng kết quả không được lưu lại.
+        </p>
+        <p x-show="online && !secret" x-cloak class="mt-3 text-xs text-slate-500">
+          <button @click="askSecret()" class="underline hover:text-indigo-600">Nhập mã bí mật</button>
+          để lưu kết quả và được gợi ý ôn đúng chỗ hay sai.
+        </p>
+        <div class="mt-4 flex gap-2">
+          <button @click="start(10)"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+            Làm 10 câu
+          </button>
+          <button @click="start(20)"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500">
+            Làm 20 câu
+          </button>
+        </div>
+      </div>
+
+      <!-- Điểm yếu, chỉ hiện khi đã có dữ liệu làm bài -->
+      <template x-if="online && Object.keys(cards).length">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+          <h3 class="text-xs font-bold uppercase tracking-wide text-slate-400">Hay sai nhất</h3>
+          <ul class="mt-2 space-y-1">
+            <template x-for="q in [...data.quiz].sort((a,b) => score(b) - score(a)).slice(0,3)" :key="q.id">
+              <li class="text-sm text-slate-600 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0"></span>
+                <span class="truncate" x-text="conceptName(q.concept)"></span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </div>
+    </div>
+    </template>
+
+    <!-- ── Làm bài ──────────────────────────────────────────────────────── -->
+    <template x-if="screen === 'quiz' && q">
+    <div class="space-y-4">
+      <div class="flex items-center gap-3 text-xs text-slate-500">
+        <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
+          <div class="h-full bg-indigo-500 transition-all duration-300"
+               :style="'width:' + Math.round(at / queue.length * 100) + '%'"></div>
+        </div>
+        <span x-text="(at + 1) + '/' + queue.length"></span>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
+        <p class="mt-1 font-medium text-slate-900" x-text="q.stem_en"></p>
+        <p class="mt-1 text-sm text-slate-500" x-text="q.stem_vi"></p>
+
+        <div class="mt-4 space-y-2">
+          <template x-for="c in choices" :key="c.key">
+            <button @click="pick(c)" :disabled="answered"
+                    class="w-full text-left px-4 py-3 rounded-lg border transition-colors"
+                    :class="!answered ? 'bg-white border-slate-300 hover:border-indigo-500 hover:bg-indigo-50'
+                            : (isCorrect(c) ? 'bg-emerald-50 border-emerald-400'
+                               : (picked === c ? 'bg-rose-50 border-rose-400' : 'bg-white border-slate-200 opacity-60'))">
+              <span class="text-sm text-slate-800" x-text="c.en"></span>
+              <span class="block text-xs text-slate-500" x-text="c.vi"></span>
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <div x-show="answered" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <p class="font-medium" :class="isCorrect(picked) ? 'text-emerald-700' : 'text-rose-700'"
+           x-text="isCorrect(picked) ? '✓ Đúng rồi!' : '✗ Chưa đúng'"></p>
+        <p class="mt-1 text-sm text-slate-700" x-text="q.why_en"></p>
+        <p class="mt-0.5 text-sm text-slate-500" x-text="q.why_vi"></p>
+        <button @click="next()"
+                class="mt-4 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+          Câu tiếp →
+        </button>
+      </div>
+    </div>
+    </template>
+
+    <!-- ── Kết thúc ─────────────────────────────────────────────────────── -->
+    <div x-show="screen === 'done'" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+      <p class="text-3xl font-bold text-slate-900"><span x-text="nDone"></span>/<span x-text="log.length"></span></p>
+      <p class="mt-1 text-sm text-slate-500">câu đúng</p>
+      <p x-show="err" x-cloak class="mt-3 text-xs text-amber-700" x-text="err"></p>
+      <div class="mt-5 flex justify-center gap-2">
+        <button @click="screen = 'start'"
+                class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+          Ôn tiếp
+        </button>
+        <a href="cie-science-5.html"
+           class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500">
+          Về trang môn
+        </a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

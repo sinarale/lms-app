@@ -3,6 +3,7 @@
  *
  * Định tuyến:
  *   /api/progress  → API tiến độ học tập (đọc/ghi Workers KV)
+ *   /api/study     → lịch ôn + kết quả làm bài (đọc/ghi D1)
  *   còn lại        → trả file tĩnh từ binding ASSETS (thư mục dist/)
  *
  * API:
@@ -17,10 +18,12 @@
  * Cấu hình trong wrangler.toml / dashboard:
  *   ASSETS          — binding tới thư mục tĩnh
  *   PROGRESS_KV     — KV namespace lưu tiến độ
+ *   STUDY_DB        — D1 database lưu lịch sử ôn tập
  *   LMS_SECRET      — mã bí mật để được phép ghi (đặt trên dashboard)
  */
 
 import { readSheet, writeCell } from "./sheet.js";
+import { readCards, writeSession } from "./study.js";
 
 const KEY = "progress";
 const MAX_ITEMS = 5000; // chặn ghi phình vô hạn
@@ -133,6 +136,38 @@ export default {
           return d.error ? json({ error: d.error }, d.status || 500) : json(d);
         } catch (e) {
           return json({ error: String(e.message || e) }, 502);
+        }
+      }
+      return json({ error: "Method không hỗ trợ" }, 405);
+    }
+
+    if (pathname === "/api/study") {
+      if (!env.STUDY_DB) return json({ error: "Chưa cấu hình STUDY_DB" }, 503);
+      const user = url.searchParams.get("user") || "";
+      const course = url.searchParams.get("course") || "";
+      if (!/^[\w-]{1,32}$/.test(user) || !/^[\w-]{1,64}$/.test(course)) {
+        return json({ error: "Thiếu hoặc sai 'user'/'course'" }, 400);
+      }
+      if (request.method === "GET") {
+        try {
+          return json(await readCards(env, user, course));
+        } catch (e) {
+          return json({ error: String(e.message || e) }, 500);
+        }
+      }
+      if (request.method === "POST") {
+        const secret = env.LMS_SECRET || "";
+        if (!secret) return json({ error: "Chưa cấu hình LMS_SECRET" }, 503);
+        if ((request.headers.get("x-progress-key") || "") !== secret) {
+          return json({ error: "Mã bí mật không đúng" }, 401);
+        }
+        let body;
+        try { body = await request.json(); } catch { return json({ error: "Body không hợp lệ" }, 400); }
+        if (!Array.isArray(body?.attempts)) return json({ error: "Thiếu 'attempts'" }, 400);
+        try {
+          return json(await writeSession(env, user, course, body.attempts));
+        } catch (e) {
+          return json({ error: String(e.message || e) }, 500);
         }
       }
       return json({ error: "Method không hỗ trợ" }, 405);

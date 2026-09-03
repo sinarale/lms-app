@@ -1,0 +1,910 @@
+{
+ "schema": 1,
+ "user": "pl",
+ "course": "cie-science-5",
+ "profile": "reader",
+ "lang": {
+  "primary": "en",
+  "gloss": "vi"
+ },
+ "source": {
+  "notebook_id": "4da955dd-f48b-4624-a929-98516ead0e22"
+ },
+ "concepts": [
+  {
+   "id": "c.materials",
+   "parent": null,
+   "en": "Materials: properties and changes",
+   "vi": "Chất: tính chất và sự biến đổi",
+   "pages": "35-62"
+  },
+  {
+   "id": "c.materials.properties",
+   "parent": "c.materials",
+   "en": "Properties of substances",
+   "vi": "Tính chất của các chất",
+   "pages": "35-41"
+  },
+  {
+   "id": "c.materials.properties.melting",
+   "parent": "c.materials.properties",
+   "en": "Melting point",
+   "vi": "Nhiệt độ nóng chảy",
+   "pages": "35-37"
+  },
+  {
+   "id": "c.materials.properties.boiling_evaporation",
+   "parent": "c.materials.properties",
+   "en": "Boiling point and evaporation",
+   "vi": "Nhiệt độ sôi và sự bay hơi",
+   "pages": "36-38"
+  },
+  {
+   "id": "c.materials.properties.gases",
+   "parent": "c.materials.properties",
+   "en": "Properties of gases",
+   "vi": "Tính chất của chất khí",
+   "pages": "39-41"
+  },
+  {
+   "id": "c.materials.conductors",
+   "parent": "c.materials",
+   "en": "Thermal and electrical conductors",
+   "vi": "Vật dẫn nhiệt và dẫn điện",
+   "pages": "42-48"
+  },
+  {
+   "id": "c.materials.conductors.thermal",
+   "parent": "c.materials.conductors",
+   "en": "Thermal conductors",
+   "vi": "Chất dẫn nhiệt",
+   "pages": "42-44"
+  },
+  {
+   "id": "c.materials.conductors.electrical",
+   "parent": "c.materials.conductors",
+   "en": "Electrical conductors",
+   "vi": "Chất dẫn điện",
+   "pages": "45-47"
+  },
+  {
+   "id": "c.materials.conductors.insulators",
+   "parent": "c.materials.conductors",
+   "en": "Electrical insulators",
+   "vi": "Chất cách điện",
+   "pages": "47-48"
+  },
+  {
+   "id": "c.materials.reversible",
+   "parent": "c.materials",
+   "en": "Reversible changes",
+   "vi": "Sự biến đổi có thể đảo ngược",
+   "pages": "49-55"
+  },
+  {
+   "id": "c.materials.reversible.changes",
+   "parent": "c.materials.reversible",
+   "en": "Reversible and irreversible changes",
+   "vi": "Biến đổi có thể đảo ngược và không thể đảo ngược",
+   "pages": "49-50"
+  },
+  {
+   "id": "c.materials.reversible.dissolving",
+   "parent": "c.materials.reversible",
+   "en": "Dissolving process",
+   "vi": "Quá trình hòa tan",
+   "pages": "51-52"
+  },
+  {
+   "id": "c.materials.reversible.factors",
+   "parent": "c.materials.reversible",
+   "en": "Temperature and dissolving",
+   "vi": "Ảnh hưởng của nhiệt độ đến sự hòa tan",
+   "pages": "53-55"
+  },
+  {
+   "id": "c.materials.chemical",
+   "parent": "c.materials",
+   "en": "Chemical reactions",
+   "vi": "Phản ứng hóa học",
+   "pages": "56-62"
+  },
+  {
+   "id": "c.materials.chemical.reactants_products",
+   "parent": "c.materials.chemical",
+   "en": "Reactants and products",
+   "vi": "Chất tham gia và sản phẩm tạo thành",
+   "pages": "56-58"
+  },
+  {
+   "id": "c.materials.chemical.evidence",
+   "parent": "c.materials.chemical",
+   "en": "Evidence of chemical reactions",
+   "vi": "Dấu hiệu nhận biết phản ứng hóa học",
+   "pages": "59-60"
+  },
+  {
+   "id": "c.materials.chemical.examples",
+   "parent": "c.materials.chemical",
+   "en": "Examples of chemical reactions",
+   "vi": "Các ví dụ về phản ứng hóa học",
+   "pages": "61-62"
+  }
+ ],
+ "summary": [],
+ "glossary": [],
+ "misconceptions": [],
+ "flashcards": [],
+ "quiz": [
+  {
+   "id": "q.7d62893a",
+   "concept": "c.materials.properties.melting",
+   "stem_en": "What is the melting point (nhiệt độ nóng chảy) of ice?",
+   "stem_vi": "Nhiệt độ nóng chảy (melting point) của nước đá là bao nhiêu?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "100 °C",
+     "vi": "100 °C"
+    },
+    {
+     "key": "b",
+     "en": "0 °C",
+     "vi": "0 °C"
+    },
+    {
+     "key": "c",
+     "en": "1064 °C",
+     "vi": "1064 °C"
+    },
+    {
+     "key": "d",
+     "en": "10 °C",
+     "vi": "10 °C"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Ice melts and becomes liquid water at a temperature of 0 °C.",
+   "why_vi": "Nước đá nóng chảy và hóa thành nước lỏng ở nhiệt độ 0 °C.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.599a5f86",
+   "concept": "c.materials.properties.melting",
+   "stem_en": "Why is the melting point (nhiệt độ nóng chảy) of a substance always lower than its boiling point (nhiệt độ sôi)?",
+   "stem_vi": "Tại sao nhiệt độ nóng chảy (melting point) của một chất luôn thấp hơn nhiệt độ sôi (boiling point) của nó?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Particles need less energy to slide past each other than to completely break apart as a gas.",
+     "vi": "Các hạt cần ít năng lượng để trượt qua nhau hơn là để tách rời hoàn toàn thành chất khí."
+    },
+    {
+     "key": "b",
+     "en": "Substances always boil before they melt.",
+     "vi": "Các chất luôn sôi trước khi nóng chảy."
+    },
+    {
+     "key": "c",
+     "en": "Cooling makes particles move much faster.",
+     "vi": "Sự làm nguội làm cho các hạt di chuyển nhanh hơn nhiều."
+    },
+    {
+     "key": "d",
+     "en": "Melting only happens at very high temperatures.",
+     "vi": "Sự nóng chảy chỉ xảy ra ở nhiệt độ rất cao."
+    }
+   ],
+   "answer": "a",
+   "why_en": "It takes less energy to melt a solid into a liquid than to boil a liquid into a gas.",
+   "why_vi": "Cần ít năng lượng để làm nóng chảy chất rắn thành chất lỏng hơn là để đun sôi chất lỏng thành chất khí.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.d5967a8e",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "stem_en": "What is the boiling point (nhiệt độ sôi) of pure water?",
+   "stem_vi": "Nhiệt độ sôi (boiling point) của nước tinh khiết là bao nhiêu?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "0 °C",
+     "vi": "0 °C"
+    },
+    {
+     "key": "b",
+     "en": "50 °C",
+     "vi": "50 °C"
+    },
+    {
+     "key": "c",
+     "en": "100 °C",
+     "vi": "100 °C"
+    },
+    {
+     "key": "d",
+     "en": "118 °C",
+     "vi": "118 °C"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Pure water boils at a temperature of 100 °C.",
+   "why_vi": "Nước tinh khiết sôi ở nhiệt độ 100 °C.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.3019e89f",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "stem_en": "What is the main difference between boiling (sôi) and evaporation (bay hơi)?",
+   "stem_vi": "Sự khác biệt chính giữa sự sôi (boiling) và sự bay hơi (evaporation) là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Boiling happens only on the surface of the liquid.",
+     "vi": "Sự sôi chỉ xảy ra trên bề mặt của chất lỏng."
+    },
+    {
+     "key": "b",
+     "en": "Evaporation happens throughout the whole liquid.",
+     "vi": "Sự bay hơi xảy ra trong toàn bộ lòng chất lỏng."
+    },
+    {
+     "key": "c",
+     "en": "Boiling happens throughout the liquid, while evaporation only happens on the surface.",
+     "vi": "Sự sôi xảy ra trong toàn bộ lòng chất lỏng, trong khi sự bay hơi chỉ xảy ra trên bề mặt."
+    },
+    {
+     "key": "d",
+     "en": "Evaporation only happens when we heat a liquid to a very high temperature.",
+     "vi": "Sự bay hơi chỉ xảy ra khi chúng ta đun nóng chất lỏng đến nhiệt độ rất cao."
+    }
+   ],
+   "answer": "c",
+   "why_en": "Boiling happens throughout the liquid, but evaporation only happens at the surface.",
+   "why_vi": "Sự sôi xảy ra trong toàn bộ lòng chất lỏng, nhưng sự bay hơi chỉ xảy ra ở bề mặt.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.62a798a9",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "stem_en": "If we heat 100 ml of water, vinegar, and olive oil on the same burner, which liquid will turn into a gas first?",
+   "stem_vi": "Nếu chúng ta đun nóng 100 ml nước, giấm và dầu ô-liu trên cùng một bếp, chất lỏng nào sẽ chuyển thành chất khí trước?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Olive oil because it has the highest boiling point of 300 °C.",
+     "vi": "Dầu ô-liu vì nó có nhiệt độ sôi cao nhất là 300 °C."
+    },
+    {
+     "key": "b",
+     "en": "Water because it has the lowest boiling point of 100 °C.",
+     "vi": "Nước vì nó có nhiệt độ sôi thấp nhất là 100 °C."
+    },
+    {
+     "key": "c",
+     "en": "Vinegar because it boils at 118 °C.",
+     "vi": "Giấm vì nó sôi ở 118 °C."
+    },
+    {
+     "key": "d",
+     "en": "They will all turn into gas at the exact same time.",
+     "vi": "Tất cả chúng sẽ chuyển thành chất khí cùng một lúc."
+    }
+   ],
+   "answer": "b",
+   "why_en": "The liquid with the lowest boiling point will turn into a gas first.",
+   "why_vi": "Chất lỏng có nhiệt độ sôi thấp nhất sẽ chuyển thành chất khí đầu tiên.",
+   "difficulty": 3
+  },
+  {
+   "id": "q.4a61e411",
+   "concept": "c.materials.properties.gases",
+   "stem_en": "Which of these is a property (tính chất) of all gases?",
+   "stem_vi": "Điều nào sau đây là tính chất (property) của tất cả các chất khí?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "They have no mass and take up no space.",
+     "vi": "Chúng không có khối lượng và không chiếm không gian."
+    },
+    {
+     "key": "b",
+     "en": "They have mass and take up space.",
+     "vi": "Chúng có khối lượng và chiếm không gian."
+    },
+    {
+     "key": "c",
+     "en": "They only exist when we heat them.",
+     "vi": "Chúng chỉ tồn tại khi chúng ta đun nóng chúng."
+    },
+    {
+     "key": "d",
+     "en": "They have a fixed shape like solids.",
+     "vi": "Chúng có hình dạng cố định giống như chất rắn."
+    }
+   ],
+   "answer": "b",
+   "why_en": "All matter, including gases, has mass and takes up space.",
+   "why_vi": "Mọi vật chất, bao gồm cả chất khí, đều có khối lượng và chiếm không gian.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.04bd5cf4",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "What do we call materials that conduct heat (dẫn nhiệt) very well?",
+   "stem_vi": "Chúng ta gọi những vật liệu dẫn nhiệt (conduct heat) rất tốt là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Thermal insulators",
+     "vi": "Chất cách nhiệt (thermal insulators)"
+    },
+    {
+     "key": "b",
+     "en": "Thermal conductors",
+     "vi": "Chất dẫn nhiệt (thermal conductors)"
+    },
+    {
+     "key": "c",
+     "en": "Electrical conductors",
+     "vi": "Chất dẫn điện (electrical conductors)"
+    },
+    {
+     "key": "d",
+     "en": "Electrical insulators",
+     "vi": "Chất cách điện (electrical insulators)"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Substances and materials that conduct heat well are called thermal conductors.",
+   "why_vi": "Các chất và vật liệu dẫn nhiệt tốt được gọi là chất dẫn nhiệt.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.2d5d1fbd",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "Why are the handles of cooking pots and pans usually made of plastic?",
+   "stem_vi": "Tại sao tay cầm của nồi và chảo nấu ăn thường được làm bằng nhựa?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Plastic is a metal that cools down very quickly.",
+     "vi": "Nhựa là một kim loại nguội đi rất nhanh."
+    },
+    {
+     "key": "b",
+     "en": "Plastic is not a good conductor of heat, so it stops your hand from getting burnt.",
+     "vi": "Nhựa không phải là chất dẫn nhiệt tốt, vì vậy nó giúp tay bạn không bị bỏng."
+    },
+    {
+     "key": "c",
+     "en": "Plastic is the best conductor of heat.",
+     "vi": "Nhựa là chất dẫn nhiệt tốt nhất."
+    },
+    {
+     "key": "d",
+     "en": "Plastic helps transfer heat from the stove to the food.",
+     "vi": "Nhựa giúp truyền nhiệt từ bếp vào thức ăn."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Plastic is a poor thermal conductor, so heat does not travel through it easily to burn your hand.",
+   "why_vi": "Nhựa là chất dẫn nhiệt kém, vì vậy nhiệt không dễ dàng truyền qua nó để làm bỏng tay bạn.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.725074de",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "Which of these materials is the best conductor of heat (dẫn nhiệt tốt nhất)?",
+   "stem_vi": "Vật liệu nào sau đây là chất dẫn nhiệt tốt nhất (best conductor of heat)?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Stainless steel",
+     "vi": "Thép không gỉ (stainless steel)"
+    },
+    {
+     "key": "b",
+     "en": "Copper",
+     "vi": "Đồng (copper)"
+    },
+    {
+     "key": "c",
+     "en": "Silver",
+     "vi": "Bạc (silver)"
+    },
+    {
+     "key": "d",
+     "en": "Aluminium",
+     "vi": "Nhôm (aluminium)"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The Learner's Book states that silver is the best conductor of heat.",
+   "why_vi": "Sách học sinh ghi rõ rằng bạc là chất dẫn nhiệt tốt nhất.",
+   "difficulty": 3
+  },
+  {
+   "id": "q.686e0db1",
+   "concept": "c.materials.conductors.electrical",
+   "stem_en": "What metal is the connecting wire (dây nối) inside electrical circuits usually made of?",
+   "stem_vi": "Sợi dây nối (connecting wire) bên trong các mạch điện thường được làm bằng kim loại nào?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Plastic",
+     "vi": "Nhựa (plastic)"
+    },
+    {
+     "key": "b",
+     "en": "Copper",
+     "vi": "Đồng (copper)"
+    },
+    {
+     "key": "c",
+     "en": "Glass",
+     "vi": "Thủy tinh (glass)"
+    },
+    {
+     "key": "d",
+     "en": "Wood",
+     "vi": "Gỗ (wood)"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Connecting wires are made of copper because copper conducts electricity.",
+   "why_vi": "Dây nối được làm bằng đồng vì đồng dẫn điện.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.9f9b0edb",
+   "concept": "c.materials.conductors.electrical",
+   "stem_en": "Which non-metal (phi kim) substance is able to conduct electricity in a circuit?",
+   "stem_vi": "Chất phi kim (non-metal) nào có khả năng dẫn điện trong mạch điện?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Pencil graphite",
+     "vi": "Than chì bút chì (graphite)"
+    },
+    {
+     "key": "b",
+     "en": "Sugar",
+     "vi": "Đường (sugar)"
+    },
+    {
+     "key": "c",
+     "en": "Polystyrene foam",
+     "vi": "Xốp polystyrene foam"
+    },
+    {
+     "key": "d",
+     "en": "Glass rod",
+     "vi": "Đũa thủy tinh (glass rod)"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Graphite is a form of carbon that can conduct electricity in a circuit.",
+   "why_vi": "Than chì (graphite) là một dạng các-bon có thể dẫn điện trong mạch điện.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.824fa626",
+   "concept": "c.materials.conductors.insulators",
+   "stem_en": "Why are electrical plugs and covers made of plastic?",
+   "stem_vi": "Tại sao phích cắm điện và vỏ bọc lại được làm bằng nhựa?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Plastic conducts electricity better than copper.",
+     "vi": "Nhựa dẫn điện tốt hơn đồng."
+    },
+    {
+     "key": "b",
+     "en": "Plastic is an electrical insulator, which stops electricity from flowing into your body.",
+     "vi": "Nhựa là chất cách điện, giúp ngăn dòng điện truyền vào cơ thể bạn."
+    },
+    {
+     "key": "c",
+     "en": "Plastic makes the electric current flow much faster.",
+     "vi": "Nhựa làm cho dòng điện chạy nhanh hơn nhiều."
+    },
+    {
+     "key": "d",
+     "en": "Plastic is a metal that is very cheap.",
+     "vi": "Nhựa là một kim loại rất rẻ."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Plastic is an electrical insulator and does not conduct electricity.",
+   "why_vi": "Nhựa là chất cách điện và không dẫn điện.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.a84a5d95",
+   "concept": "c.materials.reversible.changes",
+   "stem_en": "What is a physical change (biến đổi vật lý)?",
+   "stem_vi": "Sự biến đổi vật lý (physical change) là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A change that makes a completely new substance.",
+     "vi": "Sự biến đổi tạo ra một chất hoàn toàn mới."
+    },
+    {
+     "key": "b",
+     "en": "A change that only alters how a substance looks or feels, without making a new substance.",
+     "vi": "Sự biến đổi chỉ làm thay đổi vẻ ngoài hoặc cảm giác của một chất mà không tạo ra chất mới."
+    },
+    {
+     "key": "c",
+     "en": "A change that can never be reversed.",
+     "vi": "Sự biến đổi không bao giờ có thể đảo ngược."
+    },
+    {
+     "key": "d",
+     "en": "A change caused only by burning things.",
+     "vi": "Sự biến đổi chỉ gây ra do đốt cháy mọi thứ."
+    }
+   ],
+   "answer": "b",
+   "why_en": "A physical change does not change a substance into a different substance.",
+   "why_vi": "Sự biến đổi vật lý không biến một chất này thành một chất khác.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.8744d4bc",
+   "concept": "c.materials.reversible.changes",
+   "stem_en": "Which of these processes is an irreversible change (biến đổi không thể đảo ngược)?",
+   "stem_vi": "Quá trình nào sau đây là sự biến đổi không thể đảo ngược (irreversible change)?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Melting butter in a hot pan",
+     "vi": "Làm nóng chảy bơ trong chảo nóng"
+    },
+    {
+     "key": "b",
+     "en": "Freezing water into ice",
+     "vi": "Làm đông đặc nước thành đá"
+    },
+    {
+     "key": "c",
+     "en": "Baking a cake",
+     "vi": "Nướng một chiếc bánh ngọt"
+    },
+    {
+     "key": "d",
+     "en": "Dissolving salt in water",
+     "vi": "Hòa tan muối vào nước"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Baking a cake causes chemical changes that cannot be reversed to get the original ingredients back.",
+   "why_vi": "Nướng bánh gây ra những biến đổi hóa học không thể đảo ngược để lấy lại nguyên liệu ban đầu.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.b498ec40",
+   "concept": "c.materials.reversible.dissolving",
+   "stem_en": "In a salt water solution (dung dịch), what are the scientific names for the salt and the water?",
+   "stem_vi": "Trong một dung dịch nước muối, tên khoa học của muối và nước là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Salt is the solvent, and water is the solute.",
+     "vi": "Muối là dung môi (solvent), và nước là chất tan (solute)."
+    },
+    {
+     "key": "b",
+     "en": "Salt is the solute, and water is the solvent.",
+     "vi": "Muối là chất tan (solute), và nước là dung môi (solvent)."
+    },
+    {
+     "key": "c",
+     "en": "Both salt and water are solutes.",
+     "vi": "Cả muối và nước đều là chất tan (solutes)."
+    },
+    {
+     "key": "d",
+     "en": "Salt is the reactant, and water is the product.",
+     "vi": "Muối là chất tham gia (reactant), và nước là sản phẩm (product)."
+    }
+   ],
+   "answer": "b",
+   "why_en": "The solid in a solution is the solute, and the liquid is the solvent.",
+   "why_vi": "Chất rắn trong dung dịch là chất tan, còn chất lỏng là dung môi.",
+   "difficulty": 1
+  },
+  {
+   "id": "q.9655d150",
+   "concept": "c.materials.reversible.dissolving",
+   "stem_en": "Why is dissolving salt in water called a reversible change?",
+   "stem_vi": "Tại sao việc hòa tan muối vào nước được gọi là biến đổi có thể đảo ngược?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Because the salt disappears forever.",
+     "vi": "Vì muối biến mất mãi mãi."
+    },
+    {
+     "key": "b",
+     "en": "Because we can evaporate the water to leave the solid salt behind.",
+     "vi": "Vì chúng ta có thể làm bay hơi nước để thu lại muối rắn."
+    },
+    {
+     "key": "c",
+     "en": "Because we can freeze the solution to separate them.",
+     "vi": "Vì chúng ta có thể làm đông lạnh dung dịch để tách chúng ra."
+    },
+    {
+     "key": "d",
+     "en": "Because salt changes into water particles.",
+     "vi": "Vì muối biến đổi thành các hạt nước."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Evaporating the liquid solvent leaves the solid solute behind, which reverses the dissolving.",
+   "why_vi": "Làm bay hơi dung môi lỏng sẽ để lại chất tan rắn, làm đảo ngược quá trình hòa tan.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.e82820e7",
+   "concept": "c.materials.reversible.factors",
+   "stem_en": "How does water temperature affect how fast sugar dissolves?",
+   "stem_vi": "Nhiệt độ nước ảnh hưởng như thế nào đến tốc độ hòa tan của đường?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Sugar dissolves faster in cold water than in hot water.",
+     "vi": "Đường hòa tan nhanh hơn trong nước lạnh so với trong nước nóng."
+    },
+    {
+     "key": "b",
+     "en": "Sugar dissolves faster in hot water than in cold water.",
+     "vi": "Đường hòa tan nhanh hơn trong nước nóng so với trong nước lạnh."
+    },
+    {
+     "key": "c",
+     "en": "Temperature does not affect how fast sugar dissolves.",
+     "vi": "Nhiệt độ không ảnh hưởng đến tốc độ hòa tan của đường."
+    },
+    {
+     "key": "d",
+     "en": "Hot water stops sugar from dissolving at all.",
+     "vi": "Nước nóng ngăn không cho đường hòa tan."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Sugar and other solids dissolve faster in hot water than in cold water.",
+   "why_vi": "Đường và các chất rắn khác hòa tan nhanh hơn trong nước nóng so với trong nước lạnh.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.55e9dd54",
+   "concept": "c.materials.reversible.factors",
+   "stem_en": "Using the particle model, why does sugar dissolve faster in hot water?",
+   "stem_vi": "Sử dụng mô hình hạt, tại sao đường hòa tan nhanh hơn trong nước nóng?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Hot water makes the sugar particles grow much bigger.",
+     "vi": "Nước nóng làm cho các hạt đường nở to hơn nhiều."
+    },
+    {
+     "key": "b",
+     "en": "In hot water, particles have more energy and move faster, which helps them spread out quickly.",
+     "vi": "Trong nước nóng, các hạt có nhiều năng lượng hơn và di chuyển nhanh hơn, giúp chúng phân tán nhanh chóng."
+    },
+    {
+     "key": "c",
+     "en": "Cold water makes the water particles disappear.",
+     "vi": "Nước lạnh làm cho các hạt nước biến mất."
+    },
+    {
+     "key": "d",
+     "en": "Hot water makes the sugar particles stay completely still.",
+     "vi": "Nước nóng làm cho các hạt đường đứng yên hoàn toàn."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Higher temperature increases particle energy and movement, making dissolving faster.",
+   "why_vi": "Nhiệt độ cao hơn làm tăng năng lượng và chuyển động của hạt, giúp hòa tan nhanh hơn.",
+   "difficulty": 3
+  },
+  {
+   "id": "q.71aaa2a7",
+   "concept": "c.materials.chemical.reactants_products",
+   "stem_en": "When an iron nail is left in water and rusts, what are the reactants (chất tham gia) and the product (sản phẩm)?",
+   "stem_vi": "Khi một chiếc đinh sắt bị ngâm trong nước và bị gỉ, chất tham gia (reactants) và sản phẩm (product) là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The reactants are iron, water, and oxygen; the product is rust.",
+     "vi": "Chất tham gia là sắt, nước và ô-xy; sản phẩm là gỉ sắt."
+    },
+    {
+     "key": "b",
+     "en": "The reactant is rust; the products are iron and water.",
+     "vi": "Chất tham gia là gỉ sắt; sản phẩm là sắt và nước."
+    },
+    {
+     "key": "c",
+     "en": "The reactants are rust and water; the product is iron.",
+     "vi": "Chất tham gia là gỉ sắt và nước; sản phẩm là sắt."
+    },
+    {
+     "key": "d",
+     "en": "There are no reactants because rusting is a physical change.",
+     "vi": "Không có chất tham gia vì gỉ sắt là một sự biến đổi vật lý."
+    }
+   ],
+   "answer": "a",
+   "why_en": "Iron reacts with water and oxygen from the air to form the new product, rust.",
+   "why_vi": "Sắt phản ứng với nước và ô-xy từ không khí để tạo thành sản phẩm mới là gỉ sắt.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.b6a55253",
+   "concept": "c.materials.chemical.evidence",
+   "stem_en": "Which of these is NOT reliable evidence (dấu hiệu) that a chemical reaction has taken place?",
+   "stem_vi": "Điều nào sau đây KHÔNG phải là dấu hiệu đáng tin cậy (evidence) cho thấy một phản ứng hóa học đã xảy ra?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Bubbles of gas form when we mix vinegar and baking soda.",
+     "vi": "Bọt khí hình thành khi chúng ta trộn giấm và muối nở baking soda."
+    },
+    {
+     "key": "b",
+     "en": "A solid candle wax melts and turns into a liquid when heated.",
+     "vi": "Sáp nến rắn nóng chảy và chuyển thành chất lỏng khi đun nóng."
+    },
+    {
+     "key": "c",
+     "en": "A bright white flame is seen when burning magnesium.",
+     "vi": "Thấy một ngọn lửa trắng sáng khi đốt cháy ma-nhê."
+    },
+    {
+     "key": "d",
+     "en": "An egg rots and forms a gas that smells very bad.",
+     "vi": "Trứng bị thối và tạo ra một chất khí có mùi rất hôi."
+    }
+   ],
+   "answer": "b",
+   "why_en": "Melting candle wax is a physical change of state, not a chemical reaction, because no new substance is formed.",
+   "why_vi": "Sáp nến nóng chảy là sự biến đổi trạng thái vật lý, không phải phản ứng hóa học, vì không có chất mới nào được tạo ra.",
+   "difficulty": 3
+  },
+  {
+   "id": "q.317aa7c6",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "Which metal is the best conductor of heat?",
+   "stem_vi": "Kim loại nào dẫn nhiệt tốt nhất?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Copper",
+     "vi": "Đồng"
+    },
+    {
+     "key": "b",
+     "en": "Silver",
+     "vi": "Bạc"
+    },
+    {
+     "key": "c",
+     "en": "Aluminium",
+     "vi": "Nhôm"
+    },
+    {
+     "key": "d",
+     "en": "Iron",
+     "vi": "Sắt"
+    }
+   ],
+   "answer": "b",
+   "why_en": "According to the Learner's Book, silver is the best conductor of heat, even though other metals like copper also conduct heat well.",
+   "why_vi": "Theo Sách học sinh, bạc là chất dẫn nhiệt tốt nhất, mặc dù các kim loại khác như đồng cũng dẫn nhiệt tốt.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.8e5df7d1",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "What is a thermal conductor?",
+   "stem_vi": "Chất dẫn nhiệt là gì?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A material that lets electricity pass through it easily.",
+     "vi": "Một vật liệu cho phép dòng điện truyền qua nó dễ dàng."
+    },
+    {
+     "key": "b",
+     "en": "A material that does not let heat pass through it.",
+     "vi": "Một vật liệu không cho phép nhiệt truyền qua nó."
+    },
+    {
+     "key": "c",
+     "en": "A material that lets heat pass through it easily.",
+     "vi": "Một vật liệu cho phép nhiệt truyền qua nó dễ dàng."
+    },
+    {
+     "key": "d",
+     "en": "A material that does not let electricity pass through it.",
+     "vi": "Một vật liệu không cho phép dòng điện truyền qua nó."
+    }
+   ],
+   "answer": "c",
+   "why_en": "A thermal conductor is a material or substance that conducts heat well (lets heat pass through easily). Electrical conductors let electricity pass through easily.",
+   "why_vi": "Chất dẫn nhiệt là vật liệu hoặc chất dẫn nhiệt tốt (cho phép nhiệt truyền qua dễ dàng). Chất dẫn điện cho phép dòng điện truyền qua dễ dàng.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.da76fa69",
+   "concept": "c.materials.conductors.thermal",
+   "stem_en": "A metal teaspoon handle becomes warm when you put it in a hot cup of tea. Which property of the metal spoon does this show?",
+   "stem_vi": "Cán của một chiếc thìa kim loại ấm lên khi bạn đặt nó vào một cốc trà nóng. Tính chất này thể hiện tính chất nào của chiếc thìa kim loại?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "It is a good thermal conductor.",
+     "vi": "Nó là một chất dẫn nhiệt tốt."
+    },
+    {
+     "key": "b",
+     "en": "It is a good electrical conductor.",
+     "vi": "Nó là một chất dẫn điện tốt."
+    },
+    {
+     "key": "c",
+     "en": "It is a good electrical insulator.",
+     "vi": "Nó là một chất cách điện tốt."
+    },
+    {
+     "key": "d",
+     "en": "It has a low boiling point.",
+     "vi": "Nó có nhiệt độ sôi thấp."
+    }
+   ],
+   "answer": "a",
+   "why_en": "When heat from the hot tea moves to the teaspoon handle, it shows conduction of heat. This means the metal is a good thermal conductor. It does not involve electricity.",
+   "why_vi": "Khi nhiệt từ trà nóng truyền đến cán thìa, nó thể hiện sự dẫn nhiệt. Điều này có nghĩa là kim loại là chất dẫn nhiệt tốt. Hiện tượng này không liên quan đến điện.",
+   "difficulty": 2
+  },
+  {
+   "id": "q.dc0bcb6e",
+   "concept": "c.materials.conductors.electrical",
+   "stem_en": "Electric wires are often made of copper. Why do we use copper for electric wires?",
+   "stem_vi": "Dây điện thường được làm bằng đồng. Tại sao chúng ta sử dụng đồng để làm dây điện?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Because copper is the best conductor of heat.",
+     "vi": "Vì đồng là chất dẫn nhiệt tốt nhất."
+    },
+    {
+     "key": "b",
+     "en": "Because copper is a good electrical insulator.",
+     "vi": "Vì đồng là một chất cách điện tốt."
+    },
+    {
+     "key": "c",
+     "en": "Because copper is a non-metal.",
+     "vi": "Vì đồng là một phi kim."
+    },
+    {
+     "key": "d",
+     "en": "Because copper conducts electricity well.",
+     "vi": "Vì đồng dẫn điện tốt."
+    }
+   ],
+   "answer": "d",
+   "why_en": "We use copper in electric wires because it conducts electricity well (it is an electrical conductor). Silver is the best conductor of heat, but copper wires are used for circuits.",
+   "why_vi": "Chúng ta dùng đồng làm dây điện vì nó dẫn điện tốt (nó là chất dẫn điện). Bạc là chất dẫn nhiệt tốt nhất, nhưng dây đồng được dùng cho các mạch điện.",
+   "difficulty": 2
+  }
+ ],
+ "retired": [],
+ "generated_at": "2026-09-03T06:00:36+00:00"
+}

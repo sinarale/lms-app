@@ -32,3 +32,13 @@ html_handling = "none"
 [[kv_namespaces]]
 binding = "PROGRESS_KV"
 id = "490c8ae7c319483d953f95f7855b6ad1"
+
+# D1 lưu lịch sử ôn tập. KHÔNG dùng KV cho việc này: KV không có CAS nên một
+# phiên luyện tập (chùm ghi dồn dập) dễ mất trắng, và truy vấn "câu nào hay sai"
+# trên KV là parse toàn kho mỗi lần gọi — vượt trần 10ms CPU của gói free.
+# Migration phải áp TAY từ máy dev, CI không có chỗ chạy:
+#   npx wrangler d1 execute lms-study --remote --file=migrations/0001_study.sql
+[[d1_databases]]
+binding = "STUDY_DB"
+database_name = "lms-study"
+database_id = "8cc125df-56ea-46b2-ad33-e8069bd817c9"
