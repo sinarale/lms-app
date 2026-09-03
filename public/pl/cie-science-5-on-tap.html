@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.db69b9e7.css">
+  <link rel="stylesheet" href="../assets/tw.810fa049.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -320,6 +320,21 @@
           if (this.at >= this.queue.length) { this.screen = 'done'; this.save(); }
         },
         get nDone() { return this.log.filter(x => x.ok).length; },
+
+        // ── Đọc to ─────────────────────────────────────────────────────────────
+        // Web Speech API của trình duyệt: không file audio, không request, không
+        // hạn mức. Giọng là của thiết bị nên chất lượng tuỳ máy; đặt en-US để
+        // chọn giọng Mỹ. Không có API thì ẩn nút, không báo lỗi.
+        get canSpeak() { return typeof window !== 'undefined' && 'speechSynthesis' in window; },
+        speak(text) {
+          if (!this.canSpeak || !text) return;
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = 'en-US'; u.rate = 0.9;
+          const v = window.speechSynthesis.getVoices().find(x => /^en[-_]US/i.test(x.lang));
+          if (v) u.voice = v;
+          window.speechSynthesis.speak(u);
+        },
 
         // ── Thẻ ghi nhớ: HỌC ───────────────────────────────────────────────────
         // Xem lần lượt, hiện cả hai mặt, không chấm. Thứ tự theo cây khái niệm.
@@ -736,9 +751,11 @@
       </div>
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
         <p class="text-xs text-slate-400" x-text="conceptName(learnCard.concept)"></p>
-        <p class="mt-2 text-lg font-medium text-slate-900" x-text="learnCard.front_en"></p>
+        <p class="mt-2 text-lg font-medium text-slate-900"><span x-text="learnCard.front_en"></span><button x-show="canSpeak" @click.stop="speak(learnCard.front_en)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
         <div class="mt-4 pt-4 border-t border-slate-100">
-          <p class="text-slate-700" x-text="learnCard.back_en"></p>
+          <p class="text-slate-700"><span x-text="learnCard.back_en"></span><button x-show="canSpeak" @click.stop="speak(learnCard.back_en)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
           <p x-show="learnCard.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="learnCard.example_en"></p>
         </div>
       </div>
@@ -762,16 +779,22 @@
         <span><span class="font-semibold text-rose-600" x-text="nAgain"></span> cần xem lại · <span x-text="nUnseen"></span> chưa gặp</span>
       </div>
       <!-- Bấm vào thẻ để lật -->
-      <button @click="revealed = true" :class="revealed ? 'cursor-default' : 'cursor-pointer hover:border-indigo-400'"
-              class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col transition-colors">
+      <!-- div role=button chứ KHÔNG phải <button>: bên trong có nút loa, mà
+           <button> lồng trong <button> là HTML không hợp lệ — trình duyệt tự bỏ
+           nút trong. -->
+      <div role="button" tabindex="0" @click="revealed = true" @keydown.enter="revealed = true"
+           :class="revealed ? 'cursor-default' : 'cursor-pointer hover:border-indigo-400'"
+           class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col transition-colors">
         <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
-        <p class="mt-2 text-lg font-medium text-slate-900" x-text="q.front_en"></p>
+        <p class="mt-2 text-lg font-medium text-slate-900"><span x-text="q.front_en"></span><button x-show="canSpeak" @click.stop="speak(q.front_en)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
         <div x-show="revealed" x-cloak class="mt-4 pt-4 border-t border-slate-100">
-          <p class="text-slate-700" x-text="q.back_en"></p>
+          <p class="text-slate-700"><span x-text="q.back_en"></span><button x-show="canSpeak" @click.stop="speak(q.back_en)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
           <p x-show="q.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="q.example_en"></p>
         </div>
         <p x-show="!revealed" class="mt-auto pt-6 text-sm text-indigo-600">Bấm để xem đáp án ↻</p>
-      </button>
+      </div>
       <div x-show="revealed" x-cloak class="grid grid-cols-2 gap-2">
         <button @click="mark(false)" class="px-3 py-3 text-sm font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">↻ Cần kiểm tra lại</button>
         <button @click="mark(true)"  class="px-3 py-3 text-sm font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">✓ Đã thuộc</button>
@@ -894,7 +917,8 @@
               <dl class="px-4 pt-3 grid gap-x-3 gap-y-1.5 sm:grid-cols-2">
                 <template x-for="g in tagged(sec.glossary, leaf.id)" :key="g.term">
                   <div class="rounded-lg bg-indigo-50/60 border border-indigo-100 px-3 py-2">
-                    <dt class="text-sm font-semibold text-indigo-900" x-text="g.term"></dt>
+                    <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></dt>
                     <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
                     <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
                   </div>
@@ -999,7 +1023,8 @@
             <dl class="grid gap-x-3 gap-y-1.5 sm:grid-cols-2">
               <template x-for="g in untagged(sec).glossary" :key="g.term">
                 <div class="rounded-lg bg-indigo-50/60 border border-indigo-100 px-3 py-2">
-                  <dt class="text-sm font-semibold text-indigo-900" x-text="g.term"></dt>
+                  <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
+                        class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></dt>
                   <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
                   <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
                 </div>
