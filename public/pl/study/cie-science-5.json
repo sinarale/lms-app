@@ -255,30 +255,65 @@
  "summary": [
   {
    "concept": "c.materials.properties",
-   "big_en": "Everything is made of tiny particles. Heating and cooling change how they move.",
+   "big_en": "Every substance has its own melting temperature and its own boiling temperature.",
    "diagram": "particles",
+   "compare": {
+    "label_a": "Boiling",
+    "label_b": "Evaporation",
+    "rows": [
+     {
+      "aspect": "Where",
+      "a": "All through the liquid",
+      "b": "Only at the surface"
+     },
+     {
+      "aspect": "Speed",
+      "a": "Fast",
+      "b": "Slow"
+     },
+     {
+      "aspect": "Temperature",
+      "a": "Only at its own boiling point",
+      "b": "At any temperature"
+     }
+    ]
+   },
    "points": [
     {
-     "t": "Solid, liquid and gas are the three states of matter.",
-     "icon": "cube"
-    },
-    {
-     "t": "Melting point: the temperature where a solid becomes a liquid.",
+     "t": "Ice melts at 0 °C, but gold melts at 1064 °C.",
      "icon": "ice"
     },
     {
-     "t": "Boiling point: the temperature where a liquid becomes a gas.",
+     "t": "Pure water boils at 100 °C, but vinegar boils at 118 °C.",
      "icon": "fire"
     },
     {
-     "t": "All matter has mass and takes up space, even air.",
-     "icon": "scale"
+     "t": "Liquid gold boils at 2856 °C.",
+     "icon": "heat"
     },
     {
-     "t": "Boiling happens all through a liquid. Evaporation happens only at the surface.",
-     "icon": "cloud"
+     "t": "Two matching balloons on a ruler balance show that gas has mass.",
+     "icon": "scale"
     }
    ],
+   "watch_out": [
+    {
+     "wrong": "Evaporation only happens when you heat a liquid.",
+     "right": "Evaporation can happen at any temperature, even in the cold."
+    },
+    {
+     "wrong": "Air is empty space and does not weigh anything.",
+     "right": "Air is made of gases, which take up space and have mass."
+    },
+    {
+     "wrong": "Heat a bigger pan of water and its boiling point goes up.",
+     "right": "Water always boils at 100 °C, no matter how much of it you heat."
+    }
+   ],
+   "from_the_book": {
+    "activity": "Blow up two balloons to the same size, tie them to a ruler balance, then let the air out of one.",
+    "what_it_shows": "The balloon still full of air pulls its side down — gases have mass."
+   },
    "terms": [
     "property",
     "melting point",
@@ -290,36 +325,75 @@
   },
   {
    "concept": "c.materials.conductors",
-   "big_en": "Some materials let heat and electricity pass through. Others block them.",
+   "big_en": "Metals are super helpers: they let heat and electricity flow straight through.",
    "diagram": "conduction",
+   "compare": {
+    "label_a": "Metals — copper, iron",
+    "label_b": "Non-metals — plastic, wood",
+    "rows": [
+     {
+      "aspect": "Heat",
+      "a": "Travels through very fast",
+      "b": "Travels through very slowly"
+     },
+     {
+      "aspect": "Electricity",
+      "a": "Passes through easily",
+      "b": "Is blocked"
+     },
+     {
+      "aspect": "Used for",
+      "a": "Pans, so food heats fast",
+      "b": "Handles, so hands don't burn"
+     }
+    ]
+   },
    "points": [
     {
-     "t": "Conduction is heat energy moving from one object to another.",
+     "t": "Silver is the best heat conductor — but pots aren't made of it because silver costs too much.",
+     "icon": "sparkle"
+    },
+    {
+     "t": "Some pots have a copper bottom: copper heats up quickly.",
      "icon": "heat"
     },
     {
-     "t": "Thermal conductors let heat through. Silver is the best.",
-     "icon": "bar"
-    },
-    {
-     "t": "Electrical conductors let electricity through. Copper is used in wires.",
+     "t": "Copper wires carry electricity, and even a steel paper clip can light a lamp.",
      "icon": "bolt"
     },
     {
-     "t": "Metals conduct both heat and electricity well.",
+     "t": "Graphite in a pencil conducts too — a 2 cm piece lights the lamp brighter than a 10 cm piece.",
      "icon": "bar"
     },
     {
-     "t": "Insulators block heat or electricity. Plastic and rubber are insulators.",
-     "icon": "shield"
+     "t": "Hot tea stays warm longest in a polystyrene foam cup.",
+     "icon": "bubbles"
     }
    ],
+   "watch_out": [
+    {
+     "wrong": "A metal dish feels warmer than a plastic dish when both hold an ice cube.",
+     "right": "The plastic feels warmer. Metal pulls heat away from your fingers faster, so it feels colder."
+    },
+    {
+     "wrong": "Only metals can conduct electricity.",
+     "right": "Graphite inside a pencil is a non-metal and still lights a lamp."
+    },
+    {
+     "wrong": "A wooden spoon gets hot and burns your hand when you stir soup.",
+     "right": "Wood conducts heat poorly, so it stays cool and is safe to hold."
+    }
+   ],
+   "from_the_book": {
+    "activity": "Metal spoon, plastic spoon, glass rod, pencil and polystyrene foam put into hot water, each with a bead stuck on using petroleum jelly.",
+    "what_it_shows": "The bead on the metal spoon falls off first — metal carries heat fastest and melts the jelly."
+   },
    "terms": [
     "conduction",
     "thermal conductor",
     "electrical conductor",
     "insulator",
-    "metal"
+    "graphite"
    ]
   },
   {
@@ -1167,5 +1241,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T08:08:54+00:00"
+ "generated_at": "2026-09-03T10:21:01+00:00"
 }

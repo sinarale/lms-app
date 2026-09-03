@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.815312fa.css">
+  <link rel="stylesheet" href="../assets/tw.4fabf686.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -765,6 +765,28 @@
             <p class="mt-1.5 text-center text-[11px] text-slate-500">reactants → product (new substance)</p>
           </div>
 
+          <!-- ── Bảng đối chiếu ───────────────────────────────────────────── -->
+          <template x-if="sec.compare">
+          <div class="px-5 pb-4">
+            <div class="rounded-lg border border-slate-200 overflow-hidden">
+              <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
+                <div class="bg-slate-100 px-2 py-2"></div>
+                <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200"
+                     x-text="sec.compare.label_a"></div>
+                <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200"
+                     x-text="sec.compare.label_b"></div>
+              </div>
+              <template x-for="(r, i) in sec.compare.rows" :key="i">
+                <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs border-t border-slate-200">
+                  <div class="bg-slate-50 px-2 py-2 font-medium text-slate-600" x-text="r.aspect"></div>
+                  <div class="px-2 py-2 text-slate-700 border-l border-slate-200" x-text="r.a"></div>
+                  <div class="px-2 py-2 text-slate-500 border-l border-slate-200" x-text="r.b"></div>
+                </div>
+              </template>
+            </div>
+          </div>
+          </template>
+
           <!-- ── Các ý cần nhớ: mỗi ý một thẻ kèm biểu tượng ──────────────── -->
           <div class="px-5 pb-4 grid gap-2 sm:grid-cols-2">
             <template x-for="(pt, i) in points(sec)" :key="i">
@@ -774,6 +796,38 @@
               </div>
             </template>
           </div>
+
+          <!-- ── Dễ nhầm chỗ này ──────────────────────────────────────────
+               Phần đắt nhất của cả trang: nêu đúng điều trẻ hay nghĩ sai rồi mới
+               sửa. Nhớ được nhờ va vào trực giác sai, không phải nhờ đọc lại. -->
+          <div x-show="(sec.watch_out || []).length" x-cloak class="px-5 pb-4">
+            <p class="text-xs font-bold uppercase tracking-wide text-amber-600 mb-2">⚠ Dễ nhầm chỗ này</p>
+            <div class="space-y-2">
+              <template x-for="(w, i) in (sec.watch_out || [])" :key="i">
+                <div class="rounded-lg border border-amber-200 bg-amber-50 overflow-hidden">
+                  <p class="flex gap-2 px-3 py-2 text-sm text-slate-600">
+                    <span class="text-rose-500 font-bold shrink-0">✗</span>
+                    <span class="line-through decoration-rose-300" x-text="w.wrong"></span>
+                  </p>
+                  <p class="flex gap-2 px-3 py-2 text-sm text-slate-800 bg-white border-t border-amber-200">
+                    <span class="text-emerald-600 font-bold shrink-0">✓</span>
+                    <span x-text="w.right"></span>
+                  </p>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- ── Thí nghiệm trong sách ────────────────────────────────────── -->
+          <template x-if="sec.from_the_book">
+          <div class="px-5 pb-4">
+            <div class="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3">
+              <p class="text-xs font-bold uppercase tracking-wide text-sky-700">🔬 Thí nghiệm trong sách</p>
+              <p class="mt-1.5 text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>
+              <p class="mt-1.5 text-sm font-medium text-sky-900" x-text="sec.from_the_book.what_it_shows"></p>
+            </div>
+          </div>
+          </template>
 
           <!-- ── Thuật ngữ ────────────────────────────────────────────────── -->
           <div x-show="(sec.terms || []).length" x-cloak class="px-5 pb-5 flex flex-wrap gap-1.5">
