@@ -492,68 +492,94 @@
   },
   {
    "concept": "c.materials.reversible",
-   "big_en": "You can undo a reversible change and get your starting materials back. An irreversible change is forever.",
+   "big_en": "Some changes can be undone and some can never be undone.",
    "diagram": "reversible",
    "compare": {
     "label_a": "Reversible",
     "label_b": "Irreversible",
     "rows": [
      {
-      "aspect": "Undo it?",
-      "a": "Yes — it goes back to how it was",
-      "b": "No — never back to the start"
+      "aspect": "Change it back?",
+      "a": "Yes — we get the starting materials back",
+      "b": "No — never back to how it was"
      },
      {
       "aspect": "New substance?",
-      "a": "No, only looks or feels different",
-      "b": "Yes, a completely new one"
+      "a": "No, it only looks or feels different",
+      "b": "Yes, it becomes a new substance"
      },
      {
       "aspect": "Book example",
-      "a": "Melting ice; dissolving salt",
-      "b": "Burning a match; rust on a tin can"
+      "a": "Melting ice; dissolving salt in water",
+      "b": "Burning a match; baking a cake"
      }
     ]
    },
+   "checklist": {
+    "title": "Ways to make a solid dissolve faster",
+    "items": [
+     {
+      "sign": "Stir the liquid",
+      "look_for": "Mix the solute and solvent with a spoon.",
+      "book_example": "Stirring a teaspoon of sugar into Marcus's cup of coffee.",
+      "icon": "beaker"
+     },
+     {
+      "sign": "Heat the liquid",
+      "look_for": "Use hot water instead of cold.",
+      "book_example": "Hot water for coffee instead of cold water from the fridge.",
+      "icon": "heat"
+     }
+    ],
+    "note": "Stirring and heating give the particles energy, so they move and spread out faster."
+   },
    "points": [
     {
-     "t": "Ice cubes on a saucer in the sun melt in about five minutes.",
-     "icon": "ice"
+     "t": "Ice left in a warm place like the sun melts in about five minutes.",
+     "icon": "ice",
+     "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "Burning a wooden match turns it into a black substance called carbon.",
-     "icon": "fire"
+     "t": "Burn a match and the wood turns into a black substance called carbon.",
+     "icon": "fire",
+     "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "Jelly powder + boiling water makes a liquid that sets solid in the fridge.",
-     "icon": "sparkle"
+     "t": "Sea water tastes salty because salt is dissolved in it.",
+     "icon": "drop",
+     "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Sugar dissolves in 90 seconds at 20 °C, but only 15 seconds at 80 °C.",
-     "icon": "heat"
+     "t": "Marcus's coffee tasted bitter — the sugar was left unstirred at the bottom of the cup.",
+     "icon": "beaker",
+     "concept": "c.materials.reversible.factors"
     },
     {
-     "t": "Melting butter in a pan can be reversed. Baking a cake cannot.",
-     "icon": "swap"
+     "t": "Sugar dissolves in 15 seconds at 80 °C, but takes 90 seconds at 20 °C.",
+     "icon": "scale",
+     "concept": "c.materials.reversible.factors"
     }
    ],
    "watch_out": [
     {
-     "wrong": "Dissolved sugar is gone forever because you can't see it.",
-     "right": "It is still there — its tiny particles have spread out evenly through the water."
+     "wrong": "When sugar dissolves in a drink it disappears and is gone.",
+     "right": "It is still there — its tiny particles have spread out evenly so we cannot see them.",
+     "concept": "c.materials.reversible.dissolving"
     },
     {
-     "wrong": "Boiling an egg is reversible because you only heat it.",
-     "right": "It is irreversible: a cooked egg can never go back to raw."
+     "wrong": "Dissolving is irreversible because we can't see the solid any more.",
+     "right": "It is reversible: evaporate the water and the salt or sugar comes back.",
+     "concept": "c.materials.reversible.changes"
     },
     {
-     "wrong": "You must stir sugar or it won't dissolve.",
-     "right": "Sugar dissolves by itself if you leave it in water long enough — stirring just makes it faster."
+     "wrong": "Sugar only dissolves if you stir it.",
+     "right": "It dissolves on its own if left long enough — the particles are always moving. Stirring just makes it faster.",
+     "concept": "c.materials.reversible.factors"
     }
    ],
    "from_the_book": {
-    "activity": "Put ice cubes on a saucer in the sun, then place the melted water back in the freezer.",
-    "what_it_shows": "Melting and freezing are reversible physical changes — the water changes back and forth."
+    "activity": "Stir a teaspoon of sugar into 100 ml of hot water and 100 ml of cold water, timing each with a stopwatch.",
+    "what_it_shows": "Sugar dissolves faster in hot water — heat gives the particles energy to move and spread quicker."
    },
    "glossary": [
     {
@@ -1751,5 +1777,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T11:01:06+00:00"
+ "generated_at": "2026-09-03T11:17:00+00:00"
 }
