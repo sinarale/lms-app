@@ -492,63 +492,242 @@
   },
   {
    "concept": "c.materials.reversible",
-   "big_en": "A reversible change can be undone. You get the original substance back.",
+   "big_en": "You can undo a reversible change and get your starting materials back. An irreversible change is forever.",
    "diagram": "reversible",
+   "compare": {
+    "label_a": "Reversible",
+    "label_b": "Irreversible",
+    "rows": [
+     {
+      "aspect": "Undo it?",
+      "a": "Yes — it goes back to how it was",
+      "b": "No — never back to the start"
+     },
+     {
+      "aspect": "New substance?",
+      "a": "No, only looks or feels different",
+      "b": "Yes, a completely new one"
+     },
+     {
+      "aspect": "Book example",
+      "a": "Melting ice; dissolving salt",
+      "b": "Burning a match; rust on a tin can"
+     }
+    ]
+   },
    "points": [
     {
-     "t": "A physical change alters how something looks, but makes no new substance.",
-     "icon": "swap"
-    },
-    {
-     "t": "A reversible change can be undone to get the original back.",
-     "icon": "swap"
-    },
-    {
-     "t": "Ice melts to water, and water freezes back to ice.",
+     "t": "Ice cubes on a saucer in the sun melt in about five minutes.",
      "icon": "ice"
     },
     {
-     "t": "Dissolving a solid in a liquid is reversible.",
-     "icon": "beaker"
+     "t": "Burning a wooden match turns it into a black substance called carbon.",
+     "icon": "fire"
     },
     {
-     "t": "The solid that dissolves is the solute. The liquid is the solvent.",
-     "icon": "drop"
+     "t": "Jelly powder + boiling water makes a liquid that sets solid in the fridge.",
+     "icon": "sparkle"
+    },
+    {
+     "t": "Sugar dissolves in 90 seconds at 20 °C, but only 15 seconds at 80 °C.",
+     "icon": "heat"
+    },
+    {
+     "t": "Melting butter in a pan can be reversed. Baking a cake cannot.",
+     "icon": "swap"
+    }
+   ],
+   "watch_out": [
+    {
+     "wrong": "Dissolved sugar is gone forever because you can't see it.",
+     "right": "It is still there — its tiny particles have spread out evenly through the water."
+    },
+    {
+     "wrong": "Boiling an egg is reversible because you only heat it.",
+     "right": "It is irreversible: a cooked egg can never go back to raw."
+    },
+    {
+     "wrong": "You must stir sugar or it won't dissolve.",
+     "right": "Sugar dissolves by itself if you leave it in water long enough — stirring just makes it faster."
+    }
+   ],
+   "from_the_book": {
+    "activity": "Put ice cubes on a saucer in the sun, then place the melted water back in the freezer.",
+    "what_it_shows": "Melting and freezing are reversible physical changes — the water changes back and forth."
+   },
+   "glossary": [
+    {
+     "term": "physical change",
+     "def": "A change in how a substance looks or feels, without turning it into a new substance.",
+     "example": "Solid ice melting to become liquid water.",
+     "concept": "c.materials.reversible.changes"
+    },
+    {
+     "term": "reversible change",
+     "def": "A change that can be undone so the material goes back to the way it was.",
+     "example": "Freezing liquid water back into ice.",
+     "concept": "c.materials.reversible.changes"
+    },
+    {
+     "term": "irreversible change",
+     "def": "A change that cannot be undone to get the original material back.",
+     "example": "Burning a wooden match so it turns into black carbon.",
+     "concept": "c.materials.reversible.changes"
+    },
+    {
+     "term": "dissolve",
+     "def": "To mix a solid completely into a liquid so its parts spread out evenly and you can no longer see them.",
+     "example": "Salt mixing into water to make salty sea water.",
+     "concept": "c.materials.reversible.dissolving"
+    },
+    {
+     "term": "solute",
+     "def": "The solid that is mixed into a liquid and seems to disappear.",
+     "example": "Sugar added to a cup of warm tea.",
+     "concept": "c.materials.reversible.dissolving"
+    },
+    {
+     "term": "solvent",
+     "def": "The liquid that a solid is mixed into.",
+     "example": "The water in a jar used to mix with sugar.",
+     "concept": "c.materials.reversible.dissolving"
+    },
+    {
+     "term": "solution",
+     "def": "A mixture of a solid and a liquid that is spread out evenly and looks the same throughout.",
+     "example": "Water and sugar after stirring.",
+     "concept": "c.materials.reversible.dissolving"
+    },
+    {
+     "term": "uniform",
+     "def": "Looking exactly the same in every part of a mixture.",
+     "example": "Salt water where you cannot see any salt pieces.",
+     "concept": "c.materials.reversible.dissolving"
+    },
+    {
+     "term": "rate",
+     "def": "How fast or slow something happens.",
+     "example": "How quickly sugar mixes into hot water compared to cold.",
+     "concept": "c.materials.reversible.factors"
     }
    ],
    "terms": [
     "physical change",
     "reversible",
+    "irreversible",
     "solute",
     "solvent",
     "solution",
-    "dissolving"
+    "dissolve"
    ]
   },
   {
    "concept": "c.materials.chemical",
-   "big_en": "In a chemical reaction, new substances are made and you cannot go back.",
+   "big_en": "Mix substances together and sometimes you get a brand new substance — one you cannot easily change back.",
    "diagram": "reaction",
+   "compare": {
+    "label_a": "Reactants",
+    "label_b": "Products",
+    "rows": [
+     {
+      "aspect": "When",
+      "a": "Before the reaction",
+      "b": "After the reaction"
+     },
+     {
+      "aspect": "Vinegar experiment",
+      "a": "Vinegar + bicarbonate of soda",
+      "b": "Carbon dioxide gas + water"
+     },
+     {
+      "aspect": "Limewater experiment",
+      "a": "Limewater + carbon dioxide",
+      "b": "Calcium carbonate"
+     }
+    ]
+   },
    "points": [
     {
-     "t": "Substances react together to form completely new substances.",
-     "icon": "sparkle"
+     "t": "Vinegar + bicarbonate of soda bubbles up and makes carbon dioxide gas.",
+     "icon": "bubbles"
     },
     {
-     "t": "Starting substances are reactants. New ones made are products.",
-     "icon": "arrow"
+     "t": "Pour vinegar on wire wool in a beaker: after five minutes the thermometer shows the temperature has risen.",
+     "icon": "heat"
     },
     {
-     "t": "Chemical reactions are irreversible — you cannot get the originals back.",
-     "icon": "lock"
-    },
-    {
-     "t": "Burning wood, rusting nails and baking a cake are chemical reactions.",
+     "t": "Magnesium burns in oxygen with a bright white flame and leaves a white powder.",
      "icon": "fire"
     },
     {
-     "t": "Signs of a reaction: gas bubbles, colour change, temperature change.",
-     "icon": "bubbles"
+     "t": "Heat iron and sulfur together and you get a new substance: iron sulfide.",
+     "icon": "beaker"
+    },
+    {
+     "t": "An iron nail left in a saucer of water for a few days grows orange-brown rust.",
+     "icon": "sparkle"
+    }
+   ],
+   "watch_out": [
+    {
+     "wrong": "A candle melting is a chemical reaction.",
+     "right": "Melting wax is only a change of state. The burning wick is the chemical reaction."
+    },
+    {
+     "wrong": "Dissolving sugar is a chemical reaction because the sugar disappears.",
+     "right": "Dissolving is a physical change — evaporate the water and the sugar comes back."
+    },
+    {
+     "wrong": "Any bubbles in water mean a chemical reaction.",
+     "right": "Bubbles in boiling water are just water turning to gas. Bubbles from vinegar + baking soda are a real reaction."
+    }
+   ],
+   "from_the_book": {
+    "activity": "Loosen some wire wool, put it in a beaker, pour vinegar on it and measure the temperature with a thermometer.",
+    "what_it_shows": "After five minutes the temperature rises — a chemical reaction can give out heat."
+   },
+   "glossary": [
+    {
+     "term": "chemical reaction",
+     "def": "Different materials mix and change into completely new materials that cannot easily be turned back.",
+     "example": "Vinegar and bicarbonate of soda making a new gas.",
+     "concept": "c.materials.chemical.reactants_products"
+    },
+    {
+     "term": "react",
+     "def": "When materials mix and change each other to make a new material.",
+     "example": "Bicarbonate of soda and vinegar changing each other when they touch.",
+     "concept": "c.materials.chemical.reactants_products"
+    },
+    {
+     "term": "reactant",
+     "def": "One of the materials you start with, before a chemical change happens.",
+     "example": "Bicarbonate of soda in the jar experiment.",
+     "concept": "c.materials.chemical.reactants_products"
+    },
+    {
+     "term": "product",
+     "def": "A new material that is made after a chemical change.",
+     "example": "The carbon dioxide bubbles made in the vinegar experiment.",
+     "concept": "c.materials.chemical.reactants_products"
+    },
+    {
+     "term": "evidence",
+     "def": "Signs we can see, hear or feel that prove a change has happened.",
+     "example": "The bubbles when vinegar and bicarbonate of soda are mixed.",
+     "concept": "c.materials.chemical.evidence"
+    },
+    {
+     "term": "irreversible",
+     "def": "A permanent change that cannot be undone to get the original materials back.",
+     "example": "A burnt candle wick turning to black carbon.",
+     "concept": "c.materials.chemical.examples"
+    },
+    {
+     "term": "rust",
+     "def": "A rough, orange-brown material that forms on iron left in wet conditions.",
+     "example": "The orange-brown layer on an iron nail left in water.",
+     "concept": "c.materials.chemical.examples"
     }
    ],
    "terms": [
@@ -556,7 +735,8 @@
     "reactant",
     "product",
     "irreversible",
-    "evidence"
+    "evidence",
+    "rust"
    ]
   }
  ],
@@ -649,7 +829,9 @@
    "id": "f.05f3de31",
    "concept": "c.materials.reversible.changes",
    "front_en": "Reversible change",
-   "back_en": "A change that can be undone to make the original substance again."
+   "back_en": "A change that can be undone so the material goes back to the way it was.",
+   "example_en": "Freezing liquid water back into ice.",
+   "kind": "term"
   },
   {
    "id": "f.e04aea16",
@@ -661,7 +843,9 @@
    "id": "f.c7862f96",
    "concept": "c.materials.reversible.dissolving",
    "front_en": "Solute",
-   "back_en": "The solid substance that dissolves in a liquid."
+   "back_en": "The solid that is mixed into a liquid and seems to disappear.",
+   "example_en": "Sugar added to a cup of warm tea.",
+   "kind": "term"
   },
   {
    "id": "f.eef61934",
@@ -795,6 +979,118 @@
    "front_en": "Circuit",
    "back_en": "A complete loop that electricity flows around.",
    "example_en": "A lamp, a cell and copper connecting wires joined in a loop.",
+   "kind": "term"
+  },
+  {
+   "id": "f.ac0ae625",
+   "concept": "c.materials.reversible.changes",
+   "front_en": "Physical change",
+   "back_en": "A change in how a substance looks or feels, without turning it into a new substance.",
+   "example_en": "Solid ice melting to become liquid water.",
+   "kind": "term"
+  },
+  {
+   "id": "f.5ebf23e7",
+   "concept": "c.materials.reversible.changes",
+   "front_en": "Irreversible change",
+   "back_en": "A change that cannot be undone to get the original material back.",
+   "example_en": "Burning a wooden match so it turns into black carbon.",
+   "kind": "term"
+  },
+  {
+   "id": "f.d37abf6a",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "Dissolve",
+   "back_en": "To mix a solid completely into a liquid so its parts spread out evenly and you can no longer see them.",
+   "example_en": "Salt mixing into water to make salty sea water.",
+   "kind": "term"
+  },
+  {
+   "id": "f.df5d884e",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "Solvent",
+   "back_en": "The liquid that a solid is mixed into.",
+   "example_en": "The water in a jar used to mix with sugar.",
+   "kind": "term"
+  },
+  {
+   "id": "f.b4f91bdb",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "Solution",
+   "back_en": "A mixture of a solid and a liquid that is spread out evenly and looks the same throughout.",
+   "example_en": "Water and sugar after stirring.",
+   "kind": "term"
+  },
+  {
+   "id": "f.e96b0da8",
+   "concept": "c.materials.reversible.dissolving",
+   "front_en": "Uniform",
+   "back_en": "Looking exactly the same in every part of a mixture.",
+   "example_en": "Salt water where you cannot see any salt pieces.",
+   "kind": "term"
+  },
+  {
+   "id": "f.3a9c736b",
+   "concept": "c.materials.reversible.factors",
+   "front_en": "Rate",
+   "back_en": "How fast or slow something happens.",
+   "example_en": "How quickly sugar mixes into hot water compared to cold.",
+   "kind": "term"
+  },
+  {
+   "id": "f.5aedf181",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Chemical reaction",
+   "back_en": "Different materials mix and change into completely new materials that cannot easily be turned back.",
+   "example_en": "Vinegar and bicarbonate of soda making a new gas.",
+   "kind": "term"
+  },
+  {
+   "id": "f.4d1f996a",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "React",
+   "back_en": "When materials mix and change each other to make a new material.",
+   "example_en": "Bicarbonate of soda and vinegar changing each other when they touch.",
+   "kind": "term"
+  },
+  {
+   "id": "f.c61ed72d",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Reactant",
+   "back_en": "One of the materials you start with, before a chemical change happens.",
+   "example_en": "Bicarbonate of soda in the jar experiment.",
+   "kind": "term"
+  },
+  {
+   "id": "f.dd3b86d1",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Product",
+   "back_en": "A new material that is made after a chemical change.",
+   "example_en": "The carbon dioxide bubbles made in the vinegar experiment.",
+   "kind": "term"
+  },
+  {
+   "id": "f.7ea014de",
+   "concept": "c.materials.chemical.evidence",
+   "front_en": "Evidence",
+   "back_en": "Signs we can see, hear or feel that prove a change has happened.",
+   "example_en": "The bubbles when vinegar and bicarbonate of soda are mixed.",
+   "kind": "term"
+  },
+  {
+   "id": "f.3dac8cdc",
+   "concept": "c.materials.chemical.examples",
+   "front_en": "Irreversible",
+   "back_en": "A permanent change that cannot be undone to get the original materials back.",
+   "example_en": "A burnt candle wick turning to black carbon.",
+   "kind": "term"
+  },
+  {
+   "id": "f.e2ae20d9",
+   "concept": "c.materials.chemical.examples",
+   "front_en": "Rust",
+   "back_en": "A rough, orange-brown material that forms on iron left in wet conditions.",
+   "example_en": "The orange-brown layer on an iron nail left in water.",
    "kind": "term"
   }
  ],
@@ -1425,5 +1721,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T10:36:48+00:00"
+ "generated_at": "2026-09-03T10:45:42+00:00"
 }
