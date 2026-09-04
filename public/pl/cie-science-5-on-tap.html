@@ -28,6 +28,7 @@
         learnAt: 0,             // chế độ Học: đang xem thẻ thứ mấy
         seen: {},               // chế độ Kiểm tra: id → 'known' | 'again' (trong phiên)
         tStats: { n: 0, known: 0 },
+        qStats: { n: 0, ok: 0 },
         lastId: null,
         openMap: {},            // cây bên trái: nhánh nào đang mở
         // Bộ lọc các phần trong tóm tắt. Mỗi loại một màu cố định (xem KINDS) để
@@ -290,7 +291,7 @@
           }
           this.queue = q0;
           this.at = 0; this.log = []; this.picked = null; this.answered = false;
-          this.wrongAgain = 0; this.revealed = false;
+          this.wrongAgain = 0; this.revealed = false; this.qStats = { n: 0, ok: 0 };
           this.screen = 'quiz'; this.shownAt = Date.now();
           this.autoRead(this.q?.stem_en);
         },
@@ -318,6 +319,7 @@
           const g = okAns ? (Date.now() - this.shownAt > 20000 ? 2 : 3) : 0;
           const q = this.q;
           const st = this.sched(q.id, this.cards[q.id], g, now);
+          this.qStats.n++; if (okAns) this.qStats.ok++;
           this.log.push({
             i: q.id, c: q.concept, ok: okAns ? 1 : 0, g,
             ms: Date.now() - this.shownAt,
@@ -334,7 +336,10 @@
           // Sai thì đẩy lại CUỐI hàng đợi ngay trong phiên, không đợi hôm sau.
           // Giới hạn 5 lần để một câu khó không kéo phiên dài vô tận.
           if (!okAns && this.wrongAgain < 5) { this.queue.push(q); this.wrongAgain++; }
+          // Làm tuỳ ý, dừng lúc nào cũng được → lưu định kỳ, đừng đợi hết phiên.
+          if (this.log.length >= 5) this.save();
         },
+        finishQuiz() { this.save(); this.screen = 'done'; },
         next() {
           this.at++; this.picked = null; this.answered = false; this.shownAt = Date.now();
           if (this.at >= this.queue.length) { this.screen = 'done'; this.save(); }
@@ -729,15 +734,16 @@
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">✍️ Kiểm tra</button>
         </div>
         <div x-show="mode === 'quiz'" class="mt-4 flex gap-2">
-          <button @click="start(10)"
+          <!-- Không chọn 10/20: làm bao nhiêu tuỳ, Kết thúc lúc nào cũng được,
+               kết quả lưu định kỳ mỗi 5 câu; hết câu thì tự kết thúc. -->
+          <button @click="start(scopedQuiz.length)" :disabled="!scopedQuiz.length"
+                  class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
+            ✍️ Bắt đầu kiểm tra
+          </button>
+          <button x-show="false" @click="start(10)"
                   :disabled="!(mode === 'cards' ? scopedCards : scopedQuiz).length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
             Làm 10
-          </button>
-          <button @click="start(20)"
-                  :disabled="!(mode === 'cards' ? scopedCards : scopedQuiz).length"
-                  class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">
-            Làm 20
           </button>
         </div>
       </div>
@@ -772,6 +778,7 @@
                :style="'width:' + Math.round(at / queue.length * 100) + '%'"></div>
         </div>
         <span x-text="(at + 1) + '/' + queue.length"></span>
+        <button @click="finishQuiz()" class="text-slate-500 hover:text-indigo-600 underline">Kết thúc</button>
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
@@ -1177,7 +1184,7 @@
 
     <!-- ── Kết thúc ─────────────────────────────────────────────────────── -->
     <div x-show="screen === 'done'" x-cloak class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
-      <p class="text-3xl font-bold text-slate-900"><span x-text="mode === 'cards' ? tStats.known : nDone"></span>/<span x-text="mode === 'cards' ? tStats.n : log.length"></span></p>
+      <p class="text-3xl font-bold text-slate-900"><span x-text="mode === 'cards' ? tStats.known : qStats.ok"></span>/<span x-text="mode === 'cards' ? tStats.n : qStats.n"></span></p>
       <p class="mt-1 text-sm text-slate-500" x-text="mode === 'cards' ? 'thẻ đã thuộc' : 'câu đúng'"></p>
       <p x-show="err" x-cloak class="mt-3 text-xs text-amber-700" x-text="err"></p>
       <div class="mt-5 flex justify-center gap-2">
