@@ -130,6 +130,10 @@
           return !!c && c.n >= 8 && c.box >= 5 && c.wrong / c.n <= 0.10;
         },
         get nRetired() { return this.scopedItems.filter(q => this.retired(q)).length; },
+        // Thanh "đã nắm chắc" ở màn hình đầu tính theo ĐÚNG tab đang mở (trắc nghiệm
+        // hay thẻ) — gộp cả hai thì con số không khớp thứ đang nhìn (9 câu mà /17).
+        get modeItems() { return this.mode === 'cards' ? this.scopedCards : this.scopedQuiz; },
+        get modeRetired() { return this.modeItems.filter(q => this.retired(q)).length; },
         get scopedItems() {
           return [...this.scopedQuiz, ...this.scopedCards];
         },
@@ -694,14 +698,16 @@
           <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
           <span x-text="scopedConcepts"></span> khái niệm
         </p>
-        <div x-show="online && scopedItems.length" x-cloak class="mt-3">
+        <div x-show="online && modeItems.length" x-cloak class="mt-3">
           <div class="flex items-center gap-2 text-xs">
             <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
               <div class="h-full bg-emerald-500 transition-all duration-300"
-                   :style="'width:' + Math.round(nRetired / scopedItems.length * 100) + '%'"></div>
+                   :style="'width:' + Math.round(modeRetired / modeItems.length * 100) + '%'"></div>
             </div>
-            <span class="text-slate-500 whitespace-nowrap">
-              <span x-text="nRetired"></span>/<span x-text="scopedItems.length"></span> đã thuộc
+            <!-- "nắm chắc" ≠ nút "Đã thuộc" trong Kiểm tra: đây là mức nghỉ hưu
+                 (≥8 lần, sai ≤10%, bậc ≥5) — một lần may mắn không thành "thuộc". -->
+            <span class="text-slate-500 whitespace-nowrap" title="Đã làm ≥ 8 lần, sai ≤ 10%, bậc ôn ≥ 5">
+              <span x-text="modeRetired"></span>/<span x-text="modeItems.length"></span> đã nắm chắc
             </span>
           </div>
         </div>
