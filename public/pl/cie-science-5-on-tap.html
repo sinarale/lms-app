@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.96bd2a87.css">
+  <link rel="stylesheet" href="../assets/tw.9b4883e5.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -30,6 +30,10 @@
         tStats: { n: 0, known: 0 },
         lastId: null,
         openMap: {},            // cây bên trái: nhánh nào đang mở
+        // Bộ lọc các phần trong tóm tắt. Mỗi loại một màu cố định (xem KINDS) để
+        // nhìn là biết đang đọc loại gì, và bật/tắt được từng loại.
+        show: JSON.parse(localStorage.getItem('lms_show') || 'null') || { gloss: true, facts: true, list: true, watch: true, exp: true, compare: true },
+        detail: localStorage.getItem('lms_detail') === '1',
         scope: null,            // khái niệm đang học; null = cả môn
         navOpen: false,         // ngăn kéo cây trên màn hình hẹp
         queue: [], at: 0, picked: null, answered: false, wrongAgain: 0,
@@ -147,6 +151,17 @@
           const novel = !c || c.n === 0 ? 0.35 : 0;
           return 1.6 * err + 1.0 * overdue + 0.6 * this.conceptErr(q.concept) + novel + fresh;
         },
+        KINDS: [
+          { k: 'gloss',   t: '📖 Từ vựng',     on: 'bg-indigo-600 text-white border-indigo-600',  off: 'bg-white text-indigo-700 border-indigo-300' },
+          { k: 'facts',   t: '✦ Điều cần nhớ', on: 'bg-sky-600 text-white border-sky-600',        off: 'bg-white text-sky-700 border-sky-300' },
+          { k: 'list',    t: '☑ Danh sách',    on: 'bg-emerald-600 text-white border-emerald-600', off: 'bg-white text-emerald-700 border-emerald-300' },
+          { k: 'watch',   t: '⚠ Dễ nhầm',      on: 'bg-amber-500 text-white border-amber-500',    off: 'bg-white text-amber-700 border-amber-300' },
+          { k: 'exp',     t: '🔬 Thí nghiệm',  on: 'bg-violet-600 text-white border-violet-600',  off: 'bg-white text-violet-700 border-violet-300' },
+          { k: 'compare', t: '⇄ So sánh',      on: 'bg-slate-700 text-white border-slate-700',    off: 'bg-white text-slate-700 border-slate-300' },
+        ],
+        toggleShow(k) { this.show[k] = !this.show[k]; localStorage.setItem('lms_show', JSON.stringify(this.show)); },
+        toggleDetail() { this.detail = !this.detail; localStorage.setItem('lms_detail', this.detail ? '1' : '0'); },
+
         // ── Phạm vi học ───────────────────────────────────────────────────────
         // Bấm vào Unit thì học cả Unit; bấm vào một mục con thì chỉ học mục đó.
         // Làm bằng cách lấy toàn bộ nhánh con của khái niệm được chọn.
@@ -844,6 +859,16 @@
          nằm sẵn ở đây.                                                        -->
     <template x-if="ready && data && mode === 'summary'">
     <div class="space-y-5">
+      <!-- Lọc loại nội dung + bật chi tiết. Class ở KINDS là literal để Tailwind quét thấy. -->
+      <div class="flex flex-wrap items-center gap-1.5">
+        <template x-for="kd in KINDS" :key="kd.k">
+          <button @click="toggleShow(kd.k)" :class="show[kd.k] ? kd.on : kd.off"
+                  class="px-2.5 py-1 text-xs font-medium rounded-full border transition-colors" x-text="kd.t"></button>
+        </template>
+        <label class="ml-auto flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer select-none">
+          <input type="checkbox" :checked="detail" @change="toggleDetail()" class="accent-indigo-600"> Chi tiết
+        </label>
+      </div>
       <p x-show="!scopedSummary.length" x-cloak
          class="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm text-slate-500">
         Chưa có tóm tắt cho phần này.
@@ -946,57 +971,61 @@
               </div>
 
               <!-- từ vựng của lá -->
-              <template x-if="tagged(sec.glossary, leaf.id).length">
-              <dl class="px-4 pt-3 grid gap-x-3 gap-y-1.5 sm:grid-cols-2">
+              <template x-if="show.gloss && tagged(sec.glossary, leaf.id).length">
+              <div class="px-4 pt-3">
+              <p class="text-[11px] font-bold uppercase tracking-wide text-indigo-600 mb-1.5">📖 Từ vựng</p>
+              <dl class="grid gap-x-3 gap-y-1.5 sm:grid-cols-2">
                 <template x-for="g in tagged(sec.glossary, leaf.id)" :key="g.term">
                   <div class="rounded-lg bg-indigo-50/60 border border-indigo-100 px-3 py-2">
                     <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
                         class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></dt>
                     <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
-                    <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
+                    <dd x-show="detail && g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
                   </div>
                 </template>
               </dl>
+              </div>
               </template>
 
               <!-- ý của lá -->
-              <template x-if="tagged(points(sec), leaf.id).length">
-              <div class="px-4 pt-3 grid gap-2 sm:grid-cols-2">
+              <template x-if="show.facts && tagged(points(sec), leaf.id).length">
+              <div class="px-4 pt-3">
+              <p class="text-[11px] font-bold uppercase tracking-wide text-sky-600 mb-1.5">✦ Điều cần nhớ</p>
+              <div class="grid gap-2 sm:grid-cols-2">
                 <template x-for="(pt, i) in tagged(points(sec), leaf.id)" :key="i">
-                  <div class="flex gap-2.5 rounded-lg border border-slate-200 p-3">
-                    <svg class="w-5 h-5 shrink-0 mt-0.5 text-indigo-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
+                  <div class="flex gap-2.5 rounded-lg border border-sky-200 bg-sky-50/40 p-3">
+                    <svg class="w-5 h-5 shrink-0 mt-0.5 text-sky-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
                     <p class="text-sm text-slate-700 leading-snug" x-text="pt.t"></p>
                   </div>
                 </template>
               </div>
+              </div>
               </template>
 
-              <!-- checklist thuộc lá -->
-              <template x-if="sec.checklist && sec.checklist.concept === leaf.id">
+              <!-- checklist thuộc lá: GỌN — mỗi mục một dòng, ví dụ chỉ hiện khi bật Chi tiết -->
+              <template x-if="show.list && sec.checklist && sec.checklist.concept === leaf.id">
               <div class="px-4 pt-3">
-                <p class="text-xs font-bold uppercase tracking-wide text-emerald-700 mb-2">
-                  ✅ <span x-text="sec.checklist.title"></span>
-                </p>
-                <ol class="space-y-2">
+                <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-700 mb-1.5">☑ <span x-text="sec.checklist.title"></span></p>
+                <ol class="grid gap-1.5 sm:grid-cols-2">
                   <template x-for="(it, i) in sec.checklist.items" :key="i">
-                    <li class="flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2.5">
-                      <svg class="w-6 h-6 shrink-0 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
-                      <div class="min-w-0">
-                        <p class="text-sm font-semibold text-slate-900" x-text="it.sign"></p>
-                        <p class="text-sm text-slate-700" x-text="it.look_for"></p>
-                        <p x-show="it.book_example" class="mt-0.5 text-xs text-slate-500 italic" x-text="it.book_example"></p>
+                    <li class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-2.5 py-1.5">
+                      <svg class="w-4 h-4 shrink-0 mt-0.5 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
+                      <div class="min-w-0 text-sm leading-snug">
+                        <span class="font-semibold text-slate-900" x-text="it.sign"></span>
+                        <span class="text-slate-500"> — </span><span class="text-slate-700" x-text="it.look_for"></span>
+                        <p x-show="detail && it.book_example" class="text-xs text-slate-500 italic" x-text="it.book_example"></p>
                       </div>
                     </li>
                   </template>
                 </ol>
-                <p x-show="sec.checklist.note" class="mt-2 text-xs text-emerald-800 bg-emerald-100 rounded px-3 py-1.5" x-text="sec.checklist.note"></p>
+                <p x-show="detail && sec.checklist.note" class="mt-1.5 text-xs text-emerald-800 bg-emerald-100 rounded px-2.5 py-1" x-text="sec.checklist.note"></p>
               </div>
               </template>
 
               <!-- ngộ nhận của lá -->
-              <template x-if="tagged(sec.watch_out, leaf.id).length">
+              <template x-if="show.watch && tagged(sec.watch_out, leaf.id).length">
               <div class="px-4 pt-3">
-                <p class="text-xs font-bold uppercase tracking-wide text-amber-600 mb-2">⚠ Dễ nhầm chỗ này</p>
+                <p class="text-[11px] font-bold uppercase tracking-wide text-amber-600 mb-1.5">⚠ Dễ nhầm chỗ này</p>
                 <div class="space-y-2">
                   <template x-for="(w, i) in tagged(sec.watch_out, leaf.id)" :key="i">
                     <div class="rounded-lg border border-amber-200 bg-amber-50 overflow-hidden">
@@ -1015,12 +1044,12 @@
               </template>
 
               <!-- thí nghiệm thuộc lá -->
-              <template x-if="sec.from_the_book && sec.from_the_book.concept === leaf.id">
+              <template x-if="show.exp && sec.from_the_book && sec.from_the_book.concept === leaf.id">
               <div class="px-4 pt-3">
-                <div class="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3">
-                  <p class="text-xs font-bold uppercase tracking-wide text-sky-700">🔬 Thí nghiệm trong sách</p>
-                  <p class="mt-1.5 text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>
-                  <p class="mt-1.5 text-sm font-medium text-sky-900" x-text="sec.from_the_book.what_it_shows"></p>
+                <p class="text-[11px] font-bold uppercase tracking-wide text-violet-600 mb-1.5">🔬 Thí nghiệm trong sách</p>
+                <div class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5">
+                  <p x-show="detail" class="text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>
+                  <p class="text-sm font-medium text-violet-900" :class="detail ? 'mt-1.5' : ''" x-text="sec.from_the_book.what_it_shows"></p>
                 </div>
               </div>
               </template>
@@ -1030,9 +1059,9 @@
 
           <!-- ── Phần thuộc CẢ mục (không gắn lá): bảng đối chiếu, và mọi thứ
                chưa gắn nhãn — để dữ liệu cũ vẫn hiện đủ.                       -->
-          <template x-if="sec.compare">
+          <template x-if="show.compare && sec.compare">
           <div class="px-5 pb-4">
-            <p class="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2">⇄ So sánh</p>
+            <p class="text-[11px] font-bold uppercase tracking-wide text-slate-600 mb-1.5">⇄ So sánh</p>
             <div class="rounded-lg border border-slate-200 overflow-hidden">
               <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
                 <div class="bg-slate-100 px-2 py-2"></div>
@@ -1052,7 +1081,7 @@
 
           <template x-if="untagged(sec).any">
           <div class="px-5 pb-4 space-y-3">
-            <template x-if="untagged(sec).glossary.length">
+            <template x-if="show.gloss && untagged(sec).glossary.length">
             <dl class="grid gap-x-3 gap-y-1.5 sm:grid-cols-2">
               <template x-for="g in untagged(sec).glossary" :key="g.term">
                 <div class="rounded-lg bg-indigo-50/60 border border-indigo-100 px-3 py-2">
@@ -1064,7 +1093,7 @@
               </template>
             </dl>
             </template>
-            <template x-if="untagged(sec).points.length">
+            <template x-if="show.facts && untagged(sec).points.length">
             <div class="grid gap-2 sm:grid-cols-2">
               <template x-for="(pt, i) in untagged(sec).points" :key="i">
                 <div class="flex gap-2.5 rounded-lg border border-slate-200 p-3">
@@ -1074,7 +1103,7 @@
               </template>
             </div>
             </template>
-            <template x-if="sec.checklist && !sec.checklist.concept">
+            <template x-if="show.list && sec.checklist && !sec.checklist.concept">
             <div>
               <p class="text-xs font-bold uppercase tracking-wide text-emerald-700 mb-2">✅ <span x-text="sec.checklist.title"></span></p>
               <ol class="space-y-2">
@@ -1092,7 +1121,7 @@
               <p x-show="sec.checklist.note" class="mt-2 text-xs text-emerald-800 bg-emerald-100 rounded px-3 py-1.5" x-text="sec.checklist.note"></p>
             </div>
             </template>
-            <template x-if="untagged(sec).watch.length">
+            <template x-if="show.watch && untagged(sec).watch.length">
             <div>
               <p class="text-xs font-bold uppercase tracking-wide text-amber-600 mb-2">⚠ Dễ nhầm chỗ này</p>
               <div class="space-y-2">
@@ -1105,7 +1134,7 @@
               </div>
             </div>
             </template>
-            <template x-if="sec.from_the_book && !sec.from_the_book.concept">
+            <template x-if="show.exp && sec.from_the_book && !sec.from_the_book.concept">
             <div class="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3">
               <p class="text-xs font-bold uppercase tracking-wide text-sky-700">🔬 Thí nghiệm trong sách</p>
               <p class="mt-1.5 text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>
