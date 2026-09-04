@@ -301,29 +301,29 @@
    ],
    "points": [
     {
-     "t": "Ice melts at 0 °C. Gold melts at 1064 °C (p.36).",
-     "icon": "ice",
-     "concept": "c.materials.properties.state"
-    },
-    {
-     "t": "Melting point is a property: every substance has its own (p.36).",
+     "t": "Every substance has its own melting point. Ice melts at 0 °C, gold at 1064 °C (p.36).",
      "icon": "cube",
      "concept": "c.materials.properties.state"
     },
     {
-     "t": "Pure water boils at 100 °C, vinegar at 118 °C, liquid gold at 2856 °C (p.36).",
+     "t": "Melting point tells you which substance you have. Wax melts at 60 °C, aluminium 660 °C, silver 962 °C, copper 1083 °C (p.62).",
+     "icon": "scale",
+     "concept": "c.materials.properties.state"
+    },
+    {
+     "t": "Every substance has its own boiling point. Water boils at 100 °C, vinegar at 118 °C (p.36).",
      "icon": "fire",
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "t": "Most liquids boil only when heated, but evaporation can happen at any temperature (p.36).",
+     "t": "Boiling needs heat, but evaporation can happen at any temperature. Evaporation is slower and only at the surface (p.36).",
      "icon": "cloud",
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "t": "Check your progress table (p.62): candle wax melts at 60 °C, silver 962 °C, copper 1083 °C, aluminium 660 °C.",
-     "icon": "scale",
-     "concept": "c.materials.properties.state"
+     "t": "Gases have mass and take up space. A full balloon weighs down the ruler; an empty one does not (p.40).",
+     "icon": "bubbles",
+     "concept": "c.materials.properties.gases"
     }
    ],
    "watch_out": [
@@ -496,32 +496,32 @@
    ],
    "points": [
     {
-     "t": "A cold metal teaspoon in a hot cup of tea: after a while the handle feels warm — heat travels along the metal (p.42).",
-     "icon": "heat",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Metals are good conductors of heat. Silver is the best. Glass and plastic are not (p.44).",
+     "t": "Metals are good thermal conductors; glass, plastic and polystyrene are poor ones. Silver conducts heat best (p.44).",
      "icon": "fire",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "Tea stays warm longest in a polystyrene foam cup, not a stainless steel or glass cup (p.45 Q4).",
+     "t": "Conduction is heat moving through a material. A metal teaspoon in hot tea soon has a warm handle (p.42).",
+     "icon": "heat",
+     "concept": "c.materials.conductors.heat"
+    },
+    {
+     "t": "Poor conductors keep things warm. Tea stays hot longest in a polystyrene foam cup (p.45).",
      "icon": "shield",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "Pot handles are plastic so heat does not reach your hand; the pot itself is metal so heat reaches the food (p.45 Q2-3).",
+     "t": "Pots are metal but handles are plastic. Metal lets heat into the food; plastic keeps heat away from your hand (p.45).",
      "icon": "shield",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "In the circuit test: 0 ticks = lamp does not shine, ✓ = dim, ✓✓ = bright. Copper wire, steel paper clip and aluminium foil light the lamp (p.46).",
+     "t": "Metals such as copper, steel and aluminium conduct electricity well. They make the lamp shine brightly (p.46).",
      "icon": "bolt",
      "concept": "c.materials.conductors.electricity"
     },
     {
-     "t": "Graphite is a non-metal that conducts electricity — but only a value of 1 in the table (p.47).",
+     "t": "Graphite is the only non-metal that conducts electricity, and only weakly. Sugar, water and plastic do not conduct at all (p.47).",
      "icon": "sparkle",
      "concept": "c.materials.conductors.electricity"
     }
@@ -683,27 +683,27 @@
    ],
    "points": [
     {
-     "t": "Liquid water ⇄ solid ice: heating melts it, cooling freezes it — shown as a two-way arrow (p.50).",
+     "t": "A reversible change can be undone. Water freezes into ice and ice melts back into water (p.50).",
      "icon": "swap",
      "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "Burn a match and the wood changes into a black substance called carbon (p.50).",
+     "t": "An irreversible change makes a new substance. A burnt match turns into black carbon and cannot go back (p.50).",
      "icon": "fire",
      "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "Sea water is salty because salt is dissolved in it (p.51).",
+     "t": "Dissolving is reversible: the solute is still there. Sea water is salty because salt is dissolved in it (p.51).",
      "icon": "drop",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "When a solute dissolves, its particles spread evenly between the solvent particles — that is why you cannot see them (p.52).",
+     "t": "A dissolved solute spreads evenly between the solvent particles. That is why a solution looks uniform and you cannot see the solute (p.52).",
      "icon": "beaker",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Investigation: a teaspoon of sugar in 100 ml cold water and 100 ml hot water, timed with a stopwatch (p.54).",
+     "t": "Solutes dissolve faster in hot water and when stirred. Heat and stirring make the particles move and spread faster (p.53–54).",
      "icon": "scale",
      "concept": "c.materials.reversible.factors"
     }
@@ -844,27 +844,32 @@
    ],
    "points": [
     {
-     "t": "Candle (p.56): the wax melting is a reversible change; the wick burning is a chemical reaction — new substances form.",
+     "t": "A chemical reaction makes a new substance. The substances that react are the reactants; the new substances are the products (p.57).",
+     "icon": "swap",
+     "concept": "c.materials.chemical.reactants_products"
+    },
+    {
+     "t": "Melting is not a chemical reaction, but burning is. Candle wax melts and can be reversed; the burning wick makes new substances (p.56).",
      "icon": "fire",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Vinegar + bicarbonate of soda: bubbles at once, and another product after five minutes (p.57).",
+     "t": "Vinegar and bicarbonate of soda react to make a gas. The bubbles of gas are the product (p.57).",
      "icon": "bubbles",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Three droppers of iodine solution in water, then a spoon of cornstarch: the colour changes (p.58).",
-     "icon": "swap",
+     "t": "Evidence of a chemical reaction: a gas is produced, a colour change, a new solid, or a temperature change (p.58–59).",
+     "icon": "sparkle",
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Breathe through a straw into limewater: the carbon dioxide in your breath reacts and the liquid turns cloudy (p.58).",
+     "t": "Limewater turns cloudy when carbon dioxide reacts with it. The new solid is calcium carbonate (p.58).",
      "icon": "cloud",
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Vinegar on wire wool: record the thermometer, wait five minutes, record again — the temperature changes (p.59).",
+     "t": "A temperature change is evidence of a reaction. Vinegar on wire wool gets warmer (p.59).",
      "icon": "heat",
      "concept": "c.materials.chemical.evidence"
     }
