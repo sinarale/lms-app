@@ -313,18 +313,7 @@
      "concept": "c.materials.properties.gases"
     }
    ],
-   "watch_out": [
-    {
-     "wrong": "Water only turns into a gas when it boils.",
-     "right": "Water evaporates from the surface at any temperature (p.36).",
-     "concept": "c.materials.properties.boiling_evaporation"
-    },
-    {
-     "wrong": "Air is nothing — it has no mass.",
-     "right": "Air is a mixture of gases; it takes up space and has mass (p.39-40).",
-     "concept": "c.materials.properties.gases"
-    }
-   ],
+   "watch_out": [],
    "terms": [
     "property",
     "melting point",
@@ -507,23 +496,7 @@
      "concept": "c.materials.conductors.electricity"
     }
    ],
-   "watch_out": [
-    {
-     "wrong": "Food cooks slower in a metal dish than in a glass dish.",
-     "right": "It cooks FASTER in metal — metal conducts heat into the food quickly (p.62 Q2).",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "wrong": "Only metals can conduct electricity.",
-     "right": "Graphite is a non-metal and lights the lamp — dimly (p.45-47).",
-     "concept": "c.materials.conductors.electricity"
-    },
-    {
-     "wrong": "A substance that conducts heat well always conducts electricity well.",
-     "right": "Graphite conducts heat well (168) but electricity very poorly (1) — it does not fit the pattern (p.47 Q4).",
-     "concept": "c.materials.conductors.electricity"
-    }
-   ],
+   "watch_out": [],
    "terms": [
     "conduction",
     "thermal conductor",
@@ -660,23 +633,7 @@
      "concept": "c.materials.reversible.factors"
     }
    ],
-   "watch_out": [
-    {
-     "wrong": "Boiling an egg is reversible because you only heat it.",
-     "right": "It is irreversible — the egg becomes a new substance and cannot go back to raw (p.50 Q2).",
-     "concept": "c.materials.reversible.changes"
-    },
-    {
-     "wrong": "Dissolved sugar has disappeared.",
-     "right": "It is still there — its particles are spread evenly through the water (p.52).",
-     "concept": "c.materials.reversible.dissolving"
-    },
-    {
-     "wrong": "Sugar only dissolves if you stir it.",
-     "right": "Stirring and heating make it faster; left long enough it dissolves by itself (p.54 Q4).",
-     "concept": "c.materials.reversible.factors"
-    }
-   ],
+   "watch_out": [],
    "terms": [
     "physical change",
     "reversible",
@@ -813,13 +770,7 @@
      "concept": "c.materials.chemical.evidence"
     }
    ],
-   "watch_out": [
-    {
-     "wrong": "When the candle burns, the melting wax is the chemical reaction.",
-     "right": "Melting wax is reversible. Only the burning wick makes new substances (p.56).",
-     "concept": "c.materials.chemical.reactants_products"
-    }
-   ],
+   "watch_out": [],
    "terms": [
     "chemical reaction",
     "react",
@@ -2341,5 +2292,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T09:42:26+00:00"
+ "generated_at": "2026-09-04T09:56:36+00:00"
 }
