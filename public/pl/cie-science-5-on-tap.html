@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.ec45ff52.css">
+  <link rel="stylesheet" href="../assets/tw.352c0dfc.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -35,7 +35,7 @@
         // nhìn là biết đang đọc loại gì, và bật/tắt được từng loại.
         show: JSON.parse(localStorage.getItem('lms_show') || 'null') || { gloss: true, facts: true, list: true, watch: true, exp: true, compare: true },
         detail: localStorage.getItem('lms_detail') === '1',
-        scope: null,            // khái niệm đang học; null = cả môn
+        scope: null,            // chủ đề đang học; null = cả môn
         navOpen: false,         // ngăn kéo cây trên màn hình hẹp
         queue: [], at: 0, picked: null, answered: false, wrongAgain: 0,
         log: [], shownAt: 0,
@@ -96,7 +96,7 @@
           const c = (this.data?.concepts || []).find(x => x.id === cid);
           return c ? c.parent : null;
         },
-        // Tỉ lệ sai của một khái niệm, cộng dồn lên cây. Đây là phần thưởng của
+        // Tỉ lệ sai của một chủ đề, cộng dồn lên cây. Đây là phần thưởng của
         // việc để sơ đồ tư duy dạng cây: yếu ở "properties" nâng điểm của MỌI câu
         // nằm dưới nó, kể cả câu chưa gặp bao giờ — hệ thống khái quát hoá thay
         // vì chỉ nhai lại đúng câu đã sai.
@@ -146,7 +146,7 @@
         },
 
         // Làm trơn (+0.5/+1.0) là bắt buộc: thiếu nó thì một câu mới sai đúng
-        // một lần (tỉ lệ 1,0) sẽ xếp trên một khái niệm yếu thật sai 6/10, và
+        // một lần (tỉ lệ 1,0) sẽ xếp trên một chủ đề yếu thật sai 6/10, và
         // danh sách "điểm yếu" biến thành danh sách "câu mới gặp một lần".
         score(q, now) {
           const c = this.cards[q.id];
@@ -236,7 +236,18 @@
         },
         // Chấp nhận cả hai dạng: points_en là mảng chuỗi (bản cũ, môn khác),
         // points là mảng {t, icon}. Không ép migrate toàn bộ chỉ vì một môn.
-        // Lá của một mục = con trực tiếp của khái niệm mục đó, theo thứ tự cây
+        // Các khối tuỳ chọn — thí nghiệm, bảng, so sánh, dễ nhầm — là MẢNG: một lá
+        // có thể có 0, 1 hay nhiều, tuỳ độ quan trọng. Nhận cả dạng cũ (một object)
+        // để dữ liệu môn khác chưa gen lại vẫn hiện.
+        arr(sec, many, one) { const a = sec[many]; if (Array.isArray(a)) return a; const o = sec[one]; return o ? [o] : []; },
+        lists(sec, leafId)  { return this.arr(sec, 'checklists', 'checklist').filter(x => x.concept === leafId); },
+        exps(sec, leafId)   { return this.arr(sec, 'experiments', 'from_the_book').filter(x => x.concept === leafId); },
+        comps(sec, leafId)  { return this.arr(sec, 'compares', 'compare').filter(x => x.concept === leafId); },
+        // Khối cấp MỤC = không gắn lá nào
+        secLists(sec) { return this.arr(sec, 'checklists', 'checklist').filter(x => !x.concept); },
+        secExps(sec)  { return this.arr(sec, 'experiments', 'from_the_book').filter(x => !x.concept); },
+        secComps(sec) { return this.arr(sec, 'compares', 'compare').filter(x => !x.concept); },
+        // Lá của một mục = con trực tiếp của chủ đề mục đó, theo thứ tự cây
         leavesOf(sec) { return this.children(sec.concept); },
         tagged(list, leafId) { return (list || []).filter(x => x && x.concept === leafId); },
         // Mọi thứ KHÔNG gắn vào lá nào của mục — dữ liệu cũ, hoặc ý thuộc cả mục
@@ -245,7 +256,7 @@
           const f = (list) => (list || []).filter(x => !x || !ids.has(x.concept));
           const r = { glossary: f(sec.glossary), points: f(this.points(sec)), watch: f(sec.watch_out) };
           r.any = r.glossary.length || r.points.length || r.watch.length
-                  || (sec.checklist && !sec.checklist.concept) || (sec.from_the_book && !sec.from_the_book.concept);
+                  || this.secLists(sec).length || this.secExps(sec).length;
           return r;
         },
         points(sec) {
@@ -282,7 +293,7 @@
             if (pick.length >= n) break;
             if (!pick.includes(q)) pick.push(q);
           }
-          // Giãn sao cho hai câu liền nhau không cùng khái niệm, nếu xếp được
+          // Giãn sao cho hai câu liền nhau không cùng chủ đề, nếu xếp được
           const q0 = pick.sort(() => Math.random() - 0.5);
           for (let i = 1; i < q0.length; i++) {
             if (q0[i].concept !== q0[i - 1].concept) continue;
@@ -516,7 +527,7 @@
             this.err = 'Chưa lưu được kết quả — sẽ thử lại lần sau. (' + e.message + ')';
           }
         },
-        // Khái niệm yếu nhất, ngưỡng n>=2 để không kết luận từ một lần sai
+        // Chủ đề yếu nhất, ngưỡng n>=2 để không kết luận từ một lần sai
         weakConcepts() {
           const by = {};
           for (const q of this.allItems) {
@@ -701,7 +712,7 @@
         <p class="mt-1 text-sm text-slate-500">
           <span x-text="mode === 'cards' ? scopedCards.length : scopedQuiz.length"></span>
           <span x-text="mode === 'cards' ? 'thẻ' : 'câu hỏi'"></span> ·
-          <span x-text="scopedConcepts"></span> khái niệm
+          <span x-text="scopedConcepts"></span> chủ đề
         </p>
         <div x-show="online && modeItems.length" x-cloak class="mt-3">
           <div class="flex items-center gap-2 text-xs">
@@ -1024,32 +1035,35 @@
                 <template x-for="(pt, i) in tagged(points(sec), leaf.id)" :key="i">
                   <div class="flex gap-2.5 rounded-lg border border-sky-200 bg-sky-50/40 p-3">
                     <svg class="w-5 h-5 shrink-0 mt-0.5 text-sky-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
-                    <p class="text-sm text-slate-700 leading-snug" x-text="pt.t"></p>
+                    <p class="text-sm text-slate-700 leading-snug flex-1" x-text="pt.t"></p>
+                    <template x-if="pt.image"><img :src="'study/img/' + pt.image" alt="" class="w-16 shrink-0 self-start rounded border border-sky-200 bg-white object-contain"></template>
                   </div>
                 </template>
               </div>
               </div>
               </template>
 
-              <!-- checklist thuộc lá: GỌN — mỗi mục một dòng, ví dụ chỉ hiện khi bật Chi tiết -->
-              <template x-if="show.list && sec.checklist && sec.checklist.concept === leaf.id">
+              <!-- bảng/danh sách thuộc lá: có thể nhiều; mỗi mục một dòng, ví dụ khi bật Chi tiết -->
+              <template x-if="show.list"><div>
+              <template x-for="(ck, ci) in lists(sec, leaf.id)" :key="'l' + ci">
               <div class="px-4 pt-3">
-                <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-700 mb-1.5">☑ <span x-text="sec.checklist.title"></span></p>
+                <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-700 mb-1.5">☑ <span x-text="ck.title"></span></p>
                 <ol class="grid gap-1.5 sm:grid-cols-2">
-                  <template x-for="(it, i) in sec.checklist.items" :key="i">
+                  <template x-for="(it, i) in ck.items" :key="i">
                     <li class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-2.5 py-1.5">
                       <svg class="w-4 h-4 shrink-0 mt-0.5 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
                       <div class="min-w-0 text-sm leading-snug">
                         <span class="font-semibold text-slate-900" x-text="it.sign"></span>
-                        <span class="text-slate-500"> — </span><span class="text-slate-700" x-text="it.look_for"></span>
+                        <template x-if="it.look_for"><span><span class="text-slate-500"> — </span><span class="text-slate-700" x-text="it.look_for"></span></span></template>
                         <p x-show="detail && it.book_example" class="text-xs text-slate-500 italic" x-text="it.book_example"></p>
                       </div>
                     </li>
                   </template>
                 </ol>
-                <p x-show="detail && sec.checklist.note" class="mt-1.5 text-xs text-emerald-800 bg-emerald-100 rounded px-2.5 py-1" x-text="sec.checklist.note"></p>
+                <p x-show="detail && ck.note" class="mt-1.5 text-xs text-emerald-800 bg-emerald-100 rounded px-2.5 py-1" x-text="ck.note"></p>
               </div>
               </template>
+              </div></template>
 
               <!-- ngộ nhận của lá -->
               <template x-if="show.watch && tagged(sec.watch_out, leaf.id).length">
@@ -1072,32 +1086,70 @@
               </div>
               </template>
 
-              <!-- thí nghiệm thuộc lá -->
-              <template x-if="show.exp && sec.from_the_book && sec.from_the_book.concept === leaf.id">
+              <!-- thí nghiệm thuộc lá: có thể nhiều. Tóm tắt CẢ CÁCH LÀM (cần gì → làm gì →
+                   thấy gì), hình cắt từ trang sách đặt cạnh để liên tưởng. -->
+              <template x-if="show.exp"><div>
+              <template x-for="(ex, ei) in exps(sec, leaf.id)" :key="'e' + ei">
               <div class="px-4 pt-3">
-                <p class="text-[11px] font-bold uppercase tracking-wide text-violet-600 mb-1.5">🔬 Thí nghiệm trong sách</p>
-                <div class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5">
-                  <p x-show="detail" class="text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>
-                  <p class="text-sm font-medium text-violet-900" :class="detail ? 'mt-1.5' : ''" x-text="sec.from_the_book.what_it_shows"></p>
+                <p class="text-[11px] font-bold uppercase tracking-wide text-violet-600 mb-1.5">🔬 <span x-text="ex.title || 'Thí nghiệm trong sách'"></span><span x-show="ex.page" class="font-normal normal-case text-slate-400" x-text="' · p.' + ex.page"></span></p>
+                <div class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5 flex gap-3">
+                  <div class="min-w-0 flex-1 text-sm space-y-1">
+                    <p x-show="ex.need" class="text-slate-600"><span class="font-semibold text-violet-800">Cần:</span> <span x-text="ex.need"></span></p>
+                    <ol x-show="(ex.steps || []).length" class="list-decimal pl-5 text-slate-700 space-y-0.5">
+                      <template x-for="(st, si) in (ex.steps || [])" :key="si"><li x-text="st"></li></template>
+                    </ol>
+                    <p x-show="ex.result" class="font-medium text-violet-900"><span class="font-semibold">Thấy:</span> <span x-text="ex.result"></span></p>
+                    <p x-show="detail && ex.activity" class="text-xs text-slate-500 italic" x-text="ex.activity"></p>
+                    <p x-show="!ex.steps && ex.what_it_shows" class="font-medium text-violet-900" x-text="ex.what_it_shows"></p>
+                  </div>
+                  <!-- x-if chứ không x-show: :src vẫn bind khi ẩn → trình duyệt tải "img/null" (404) -->
+                  <template x-if="ex.image">
+                  <img :src="'study/img/' + ex.image" :alt="ex.title || ''"
+                       class="w-28 sm:w-36 shrink-0 self-start rounded-md border border-violet-200 bg-white object-contain">
+                  </template>
                 </div>
               </div>
               </template>
+              </div></template>
+
+              <!-- so sánh thuộc lá: có thể nhiều -->
+              <template x-if="show.compare"><div>
+              <template x-for="(cp, pi) in comps(sec, leaf.id)" :key="'c' + pi">
+              <div class="px-4 pt-3">
+                <p class="text-[11px] font-bold uppercase tracking-wide text-slate-600 mb-1.5">⇄ <span x-text="cp.title || 'So sánh'"></span></p>
+                <div class="rounded-lg border border-slate-200 overflow-hidden">
+                  <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
+                    <div class="bg-slate-100 px-2 py-2"></div>
+                    <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200" x-text="cp.label_a"></div>
+                    <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200" x-text="cp.label_b"></div>
+                  </div>
+                  <template x-for="(r, i) in cp.rows" :key="i">
+                    <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs border-t border-slate-200">
+                      <div class="bg-slate-50 px-2 py-2 font-medium text-slate-600" x-text="r.aspect"></div>
+                      <div class="px-2 py-2 text-slate-700 border-l border-slate-200" x-text="r.a"></div>
+                      <div class="px-2 py-2 text-slate-500 border-l border-slate-200" x-text="r.b"></div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              </template>
+              </div></template>
               <div class="h-3"></div>
             </div>
           </template>
 
           <!-- ── Phần thuộc CẢ mục (không gắn lá): bảng đối chiếu, và mọi thứ
                chưa gắn nhãn — để dữ liệu cũ vẫn hiện đủ.                       -->
-          <template x-if="show.compare && sec.compare">
+          <template x-for="(cp, pi) in (show.compare ? secComps(sec) : [])" :key="'sc' + pi">
           <div class="px-5 pb-4">
             <p class="text-[11px] font-bold uppercase tracking-wide text-slate-600 mb-1.5">⇄ So sánh</p>
             <div class="rounded-lg border border-slate-200 overflow-hidden">
               <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
                 <div class="bg-slate-100 px-2 py-2"></div>
-                <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200" x-text="sec.compare.label_a"></div>
-                <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200" x-text="sec.compare.label_b"></div>
+                <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200" x-text="cp.label_a"></div>
+                <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200" x-text="cp.label_b"></div>
               </div>
-              <template x-for="(r, i) in sec.compare.rows" :key="i">
+              <template x-for="(r, i) in cp.rows" :key="i">
                 <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs border-t border-slate-200">
                   <div class="bg-slate-50 px-2 py-2 font-medium text-slate-600" x-text="r.aspect"></div>
                   <div class="px-2 py-2 text-slate-700 border-l border-slate-200" x-text="r.a"></div>
@@ -1132,7 +1184,7 @@
               </template>
             </div>
             </template>
-            <template x-if="show.list && sec.checklist && !sec.checklist.concept">
+            <template x-if="show.list && secLists(sec).length && (sec.checklist = secLists(sec)[0])">
             <div>
               <p class="text-xs font-bold uppercase tracking-wide text-emerald-700 mb-2">✅ <span x-text="sec.checklist.title"></span></p>
               <ol class="space-y-2">
@@ -1163,7 +1215,7 @@
               </div>
             </div>
             </template>
-            <template x-if="show.exp && sec.from_the_book && !sec.from_the_book.concept">
+            <template x-if="show.exp && secExps(sec).length && (sec.from_the_book = secExps(sec)[0])">
             <div class="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3">
               <p class="text-xs font-bold uppercase tracking-wide text-sky-700">🔬 Thí nghiệm trong sách</p>
               <p class="mt-1.5 text-sm text-slate-700" x-text="sec.from_the_book.activity"></p>

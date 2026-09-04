@@ -299,46 +299,6 @@
      "concept": "c.materials.properties.gases"
     }
    ],
-   "compare": {
-    "label_a": "Boiling",
-    "label_b": "Evaporation",
-    "rows": [
-     {
-      "aspect": "Where",
-      "a": "All the particles, through the whole liquid",
-      "b": "Only particles on the surface"
-     },
-     {
-      "aspect": "Temperature",
-      "a": "Only at the boiling point — usually needs heating",
-      "b": "At any temperature"
-     },
-     {
-      "aspect": "Speed",
-      "a": "Fast",
-      "b": "Slow"
-     }
-    ]
-   },
-   "checklist": {
-    "title": "Properties of gases (p.39)",
-    "concept": "c.materials.properties.gases",
-    "items": [
-     {
-      "sign": "It takes up space",
-      "look_for": "A gas fills its container.",
-      "book_example": "Two balloons blown up to the same size (p.40).",
-      "icon": "cloud"
-     },
-     {
-      "sign": "It has mass",
-      "look_for": "A gas has weight that pulls the balance down.",
-      "book_example": "Let air out of one balloon — the ruler tips (p.40).",
-      "icon": "scale"
-     }
-    ],
-    "note": "\"We can't feel air unless it is moving\" (p.39) — but it is still matter."
-   },
    "points": [
     {
      "t": "Ice melts at 0 °C. Gold melts at 1064 °C (p.36).",
@@ -383,11 +343,6 @@
      "concept": "c.materials.properties.gases"
     }
    ],
-   "from_the_book": {
-    "activity": "Think like a scientist 3 (p.40): blow up two balloons to the same size, hang them from a ruler balanced on another ruler, then loosen one twist tie.",
-    "what_it_shows": "The side with the full balloon stays down — the air had mass and took up space.",
-    "concept": "c.materials.properties.gases"
-   },
    "terms": [
     "property",
     "melting point",
@@ -396,6 +351,129 @@
     "evaporation",
     "matter",
     "mass"
+   ],
+   "checklists": [
+    {
+     "concept": "c.materials.properties.state",
+     "title": "Melting points in the book (p.36, p.62)",
+     "items": [
+      {
+       "sign": "ice 0 °C",
+       "icon": "ice"
+      },
+      {
+       "sign": "candle wax 60 °C",
+       "icon": "fire"
+      },
+      {
+       "sign": "aluminium 660 °C",
+       "icon": "bar"
+      },
+      {
+       "sign": "silver 962 °C",
+       "icon": "sparkle"
+      },
+      {
+       "sign": "gold 1064 °C",
+       "icon": "fire"
+      },
+      {
+       "sign": "copper 1083 °C",
+       "icon": "bar"
+      }
+     ],
+     "note": "Each substance has its own melting point — that is why it is a property (p.36)."
+    },
+    {
+     "concept": "c.materials.properties.boiling_evaporation",
+     "title": "Boiling points in the book (p.36)",
+     "items": [
+      {
+       "sign": "pure water 100 °C",
+       "icon": "drop"
+      },
+      {
+       "sign": "vinegar 118 °C",
+       "icon": "beaker"
+      },
+      {
+       "sign": "liquid gold 2856 °C",
+       "icon": "fire"
+      }
+     ]
+    },
+    {
+     "concept": "c.materials.properties.gases",
+     "title": "Properties of gases (p.39)",
+     "items": [
+      {
+       "sign": "Takes up space",
+       "look_for": "fills its container",
+       "icon": "cloud"
+      },
+      {
+       "sign": "Has mass",
+       "look_for": "weighs something, even air",
+       "icon": "scale"
+      }
+     ],
+     "note": "\"We can't feel air unless it is moving\" (p.39) — but it is still matter."
+    }
+   ],
+   "compares": [
+    {
+     "concept": "c.materials.properties.boiling_evaporation",
+     "title": "Boiling vs evaporation",
+     "label_a": "Boiling",
+     "label_b": "Evaporation",
+     "rows": [
+      {
+       "aspect": "Where",
+       "a": "All the particles, through the whole liquid",
+       "b": "Only particles on the surface"
+      },
+      {
+       "aspect": "Temperature",
+       "a": "Only at the boiling point — usually needs heating",
+       "b": "At any temperature"
+      },
+      {
+       "aspect": "Speed",
+       "a": "Fast",
+       "b": "Slow"
+      }
+     ]
+    }
+   ],
+   "experiments": [
+    {
+     "concept": "c.materials.properties.state",
+     "title": "Measure and compare melting points",
+     "page": "37",
+     "image": null,
+     "need": "three different solids, three pans, a hotplate, a thermometer, a stopwatch",
+     "steps": [
+      "Teacher puts a solid in a pan and heats it until it melts.",
+      "Take the pan off the hotplate as soon as it has melted.",
+      "Measure the temperature of the melted substance and record it.",
+      "Repeat with the other two solids."
+     ],
+     "result": "Each solid melted at a different temperature — melting point is a property of the substance."
+    },
+    {
+     "concept": "c.materials.properties.gases",
+     "title": "Investigate the properties of gases",
+     "page": "40",
+     "image": "balloons.png",
+     "need": "two balloons the same size, two rulers, string, a heavy book, twist ties",
+     "steps": [
+      "Blow up both balloons to the same size; tie with twist ties.",
+      "Hang them from the ends of a ruler with 15 cm strings.",
+      "Hang that ruler from a second ruler held on the table by a heavy book, and balance it.",
+      "Loosen the twist tie on ONE balloon and watch."
+     ],
+     "result": "The side with the full balloon stays down — the air had mass and took up space."
+    }
    ]
   },
   {
@@ -428,64 +506,6 @@
      "concept": "c.materials.conductors.electricity"
     }
    ],
-   "compare": {
-    "label_a": "Conducts heat (W/m·K)",
-    "label_b": "Conducts electricity",
-    "rows": [
-     {
-      "aspect": "copper",
-      "a": "386 — best of the five",
-      "b": "59 — best of the five"
-     },
-     {
-      "aspect": "graphite",
-      "a": "168 — good",
-      "b": "1 — very poor"
-     },
-     {
-      "aspect": "steel",
-      "a": "80 — lowest",
-      "b": "10 — low"
-     }
-    ]
-   },
-   "checklist": {
-    "title": "How well substances conduct — the book's table (p.47)",
-    "concept": "c.materials.conductors.heat",
-    "items": [
-     {
-      "sign": "copper 386 · 59",
-      "look_for": "Best in the table for both heat and electricity.",
-      "book_example": "Copper connecting wires (p.45).",
-      "icon": "heat"
-     },
-     {
-      "sign": "aluminium 237 · 37",
-      "look_for": "Second for heat and electricity.",
-      "book_example": "Aluminium foil tested in the circuit (p.45).",
-      "icon": "heat"
-     },
-     {
-      "sign": "graphite 168 · 1",
-      "look_for": "Conducts heat well but electricity very poorly.",
-      "book_example": "Pencil graphite tested in the circuit (p.45).",
-      "icon": "bar"
-     },
-     {
-      "sign": "brass 150 · 16",
-      "look_for": "Middle of the table.",
-      "book_example": "—",
-      "icon": "heat"
-     },
-     {
-      "sign": "steel 80 · 10",
-      "look_for": "Lowest of the five for heat.",
-      "book_example": "Steel paper clip (p.46).",
-      "icon": "heat"
-     }
-    ],
-    "note": "Silver is named as the best conductor of heat in the text (p.44), but it is not in this table."
-   },
    "points": [
     {
      "t": "A cold metal teaspoon in a hot cup of tea: after a while the handle feels warm — heat travels along the metal (p.42).",
@@ -535,16 +555,98 @@
      "concept": "c.materials.conductors.electricity"
     }
    ],
-   "from_the_book": {
-    "activity": "Think like a scientist 1 (p.43): metal spoon, plastic spoon, glass rod, pencil and polystyrene foam stand in hot water, each with a bead stuck on with petroleum jelly.",
-    "what_it_shows": "The bead on the best conductor falls off first as the jelly melts — metal first, polystyrene last.",
-    "concept": "c.materials.conductors.heat"
-   },
    "terms": [
     "conduction",
     "thermal conductor",
     "electrical conductor",
     "insulator"
+   ],
+   "checklists": [
+    {
+     "concept": "c.materials.conductors.heat",
+     "title": "How well substances conduct — the book's table (p.47)",
+     "items": [
+      {
+       "sign": "copper",
+       "look_for": "heat 386 · electricity 59 — best for both",
+       "icon": "heat"
+      },
+      {
+       "sign": "aluminium",
+       "look_for": "237 · 37",
+       "icon": "heat"
+      },
+      {
+       "sign": "graphite",
+       "look_for": "168 · 1 — good for heat, very poor for electricity",
+       "icon": "bar"
+      },
+      {
+       "sign": "brass",
+       "look_for": "150 · 16",
+       "icon": "heat"
+      },
+      {
+       "sign": "steel",
+       "look_for": "80 · 10 — lowest for heat",
+       "icon": "heat"
+      }
+     ],
+     "note": "Silver is named the best conductor of heat in the text (p.44) but is not in this table."
+    }
+   ],
+   "compares": [
+    {
+     "concept": null,
+     "title": "Thermal vs electrical conductors",
+     "label_a": "Conducts heat",
+     "label_b": "Conducts electricity",
+     "rows": [
+      {
+       "aspect": "Best in book",
+       "a": "Silver (text) · copper 386 (table)",
+       "b": "Copper 59"
+      },
+      {
+       "aspect": "Odd one out",
+       "a": "graphite 168 — good",
+       "b": "graphite 1 — very poor"
+      },
+      {
+       "aspect": "Everyday use",
+       "a": "Metal pots and pans",
+       "b": "Copper wire in circuits"
+      }
+     ]
+    }
+   ],
+   "experiments": [
+    {
+     "concept": "c.materials.conductors.heat",
+     "title": "Investigate how well different materials conduct heat",
+     "page": "43",
+     "image": "beads.png",
+     "need": "a beaker of hot water, a metal spoon, a plastic spoon, a glass rod, a pencil, polystyrene foam, five beads, petroleum jelly",
+     "steps": [
+      "Put a small bit of petroleum jelly on one end of each material and push a bead into it.",
+      "Stand all the materials in the beaker; teacher pours in hot water.",
+      "Watch which bead falls off first and last, and record the order."
+     ],
+     "result": "The bead on the metal spoon falls first (heat travels up it fastest); polystyrene last."
+    },
+    {
+     "concept": "c.materials.conductors.electricity",
+     "title": "Investigate how well different substances conduct electricity",
+     "page": "45-46",
+     "image": "circuit.png",
+     "need": "two cells, a cell holder, a 1.5 V lamp, three copper connecting wires, steel paper clip, aluminium foil, tap water, sugar, pencil graphite",
+     "steps": [
+      "Set up the circuit; touch the two free wire ends together — the lamp shines.",
+      "Put each substance between the wire ends in turn.",
+      "Score the lamp: 0 ticks = does not shine, ✓ = dim, ✓✓ = bright."
+     ],
+     "result": "Copper wire, steel paper clip and aluminium foil light the lamp brightly; graphite dimly; sugar, water and plastic not at all."
+    }
    ]
   },
   {
@@ -601,46 +703,6 @@
      "concept": "c.materials.reversible.factors"
     }
    ],
-   "compare": {
-    "label_a": "Reversible",
-    "label_b": "Irreversible",
-    "rows": [
-     {
-      "aspect": "Can it change back?",
-      "a": "Yes",
-      "b": "No"
-     },
-     {
-      "aspect": "New substance?",
-      "a": "No — a physical change",
-      "b": "Yes — a chemical change"
-     },
-     {
-      "aspect": "Book examples",
-      "a": "Ice ⇄ water; dissolving salt",
-      "b": "Burning a match; boiling an egg (p.50)"
-     }
-    ]
-   },
-   "checklist": {
-    "title": "Ways to make a solid dissolve faster (p.53)",
-    "concept": "c.materials.reversible.factors",
-    "items": [
-     {
-      "sign": "Stir",
-      "look_for": "Stirring spreads the solute particles into the spaces between solvent particles more quickly.",
-      "book_example": "Marcus's coffee tasted bitter because the sugar was not stirred (p.53).",
-      "icon": "beaker"
-     },
-     {
-      "sign": "Heat",
-      "look_for": "Heat gives the particles energy so they move faster and spread out more.",
-      "book_example": "Coffee made with hot water, not water from the fridge (p.53-54).",
-      "icon": "heat"
-     }
-    ],
-    "note": "Sugar will dissolve on its own in cold water if you leave it long enough — particles are always moving (p.54 Q4)."
-   },
    "points": [
     {
      "t": "Liquid water ⇄ solid ice: heating melts it, cooling freezes it — shown as a two-way arrow (p.50).",
@@ -685,11 +747,6 @@
      "concept": "c.materials.reversible.factors"
     }
    ],
-   "from_the_book": {
-    "activity": "Think like a scientist 2 (p.54): stir a teaspoon of sugar into 100 ml of cold water and into 100 ml of hot water; time how long each takes to dissolve.",
-    "what_it_shows": "Sugar dissolves faster in hot water — heat gives the particles energy to move and spread.",
-    "concept": "c.materials.reversible.factors"
-   },
    "terms": [
     "physical change",
     "reversible",
@@ -699,6 +756,91 @@
     "solution",
     "uniform",
     "rate"
+   ],
+   "checklists": [
+    {
+     "concept": "c.materials.reversible.factors",
+     "title": "Ways to make a solid dissolve faster (p.53)",
+     "items": [
+      {
+       "sign": "Stir",
+       "look_for": "spreads solute particles between solvent particles faster",
+       "icon": "beaker"
+      },
+      {
+       "sign": "Heat",
+       "look_for": "particles gain energy, move faster, spread out more",
+       "icon": "heat"
+      }
+     ],
+     "note": "Left long enough, sugar dissolves by itself even in cold water — particles are always moving (p.54 Q4)."
+    }
+   ],
+   "compares": [
+    {
+     "concept": "c.materials.reversible.changes",
+     "title": "Reversible vs irreversible",
+     "label_a": "Reversible",
+     "label_b": "Irreversible",
+     "rows": [
+      {
+       "aspect": "Change back?",
+       "a": "Yes",
+       "b": "No"
+      },
+      {
+       "aspect": "New substance?",
+       "a": "No — physical change",
+       "b": "Yes — chemical change"
+      },
+      {
+       "aspect": "Book examples",
+       "a": "Ice ⇄ water; dissolving salt",
+       "b": "Burning a match; boiling an egg"
+      }
+     ]
+    }
+   ],
+   "experiments": [
+    {
+     "concept": "c.materials.reversible.changes",
+     "title": "Getting started: ice cubes in the sun",
+     "page": "49",
+     "image": "icewater.png",
+     "need": "ice cubes, a saucer, a watch",
+     "steps": [
+      "Put the ice cubes on a saucer in the sun or another warm place for five minutes.",
+      "Draw what has happened.",
+      "Put the water back in the freezer."
+     ],
+     "result": "Ice melts, then freezes again — melting and freezing are reversible physical changes."
+    },
+    {
+     "concept": "c.materials.reversible.dissolving",
+     "title": "Describe dissolving",
+     "page": "52",
+     "image": "particles.png",
+     "need": "the picture of copper sulfate dissolving in water",
+     "steps": [
+      "Name the solute (copper sulfate) and the solvent (water).",
+      "Draw the solution after the solute has dissolved.",
+      "Say why it is a reversible change."
+     ],
+     "result": "Solute particles spread evenly between the solvent particles — the solution looks uniform, and evaporating the water brings the solute back."
+    },
+    {
+     "concept": "c.materials.reversible.factors",
+     "title": "Does water temperature affect the rate of dissolving?",
+     "page": "54",
+     "image": "marcus.png",
+     "need": "sugar, two glass jars, cold and hot water, a teaspoon, a measuring cylinder, a stopwatch",
+     "steps": [
+      "Put 100 ml of cold water in one jar and 100 ml of hot water in the other.",
+      "Stir a teaspoon of sugar into each.",
+      "Time how long the sugar takes to dissolve in each jar and record in a table."
+     ],
+     "result": "Sugar dissolves much faster in hot water — heat gives the particles energy to move and spread."
+    }
    ]
   },
   {
@@ -737,58 +879,6 @@
      "concept": "c.materials.chemical.evidence"
     }
    ],
-   "compare": {
-    "label_a": "Reactants",
-    "label_b": "Products",
-    "rows": [
-     {
-      "aspect": "Vinegar + bicarbonate of soda",
-      "a": "vinegar, bicarbonate of soda",
-      "b": "a gas (p.57)"
-     },
-     {
-      "aspect": "Limewater + carbon dioxide",
-      "a": "limewater, carbon dioxide",
-      "b": "calcium carbonate (p.59 Q2)"
-     },
-     {
-      "aspect": "Iron nail in water",
-      "a": "iron, water, oxygen",
-      "b": "rust (p.62 Q5)"
-     }
-    ]
-   },
-   "checklist": {
-    "title": "Evidence for chemical reactions (p.58-59)",
-    "concept": "c.materials.chemical.evidence",
-    "items": [
-     {
-      "sign": "A gas is produced",
-      "look_for": "Bubbles appear.",
-      "book_example": "Vinegar + bicarbonate of soda (p.57-58); Zara's fizzy tablet (p.59 Q3).",
-      "icon": "bubbles"
-     },
-     {
-      "sign": "A colour change",
-      "look_for": "The mixture changes colour.",
-      "book_example": "Cornstarch added to water with iodine solution (p.58, investigation A).",
-      "icon": "swap"
-     },
-     {
-      "sign": "A temperature change",
-      "look_for": "The thermometer reading changes after five minutes.",
-      "book_example": "Vinegar poured on wire wool (p.59, investigation B).",
-      "icon": "heat"
-     },
-     {
-      "sign": "A new solid forms",
-      "look_for": "A clear liquid turns cloudy.",
-      "book_example": "Breathe carbon dioxide into limewater → calcium carbonate (p.58-59).",
-      "icon": "cloud"
-     }
-    ],
-    "note": "Question 1 (p.59) asks for THREE ways: gas, colour change, temperature change."
-   },
    "points": [
     {
      "t": "Candle (p.56): the wax melting is a reversible change; the wick burning is a chemical reaction — new substances form.",
@@ -833,17 +923,106 @@
      "concept": "c.materials.chemical.reactants_products"
     }
    ],
-   "from_the_book": {
-    "activity": "Investigate evidence A and B (p.58-59): iodine + cornstarch; breath into limewater; vinegar on wire wool with a thermometer.",
-    "what_it_shows": "Colour change, a cloudy new solid, and a temperature change — three kinds of evidence of a chemical reaction.",
-    "concept": "c.materials.chemical.evidence"
-   },
    "terms": [
     "chemical reaction",
     "react",
     "reactants",
     "products",
     "evidence"
+   ],
+   "checklists": [
+    {
+     "concept": "c.materials.chemical.evidence",
+     "title": "Evidence for chemical reactions (p.58-59)",
+     "items": [
+      {
+       "sign": "A gas is produced",
+       "look_for": "bubbles appear",
+       "icon": "bubbles"
+      },
+      {
+       "sign": "A colour change",
+       "look_for": "the mixture changes colour",
+       "icon": "swap"
+      },
+      {
+       "sign": "A temperature change",
+       "look_for": "the thermometer reading changes",
+       "icon": "heat"
+      },
+      {
+       "sign": "A new solid forms",
+       "look_for": "a clear liquid turns cloudy",
+       "icon": "cloud"
+      }
+     ],
+     "note": "Question 1 (p.59) asks for THREE ways: gas, colour change, temperature change."
+    }
+   ],
+   "compares": [
+    {
+     "concept": "c.materials.chemical.reactants_products",
+     "title": "Reactants → products",
+     "label_a": "Reactants",
+     "label_b": "Products",
+     "rows": [
+      {
+       "aspect": "Vinegar + bicarbonate of soda",
+       "a": "vinegar, bicarbonate of soda",
+       "b": "a gas (p.57)"
+      },
+      {
+       "aspect": "Limewater + carbon dioxide",
+       "a": "limewater, carbon dioxide",
+       "b": "calcium carbonate (p.59 Q2)"
+      },
+      {
+       "aspect": "Iron nail in water",
+       "a": "iron, water, oxygen",
+       "b": "rust (p.62 Q5)"
+      }
+     ]
+    }
+   ],
+   "experiments": [
+    {
+     "concept": "c.materials.chemical.reactants_products",
+     "title": "Identify reactants and products",
+     "page": "57",
+     "image": "vinegar.png",
+     "need": "vinegar, bicarbonate of soda, a jar with a wide mouth, a spoon",
+     "steps": [
+      "Pour some vinegar into the jar.",
+      "Add a teaspoon of bicarbonate of soda and observe.",
+      "Wait five minutes and look again for any other product."
+     ],
+     "result": "Bubbles of gas straight away — reactants: vinegar + bicarbonate of soda; product: the gas."
+    },
+    {
+     "concept": "c.materials.chemical.evidence",
+     "title": "Investigate evidence A — colour change and a new solid",
+     "page": "58",
+     "image": "limewater.png",
+     "need": "water, cornstarch, iodine solution, a dropper, a spoon, limewater, a drinking straw, beakers",
+     "steps": [
+      "Add three droppers of iodine solution to water; add a spoon of cornstarch and stir.",
+      "Pour limewater into another beaker; breathe into it through a straw."
+     ],
+     "result": "The iodine mixture changes colour; the limewater turns cloudy (calcium carbonate forms) — two kinds of evidence."
+    },
+    {
+     "concept": "c.materials.chemical.evidence",
+     "title": "Investigate evidence B — temperature change",
+     "page": "59",
+     "image": "wirewool.png",
+     "need": "wire wool, vinegar, a beaker, a thermometer, a timer",
+     "steps": [
+      "Loosen a ball of wire wool in a beaker; pour vinegar on it and let it stand 1–2 minutes.",
+      "Put a thermometer in the middle of the wool and record the reading.",
+      "Wait five minutes and record again."
+     ],
+     "result": "The temperature has changed — a chemical reaction gives out or takes in heat."
+    }
    ]
   }
  ],
@@ -2251,5 +2430,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-03T12:13:49+00:00"
+ "generated_at": "2026-09-04T02:37:17+00:00"
 }
