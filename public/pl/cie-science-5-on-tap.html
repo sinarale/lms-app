@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.663ea365.css">
+  <link rel="stylesheet" href="../assets/tw.cabadc2f.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -258,6 +258,18 @@
           r.any = r.glossary.length || r.points.length || r.watch.length
                   || this.secLists(sec).length || this.secExps(sec).length;
           return r;
+        },
+        // Tách câu đầu của "điều cần nhớ" để in đậm: theo SPEC câu đầu LÀ kiến thức,
+        // phần sau chỉ giải thích. Bỏ qua dấu chấm của "°C." và trong "(p.36)".
+        lead(t) {
+          t = t || '';
+          const re = /[.!?](?=\s|$)/g; let m;
+          while ((m = re.exec(t))) {
+            const i = m.index, before = t.slice(0, i);
+            if (before.endsWith('°C') || /\(p\.[^)]*$/.test(before) || /\bp$/.test(before)) continue;
+            return [t.slice(0, i + 1), t.slice(i + 1)];
+          }
+          return [t, ''];
         },
         points(sec) {
           if (Array.isArray(sec.points)) return sec.points;
@@ -1035,7 +1047,7 @@
                 <template x-for="(pt, i) in tagged(points(sec), leaf.id)" :key="i">
                   <div class="flex gap-2.5 rounded-lg border border-sky-200 bg-sky-50/40 p-3">
                     <svg class="w-5 h-5 shrink-0 mt-0.5 text-sky-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
-                    <p class="text-sm text-slate-700 leading-snug flex-1" x-text="pt.t"></p>
+                    <p class="text-sm text-slate-700 leading-snug flex-1"><span class="font-semibold text-slate-900" x-text="lead(pt.t)[0]"></span><span x-text="lead(pt.t)[1]"></span></p>
                     <template x-if="pt.image"><img :src="'study/img/' + pt.image" alt="" class="w-16 shrink-0 self-start rounded border border-sky-200 bg-white object-contain"></template>
                   </div>
                 </template>
@@ -1113,13 +1125,13 @@
               <div class="px-4 pt-3">
                 <p class="text-[11px] font-bold uppercase tracking-wide text-slate-600 mb-1.5">⇄ <span x-text="cp.title || 'So sánh'"></span></p>
                 <div class="rounded-lg border border-slate-200 overflow-hidden">
-                  <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
+                  <div class="grid grid-cols-[6.5rem_1fr_1fr] text-sm font-semibold">
                     <div class="bg-slate-100 px-2 py-2"></div>
                     <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200" x-text="cp.label_a"></div>
                     <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200" x-text="cp.label_b"></div>
                   </div>
                   <template x-for="(r, i) in cp.rows" :key="i">
-                    <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs border-t border-slate-200">
+                    <div class="grid grid-cols-[6.5rem_1fr_1fr] text-sm border-t border-slate-200">
                       <div class="bg-slate-50 px-2 py-2 font-medium text-slate-600" x-text="r.aspect"></div>
                       <div class="px-2 py-2 text-slate-700 border-l border-slate-200" x-text="r.a"></div>
                       <div class="px-2 py-2 text-slate-500 border-l border-slate-200" x-text="r.b"></div>
@@ -1139,13 +1151,13 @@
           <div class="px-5 pb-4">
             <p class="text-[11px] font-bold uppercase tracking-wide text-slate-600 mb-1.5">⇄ So sánh</p>
             <div class="rounded-lg border border-slate-200 overflow-hidden">
-              <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs font-semibold">
+              <div class="grid grid-cols-[6.5rem_1fr_1fr] text-sm font-semibold">
                 <div class="bg-slate-100 px-2 py-2"></div>
                 <div class="bg-emerald-50 text-emerald-800 px-2 py-2 border-l border-slate-200" x-text="cp.label_a"></div>
                 <div class="bg-slate-50 text-slate-700 px-2 py-2 border-l border-slate-200" x-text="cp.label_b"></div>
               </div>
               <template x-for="(r, i) in cp.rows" :key="i">
-                <div class="grid grid-cols-[5.5rem_1fr_1fr] text-xs border-t border-slate-200">
+                <div class="grid grid-cols-[6.5rem_1fr_1fr] text-sm border-t border-slate-200">
                   <div class="bg-slate-50 px-2 py-2 font-medium text-slate-600" x-text="r.aspect"></div>
                   <div class="px-2 py-2 text-slate-700 border-l border-slate-200" x-text="r.a"></div>
                   <div class="px-2 py-2 text-slate-500 border-l border-slate-200" x-text="r.b"></div>
@@ -1174,7 +1186,7 @@
               <template x-for="(pt, i) in untagged(sec).points" :key="i">
                 <div class="flex gap-2.5 rounded-lg border border-slate-200 p-3">
                   <svg class="w-5 h-5 shrink-0 mt-0.5 text-indigo-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
-                  <p class="text-sm text-slate-700 leading-snug" x-text="pt.t"></p>
+                  <p class="text-sm text-slate-700 leading-snug"><span class="font-semibold text-slate-900" x-text="lead(pt.t)[0]"></span><span x-text="lead(pt.t)[1]"></span></p>
                 </div>
               </template>
             </div>
