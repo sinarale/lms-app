@@ -22,8 +22,10 @@
         data: null, err: '', ready: false, online: false,
         secret: localStorage.getItem('lms_key') || '',
         cards: {},              // item_id → {n, wrong, box, ease, due, last_ts}
-        screen: 'start',        // start | quiz | done
-        mode: 'quiz',           // quiz | cards | summary | map
+        // Vào trang là thấy TÓM TẮT: đọc trước, làm bài sau. Hai chế độ kia phải
+        // bấm mới vào, nên screen khởi tạo theo 'summary' cho khớp go('summary').
+        screen: 'summary',      // start | quiz | done | summary
+        mode: 'summary',        // quiz | cards | summary | map
         revealed: false,        // flashcard: đã lật chưa
         learnAt: 0,             // chế độ Học: đang xem thẻ thứ mấy
         seen: {},               // chế độ Kiểm tra: id → 'known' | 'again' (trong phiên)
