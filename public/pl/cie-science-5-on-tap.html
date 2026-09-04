@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.dc7ac96c.css">
+  <link rel="stylesheet" href="../assets/tw.ec45ff52.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -854,9 +854,11 @@
         <span><span class="font-semibold text-rose-600" x-text="nAgain"></span> cần xem lại · <span x-text="nUnseen"></span> chưa gặp</span>
       </div>
       <!-- Bấm vào thẻ để lật -->
-      <!-- Thẻ không còn bấm để lật — lật nhầm là mất lượt "đã thuộc". Lật bằng nút. -->
-      <div class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col"
-           :class="revealed ? 'border-rose-200' : ''">
+      <!-- Bấm vào thẻ = "Xem đáp án" (chấm 0, lật). div role=button chứ không
+           phải <button>: bên trong có nút loa, <button> lồng nhau là HTML sai. -->
+      <div role="button" tabindex="0" @click="reveal()" @keydown.enter="reveal()"
+           class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col transition-colors"
+           :class="revealed ? 'border-rose-200 cursor-default' : 'cursor-pointer hover:border-indigo-400'">
         <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
         <p class="mt-2 text-lg font-medium text-slate-900"><span x-text="q.front_en"></span><button x-show="canSpeak" @click.stop="speak(q.front_en)" type="button" title="Đọc to"
                         class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
