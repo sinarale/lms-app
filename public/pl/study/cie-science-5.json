@@ -328,11 +328,6 @@
    ],
    "watch_out": [
     {
-     "wrong": "A big block of ice needs a higher temperature to melt than a small cube.",
-     "right": "Melting point is a property of the substance — it stays the same whatever the amount (p.36, p.38 Q4).",
-     "concept": "c.materials.properties.state"
-    },
-    {
      "wrong": "Water only turns into a gas when it boils.",
      "right": "Water evaporates from the surface at any temperature (p.36).",
      "concept": "c.materials.properties.boiling_evaporation"
@@ -442,7 +437,8 @@
        "a": "Fast",
        "b": "Slow"
       }
-     ]
+     ],
+     "page": "36-37"
     }
    ],
    "experiments": [
@@ -593,31 +589,7 @@
      "note": "Units W/m·K. Silver is named the best conductor of heat in the text (p.44) but is not in this table."
     }
    ],
-   "compares": [
-    {
-     "concept": null,
-     "title": "Thermal vs electrical conductors",
-     "label_a": "Conducts heat",
-     "label_b": "Conducts electricity",
-     "rows": [
-      {
-       "aspect": "Best in book",
-       "a": "Silver (text) · copper 386 (table)",
-       "b": "Copper 59"
-      },
-      {
-       "aspect": "Odd one out",
-       "a": "graphite 168 — good",
-       "b": "graphite 1 — very poor"
-      },
-      {
-       "aspect": "Everyday use",
-       "a": "Metal pots and pans",
-       "b": "Copper wire in circuits"
-      }
-     ]
-    }
-   ],
+   "compares": [],
    "experiments": [
     {
      "concept": "c.materials.conductors.heat",
@@ -786,7 +758,8 @@
        "a": "Ice ⇄ water; dissolving salt",
        "b": "Burning a match; boiling an egg"
       }
-     ]
+     ],
+     "page": "50"
     }
    ],
    "experiments": [
@@ -886,18 +859,8 @@
    ],
    "watch_out": [
     {
-     "wrong": "Bubbles always mean a chemical reaction.",
-     "right": "Boiling water bubbles too, but no new substance forms. Look for a product (p.58).",
-     "concept": "c.materials.chemical.evidence"
-    },
-    {
      "wrong": "When the candle burns, the melting wax is the chemical reaction.",
      "right": "Melting wax is reversible. Only the burning wick makes new substances (p.56).",
-     "concept": "c.materials.chemical.reactants_products"
-    },
-    {
-     "wrong": "Rust is dirt that can be washed off the nail.",
-     "right": "Rust is a product — a new substance made when iron reacts with water and oxygen (p.62 Q5).",
      "concept": "c.materials.chemical.reactants_products"
     }
    ],
@@ -959,7 +922,8 @@
        "a": "iron, water, oxygen",
        "b": "rust (p.62 Q5)"
       }
-     ]
+     ],
+     "page": "57-59"
     }
    ],
    "experiments": [
@@ -2421,5 +2385,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T04:44:17+00:00"
+ "generated_at": "2026-09-04T05:32:25+00:00"
 }

@@ -1,20 +1,111 @@
 {
- "_doc": "Hộp cắt hình thí nghiệm từ sách. Trang ghi theo SỐ TRANG IN TRÊN SÁCH; scripts/crop_book.py cộng page_offset để ra chỉ số trang PDF. box = [x0, y0, x1, y1] theo % kích thước trang. Sinh lại: .venv/bin/python scripts/crop_book.py pl cie-science-5",
+ "_doc": "Hộp cắt hình thí nghiệm từ sách. Trang ghi theo SỐ TRANG IN TRÊN SÁCH; scripts/crop_book.py cộng page_offset để ra chỉ số trang PDF. box = [x0, y0, x1, y1] theo % kích thước trang. Sinh lại: .venv/bin/python scripts/crop_book.py pl cie-science-5 pad = lề cộng thêm mỗi cạnh (% trang) cho MỌI khung — thà dính mẩu chữ bên cạnh còn hơn cắt lẹm vào hình.",
  "pdf": "data/pl/CIE Science 5/Books (Grade 5)/materials/FULL_SAMPLE_Science_LB6.pdf",
  "page_offset": 12,
+ "pad": 1.5,
  "dpi": 200,
  "max_width": 480,
  "colors": 128,
  "crops": {
-  "melting.png":       {"page": 37, "box": [55, 49, 91, 89], "what": "giáo viên đun chất rắn trên hotplate"},
-  "balloons.png":      {"page": 40, "box": [60, 26, 93, 50], "what": "hai bóng bay treo trên thước, có nhãn"},
-  "beads.png":         {"page": 43, "box": [45, 58, 91, 86], "what": "cốc nước nóng với thìa/que có hạt gắn, có nhãn"},
-  "circuit.png":       {"page": 46, "box": [56, 38, 91, 60], "what": "tay cầm hai đầu dây, pin và bóng đèn"},
-  "icewater.png":      {"page": 50, "box": [49, 30, 96, 49], "what": "sơ đồ nước ⇄ đá, mũi tên hai chiều"},
-  "coppersulfate.png": {"page": 52, "box": [52, 53, 92, 80], "what": "đồng sunfat đổ vào cốc nước, có nhãn"},
-  "marcus.png":        {"page": 53, "box": [8, 25, 91, 49],  "what": "truyện tranh Marcus khuấy cà phê (trang 54 không có hình thí nghiệm)"},
-  "vinegar.png":       {"page": 57, "box": [50, 41, 92, 71], "what": "chai giấm, hộp bicarbonate of soda, lọ, thìa"},
-  "limewater.png":     {"page": 58, "box": [50, 46, 91, 88], "what": "bé gái thổi ống hút vào nước vôi trong"},
-  "wirewool.png":      {"page": 59, "box": [53, 29, 91, 72], "what": "bùi nhùi thép, giấm, nhiệt kế; hai bạn làm thí nghiệm"}
+  "melting.png": {
+   "page": 37,
+   "box": [
+    50,
+    48,
+    92,
+    90
+   ],
+   "what": "giáo viên đun chất rắn trên hotplate"
+  },
+  "balloons.png": {
+   "page": 40,
+   "box": [
+    57,
+    25,
+    94,
+    51
+   ],
+   "what": "hai bóng bay treo trên thước, có nhãn"
+  },
+  "beads.png": {
+   "page": 43,
+   "box": [
+    41,
+    57,
+    92,
+    87
+   ],
+   "what": "cốc nước nóng với thìa/que có hạt gắn, có nhãn"
+  },
+  "circuit.png": {
+   "page": 46,
+   "box": [
+    50,
+    37,
+    92,
+    61
+   ],
+   "what": "tay cầm hai đầu dây, pin và bóng đèn"
+  },
+  "icewater.png": {
+   "page": 50,
+   "box": [
+    47,
+    29,
+    97,
+    50
+   ],
+   "what": "sơ đồ nước ⇄ đá, mũi tên hai chiều"
+  },
+  "coppersulfate.png": {
+   "page": 52,
+   "box": [
+    49,
+    52,
+    93,
+    81
+   ],
+   "what": "đồng sunfat đổ vào cốc nước, có nhãn"
+  },
+  "marcus.png": {
+   "page": 53,
+   "box": [
+    7,
+    24,
+    92,
+    50
+   ],
+   "what": "truyện tranh Marcus khuấy cà phê (trang 54 không có hình thí nghiệm)"
+  },
+  "vinegar.png": {
+   "page": 57,
+   "box": [
+    47,
+    40,
+    93,
+    72
+   ],
+   "what": "chai giấm, hộp bicarbonate of soda, lọ, thìa"
+  },
+  "limewater.png": {
+   "page": 58,
+   "box": [
+    47,
+    45,
+    92,
+    89
+   ],
+   "what": "bé gái thổi ống hút vào nước vôi trong"
+  },
+  "wirewool.png": {
+   "page": 59,
+   "box": [
+    46,
+    28,
+    92,
+    77
+   ],
+   "what": "bùi nhùi thép, giấm, nhiệt kế; hai bạn làm thí nghiệm"
+  }
  }
 }

@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.78785384.css">
+  <link rel="stylesheet" href="../assets/tw.663ea365.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -1100,7 +1100,7 @@
                   <!-- x-if chứ không x-show: :src vẫn bind khi ẩn → trình duyệt tải "img/null" (404) -->
                   <template x-if="ex.image">
                   <img :src="'study/img/' + ex.image" :alt="ex.title || ''" loading="lazy"
-                       class="w-32 sm:w-44 max-h-40 shrink-0 rounded-md border border-violet-200 bg-white object-contain">
+                       class="w-36 sm:w-52 max-h-56 shrink-0 rounded-md border border-violet-200 bg-white object-contain">
                   </template>
                 </div>
               </div>
