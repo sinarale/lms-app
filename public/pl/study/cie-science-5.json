@@ -301,28 +301,15 @@
    ],
    "points": [
     {
-     "t": "Every substance has its own melting point. Ice melts at 0 °C, gold at 1064 °C (p.36).",
-     "icon": "cube",
+     "t": "Every substance has its own melting point, so melting point tells substances apart (p.36).",
      "concept": "c.materials.properties.state"
     },
     {
-     "t": "Melting point tells you which substance you have. Wax melts at 60 °C, aluminium 660 °C, silver 962 °C, copper 1083 °C (p.62).",
-     "icon": "scale",
-     "concept": "c.materials.properties.state"
-    },
-    {
-     "t": "Every substance has its own boiling point. Water boils at 100 °C, vinegar at 118 °C (p.36).",
-     "icon": "fire",
+     "t": "Boiling point is a property too: every substance boils at its own temperature (p.36).",
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "t": "Boiling needs heat, but evaporation can happen at any temperature. Evaporation is slower and only at the surface (p.36).",
-     "icon": "cloud",
-     "concept": "c.materials.properties.boiling_evaporation"
-    },
-    {
-     "t": "Gases have mass and take up space. A full balloon weighs down the ruler; an empty one does not (p.40).",
-     "icon": "bubbles",
+     "t": "A gas is matter, like a solid or a liquid. Matter is anything that takes up space and has mass (p.39).",
      "concept": "c.materials.properties.gases"
     }
    ],
@@ -493,42 +480,18 @@
    "points": [
     {
      "t": "Metals are good thermal conductors; glass and plastic are not. Silver is the best conductor of heat (p.44).",
-     "icon": "fire",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "How well a substance conducts heat is a property of that substance. Some conduct heat much better than others (p.44).",
-     "icon": "cube",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Conduction is heat moving through a material. A metal teaspoon in hot tea soon has a warm handle (p.42).",
-     "icon": "heat",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Poor conductors keep things warm. Tea stays hot longest in a polystyrene foam cup (p.45).",
-     "icon": "shield",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Pots are metal but handles are plastic. Metal lets heat into the food; plastic keeps heat away from your hand (p.45).",
-     "icon": "shield",
+     "t": "How well a substance conducts heat is a property of that substance (p.44).",
      "concept": "c.materials.conductors.heat"
     },
     {
      "t": "Conducting electricity is a property of a substance. Metals conduct electricity; most other substances do not (p.45).",
-     "icon": "bolt",
      "concept": "c.materials.conductors.electricity"
     },
     {
-     "t": "Copper, steel and aluminium conduct electricity well. They make the lamp shine brightly (p.46).",
-     "icon": "bolt",
-     "concept": "c.materials.conductors.electricity"
-    },
-    {
-     "t": "Graphite is a non-metal that conducts electricity, but only weakly. Sugar, water and plastic do not conduct at all (p.46-47).",
-     "icon": "sparkle",
+     "t": "Wires are metal, but their covering is plastic or rubber. Insulators stop the electricity reaching you (p.61).",
      "concept": "c.materials.conductors.electricity"
     }
    ],
@@ -665,28 +628,19 @@
    ],
    "points": [
     {
-     "t": "A reversible change can be undone. Water freezes into ice and ice melts back into water (p.50).",
-     "icon": "swap",
+     "t": "A physical change alters how a substance looks or feels, not what it is. No new substance forms (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "An irreversible change makes a new substance. A burnt match turns into black carbon and cannot go back (p.50).",
-     "icon": "fire",
-     "concept": "c.materials.reversible.changes"
-    },
-    {
-     "t": "Dissolving is reversible: the solute is still there. Sea water is salty because salt is dissolved in it (p.51).",
-     "icon": "drop",
+     "t": "A solution is a solute dissolved in a solvent. Sea water is salt (solute) dissolved in water (solvent) (p.51).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "A dissolved solute spreads evenly between the solvent particles. That is why a solution looks uniform and you cannot see the solute (p.52).",
-     "icon": "beaker",
+     "t": "A solution looks the same all the way through. That is called a uniform appearance (p.52).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Solutes dissolve faster in hot water and when stirred. Heat and stirring make the particles move and spread faster (p.53–54).",
-     "icon": "scale",
+     "t": "Rate of dissolving means how fast a solute dissolves. Stirring and heating both raise it because the particles move faster (p.53-54).",
      "concept": "c.materials.reversible.factors"
     }
    ],
@@ -828,32 +782,10 @@
    "points": [
     {
      "t": "A chemical reaction makes a new substance. The substances that react are the reactants; the new substances are the products (p.57).",
-     "icon": "swap",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Melting is not a chemical reaction, but burning is. Candle wax melts and can be reversed; the burning wick makes new substances (p.56).",
-     "icon": "fire",
-     "concept": "c.materials.chemical.reactants_products"
-    },
-    {
-     "t": "Vinegar and bicarbonate of soda react to make a gas. The bubbles of gas are the product (p.57).",
-     "icon": "bubbles",
-     "concept": "c.materials.chemical.reactants_products"
-    },
-    {
-     "t": "Evidence of a chemical reaction: a gas is produced, a colour change, a new solid, or a temperature change (p.58–59).",
-     "icon": "sparkle",
-     "concept": "c.materials.chemical.evidence"
-    },
-    {
-     "t": "Limewater turns cloudy when carbon dioxide reacts with it. The new solid is calcium carbonate (p.58).",
-     "icon": "cloud",
-     "concept": "c.materials.chemical.evidence"
-    },
-    {
-     "t": "A temperature change is evidence of a reaction. Vinegar on wire wool gets warmer (p.59).",
-     "icon": "heat",
+     "t": "Evidence is something you can observe that shows a product has formed. No new substance means no chemical reaction (p.58).",
      "concept": "c.materials.chemical.evidence"
     }
    ],
@@ -2385,5 +2317,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T05:37:21+00:00"
+ "generated_at": "2026-09-04T09:34:45+00:00"
 }
