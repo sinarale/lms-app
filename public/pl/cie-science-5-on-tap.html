@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.9b4883e5.css">
+  <link rel="stylesheet" href="../assets/tw.dc7ac96c.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -379,12 +379,18 @@
         autoRead(text) { if (this.autoSpeak) setTimeout(() => this.speak(text), 50); },
 
         // ── Thẻ ghi nhớ: HỌC ───────────────────────────────────────────────────
-        // Xem lần lượt, hiện cả hai mặt, không chấm. Thứ tự theo cây khái niệm.
-        get learnDeck() {
-          const order = {}; (this.data?.concepts || []).forEach((c, i) => order[c.id] = i);
-          return [...this.scopedCards].sort((a, b) => (order[a.concept] ?? 999) - (order[b.concept] ?? 999));
+        // Xem lần lượt, hiện cả hai mặt, không chấm. Thứ tự XÁO NGẪU NHIÊN mỗi lần
+        // vào (không cố định theo cây, kẻo học thuộc theo vị trí), nhưng giữ nguyên
+        // trong lúc lật qua lại; nút 🔀 xáo lại.
+        learnList: [],
+        get learnDeck() { return this.learnList; },
+        shuffleLearn() {
+          const a = [...this.scopedCards];
+          for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+          this.learnList = a; this.learnAt = 0;
+          this.autoRead(this.learnCard?.front_en);
         },
-        startLearn() { this.learnAt = 0; this.screen = 'learn'; this.autoRead(this.learnCard?.front_en); },
+        startLearn() { this.shuffleLearn(); this.screen = 'learn'; },
         get learnCard() { return this.learnDeck[this.learnAt] || null; },
 
         // ── Thẻ ghi nhớ: KIỂM TRA ──────────────────────────────────────────────
@@ -417,8 +423,12 @@
         },
         // known=true → điểm 3 ("Đã thuộc"), false → điểm 0 ("Cần kiểm tra lại").
         // Cùng thang với trắc nghiệm nên D1 và lịch ôn giãn cách dùng chung.
-        mark(known) {
-          if (!this.revealed) return;
+        // Đã thuộc → chấm 3 và sang thẻ kế ngay. Xem đáp án → chấm 0, lật thẻ, chờ
+        // bấm Tiếp theo. Chấm ngay lúc bấm (không đợi Tiếp theo) để đóng tab giữa
+        // chừng cũng không mất lượt: log đã có, save() định kỳ sẽ đẩy.
+        markKnown() { this.grade(true); this.advance(); },
+        reveal() { if (this.revealed) return; this.revealed = true; this.grade(false); },
+        grade(known) {
           const g = known ? 3 : 0;
           const now = Math.floor(Date.now() / 1000);
           const q = this.q;
@@ -434,6 +444,8 @@
           this.tStats.n++; if (known) this.tStats.known++;
           this.lastId = q.id;
           if (this.log.length >= 5) this.save();   // lưu định kỳ: vòng vô hạn không có "kết thúc" để chờ
+        },
+        advance() {
           this.queue = [this.pickWeighted()]; this.at = 0;
           this.revealed = false; this.shownAt = Date.now();
           this.autoRead(this.q?.front_en);
@@ -815,6 +827,7 @@
                 class="flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Tiếp →</button>
         <button x-show="learnAt >= learnDeck.length - 1" x-cloak @click="startTest()"
                 class="flex-1 px-4 py-2 text-sm font-medium rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">✍️ Bắt đầu kiểm tra</button>
+        <button @click="shuffleLearn()" title="Xáo lại" class="px-3 py-2 text-sm text-slate-500 hover:text-indigo-600">🔀</button>
         <button @click="screen = 'start'" class="px-3 py-2 text-sm text-slate-500 hover:text-indigo-600">Thoát</button>
       </div>
     </div>
@@ -828,12 +841,9 @@
         <span><span class="font-semibold text-rose-600" x-text="nAgain"></span> cần xem lại · <span x-text="nUnseen"></span> chưa gặp</span>
       </div>
       <!-- Bấm vào thẻ để lật -->
-      <!-- div role=button chứ KHÔNG phải <button>: bên trong có nút loa, mà
-           <button> lồng trong <button> là HTML không hợp lệ — trình duyệt tự bỏ
-           nút trong. -->
-      <div role="button" tabindex="0" @click="revealed = true" @keydown.enter="revealed = true"
-           :class="revealed ? 'cursor-default' : 'cursor-pointer hover:border-indigo-400'"
-           class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col transition-colors">
+      <!-- Thẻ không còn bấm để lật — lật nhầm là mất lượt "đã thuộc". Lật bằng nút. -->
+      <div class="w-full text-left bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-44 flex flex-col"
+           :class="revealed ? 'border-rose-200' : ''">
         <p class="text-xs text-slate-400" x-text="conceptName(q.concept)"></p>
         <p class="mt-2 text-lg font-medium text-slate-900"><span x-text="q.front_en"></span><button x-show="canSpeak" @click.stop="speak(q.front_en)" type="button" title="Đọc to"
                         class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></p>
@@ -841,11 +851,15 @@
           <p class="text-slate-700" x-text="q.back_en"></p>
           <p x-show="q.example_en" class="mt-2 text-sm text-slate-500 italic" x-text="q.example_en"></p>
         </div>
-        <p x-show="!revealed" class="mt-auto pt-6 text-sm text-indigo-600">Bấm để xem đáp án ↻</p>
       </div>
-      <div x-show="revealed" x-cloak class="grid grid-cols-2 gap-2">
-        <button @click="mark(false)" class="px-3 py-3 text-sm font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">↻ Cần kiểm tra lại</button>
-        <button @click="mark(true)"  class="px-3 py-3 text-sm font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">✓ Đã thuộc</button>
+      <!-- Hai nút hiện SẴN. Bấm một trong hai thì đổi thành Tiếp theo (Đã thuộc
+           thì sang luôn nên thực tế Tiếp theo chỉ xuất hiện sau Xem đáp án). -->
+      <div x-show="!revealed" class="grid grid-cols-2 gap-2">
+        <button @click="reveal()"     class="px-3 py-3 text-sm font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200">👁 Xem đáp án</button>
+        <button @click="markKnown()"  class="px-3 py-3 text-sm font-medium rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200">✓ Đã thuộc</button>
+      </div>
+      <div x-show="revealed" x-cloak>
+        <button @click="advance()" class="w-full px-3 py-3 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Tiếp theo →</button>
       </div>
       <div class="text-center">
         <button @click="finishTest()" class="text-sm text-slate-500 hover:text-indigo-600 underline">Kết thúc</button>
