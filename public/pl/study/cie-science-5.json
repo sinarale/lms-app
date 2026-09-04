@@ -435,7 +435,7 @@
      "page": "37",
      "image": "melting.png",
      "summary": "The teacher heats three different solids in pans on a hotplate and measures the temperature of each one the moment it melts.",
-     "result": "Each solid melts at its own temperature — melting point is a property of the substance."
+     "result": "The three solids melt at three different temperatures on the thermometer."
     },
     {
      "concept": "c.materials.properties.gases",
@@ -443,7 +443,7 @@
      "page": "40",
      "image": "balloons.png",
      "summary": "Two blown-up balloons are hung from a ruler so they balance, then the tie on one balloon is loosened to let the air out.",
-     "result": "The ruler tips towards the full balloon — the air inside had mass and took up space."
+     "result": "As the air leaves one balloon, the ruler tips down on the side of the full balloon."
     }
    ]
   },
@@ -487,7 +487,19 @@
      "concept": "c.materials.conductors.heat"
     },
     {
+     "t": "Poor conductors keep things warm. Tea stays hot longest in a polystyrene foam cup (p.45).",
+     "concept": "c.materials.conductors.heat"
+    },
+    {
+     "t": "Pots are metal but handles are plastic. Metal lets heat into the food; plastic keeps heat away from your hand (p.45).",
+     "concept": "c.materials.conductors.heat"
+    },
+    {
      "t": "Conducting electricity is a property of a substance. Metals conduct electricity; most other substances do not (p.45).",
+     "concept": "c.materials.conductors.electricity"
+    },
+    {
+     "t": "Graphite is a non-metal that conducts electricity, but only weakly. Sugar, water and plastic do not conduct at all (p.46-47).",
      "concept": "c.materials.conductors.electricity"
     },
     {
@@ -560,7 +572,7 @@
      "page": "43",
      "image": "beads.png",
      "summary": "A bead is stuck with petroleum jelly to the top of a metal spoon, a plastic spoon, a glass rod, a pencil and a piece of polystyrene foam, then all of them are stood in hot water.",
-     "result": "The bead on the metal spoon drops first and the polystyrene one last — metal conducts heat fastest."
+     "result": "The bead on the metal spoon drops first, then the glass rod; the polystyrene bead stays on longest."
     },
     {
      "concept": "c.materials.conductors.electricity",
@@ -568,7 +580,7 @@
      "page": "45-46",
      "image": "circuit.png",
      "summary": "A lamp circuit is set up with two free wire ends, and different substances (copper, steel, aluminium foil, graphite, sugar, water) are placed between the ends in turn.",
-     "result": "Metals make the lamp shine brightly and graphite dimly; sugar, water and plastic do not light it at all."
+     "result": "The lamp is bright with the copper wire, paper clip and foil, dim with the pencil graphite, and dark with sugar, water and plastic."
     }
    ]
   },
@@ -632,15 +644,19 @@
      "concept": "c.materials.reversible.changes"
     },
     {
+     "t": "Heating and cooling drive reversible changes. Heat melts ice; losing heat freezes water again (p.50).",
+     "concept": "c.materials.reversible.changes"
+    },
+    {
      "t": "A solution is a solute dissolved in a solvent. Sea water is salt (solute) dissolved in water (solvent) (p.51).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "A solution looks the same all the way through. That is called a uniform appearance (p.52).",
+     "t": "Dissolving is reversible: the solute is still there, spread evenly through the solvent. The solution looks uniform (p.52).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Rate of dissolving means how fast a solute dissolves. Stirring and heating both raise it because the particles move faster (p.53-54).",
+     "t": "Solutes dissolve faster in hot water and when stirred. Heat and stirring make the particles move faster and spread out (p.53-54).",
      "concept": "c.materials.reversible.factors"
     }
    ],
@@ -723,7 +739,7 @@
      "page": "49",
      "image": "icewater.png",
      "summary": "Ice cubes are left on a saucer in a warm place for five minutes, then the water is put back in the freezer.",
-     "result": "The ice melts and the water freezes again — melting and freezing are reversible changes."
+     "result": "After five minutes the ice cubes have become a puddle of water, and in the freezer the water turns back into ice."
     },
     {
      "concept": "c.materials.reversible.dissolving",
@@ -731,7 +747,7 @@
      "page": "52",
      "image": "coppersulfate.png",
      "summary": "Look at the picture of copper sulfate being added to water and describe what happens to it.",
-     "result": "Copper sulfate (the solute) spreads evenly through the water (the solvent) to make a uniform solution; evaporating the water brings it back."
+     "result": "The blue copper sulfate spreads out until the whole liquid is the same pale blue and no grains can be seen."
     },
     {
      "concept": "c.materials.reversible.factors",
@@ -739,7 +755,7 @@
      "page": "54",
      "image": "marcus.png",
      "summary": "A teaspoon of sugar is stirred into 100 ml of cold water and into 100 ml of hot water, and the time it takes to dissolve is measured for each.",
-     "result": "Sugar dissolves much faster in hot water — heat gives the particles energy to move and spread out."
+     "result": "The sugar in the hot-water jar disappears in far less time than the sugar in the cold-water jar."
     }
    ]
   },
@@ -786,6 +802,14 @@
     },
     {
      "t": "Evidence is something you can observe that shows a product has formed. No new substance means no chemical reaction (p.58).",
+     "concept": "c.materials.chemical.evidence"
+    },
+    {
+     "t": "Limewater turns cloudy when carbon dioxide reacts with it. The new solid is calcium carbonate (p.58-59).",
+     "concept": "c.materials.chemical.evidence"
+    },
+    {
+     "t": "A chemical reaction can give out heat or take it in. That is why the temperature changes (p.59).",
      "concept": "c.materials.chemical.evidence"
     }
    ],
@@ -865,7 +889,7 @@
      "page": "57",
      "image": "vinegar.png",
      "summary": "A teaspoon of bicarbonate of soda is added to vinegar in a jar and watched for five minutes.",
-     "result": "Bubbles of gas form straight away — vinegar and bicarbonate of soda are the reactants, the gas is a product."
+     "result": "Bubbles rise from the jar straight away, and after five minutes a layer of liquid is left behind."
     },
     {
      "concept": "c.materials.chemical.evidence",
@@ -873,7 +897,7 @@
      "page": "58",
      "image": "limewater.png",
      "summary": "Iodine solution is added to water and cornstarch is stirred in; in another beaker, air is breathed through a straw into limewater.",
-     "result": "The iodine mixture changes colour and the limewater turns cloudy — a colour change and a new solid are both evidence of a chemical reaction."
+     "result": "The iodine mixture turns dark blue-black when the cornstarch goes in, and the limewater turns milky."
     },
     {
      "concept": "c.materials.chemical.evidence",
@@ -881,7 +905,7 @@
      "page": "59",
      "image": "wirewool.png",
      "summary": "Vinegar is poured over a ball of wire wool in a beaker, and the temperature is recorded straight away and again after five minutes.",
-     "result": "The temperature changes — a chemical reaction gives out or takes in heat."
+     "result": "After five minutes the thermometer reading is different from the first reading."
     }
    ]
   }
@@ -2317,5 +2341,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T09:34:45+00:00"
+ "generated_at": "2026-09-04T09:42:26+00:00"
 }
