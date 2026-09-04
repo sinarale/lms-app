@@ -1,0 +1,8 @@
+{
+  "name": "lms-app",
+  "private": true,
+  "description": "Chỉ để Cloudflare Workers Builds cache node_modules — pin wrangler thay vì npx tải mới mỗi lần build. Không dùng để chạy gì khác.",
+  "devDependencies": {
+    "wrangler": "4.128.0"
+  }
+}
