@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.352c0dfc.css">
+  <link rel="stylesheet" href="../assets/tw.78785384.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -1086,26 +1086,21 @@
               </div>
               </template>
 
-              <!-- thí nghiệm thuộc lá: có thể nhiều. Tóm tắt CẢ CÁCH LÀM (cần gì → làm gì →
-                   thấy gì), hình cắt từ trang sách đặt cạnh để liên tưởng. -->
+              <!-- thí nghiệm thuộc lá: có thể nhiều. Chỉ 1–2 câu tóm tắt cách làm + 1 câu
+                   kết quả (không liệt kê dụng cụ/bước), hình cắt rộng từ trang sách đặt cạnh. -->
               <template x-if="show.exp"><div>
               <template x-for="(ex, ei) in exps(sec, leaf.id)" :key="'e' + ei">
               <div class="px-4 pt-3">
                 <p class="text-[11px] font-bold uppercase tracking-wide text-violet-600 mb-1.5">🔬 <span x-text="ex.title || 'Thí nghiệm trong sách'"></span><span x-show="ex.page" class="font-normal normal-case text-slate-400" x-text="' · p.' + ex.page"></span></p>
-                <div class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5 flex gap-3">
-                  <div class="min-w-0 flex-1 text-sm space-y-1">
-                    <p x-show="ex.need" class="text-slate-600"><span class="font-semibold text-violet-800">Cần:</span> <span x-text="ex.need"></span></p>
-                    <ol x-show="(ex.steps || []).length" class="list-decimal pl-5 text-slate-700 space-y-0.5">
-                      <template x-for="(st, si) in (ex.steps || [])" :key="si"><li x-text="st"></li></template>
-                    </ol>
+                <div class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-2.5 flex gap-3 items-start">
+                  <div class="min-w-0 flex-1 text-sm space-y-1.5">
+                    <p x-show="ex.summary" class="text-slate-700" x-text="ex.summary"></p>
                     <p x-show="ex.result" class="font-medium text-violet-900"><span class="font-semibold">Thấy:</span> <span x-text="ex.result"></span></p>
-                    <p x-show="detail && ex.activity" class="text-xs text-slate-500 italic" x-text="ex.activity"></p>
-                    <p x-show="!ex.steps && ex.what_it_shows" class="font-medium text-violet-900" x-text="ex.what_it_shows"></p>
                   </div>
                   <!-- x-if chứ không x-show: :src vẫn bind khi ẩn → trình duyệt tải "img/null" (404) -->
                   <template x-if="ex.image">
-                  <img :src="'study/img/' + ex.image" :alt="ex.title || ''"
-                       class="w-28 sm:w-36 shrink-0 self-start rounded-md border border-violet-200 bg-white object-contain">
+                  <img :src="'study/img/' + ex.image" :alt="ex.title || ''" loading="lazy"
+                       class="w-32 sm:w-44 max-h-40 shrink-0 rounded-md border border-violet-200 bg-white object-contain">
                   </template>
                 </div>
               </div>

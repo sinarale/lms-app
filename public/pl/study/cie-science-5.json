@@ -450,29 +450,17 @@
      "concept": "c.materials.properties.state",
      "title": "Measure and compare melting points",
      "page": "37",
-     "image": null,
-     "need": "three different solids, three pans, a hotplate, a thermometer, a stopwatch",
-     "steps": [
-      "Teacher puts a solid in a pan and heats it until it melts.",
-      "Take the pan off the hotplate as soon as it has melted.",
-      "Measure the temperature of the melted substance and record it.",
-      "Repeat with the other two solids."
-     ],
-     "result": "Each solid melted at a different temperature — melting point is a property of the substance."
+     "image": "melting.png",
+     "summary": "The teacher heats three different solids in pans on a hotplate and measures the temperature of each one the moment it melts.",
+     "result": "Each solid melts at its own temperature — melting point is a property of the substance."
     },
     {
      "concept": "c.materials.properties.gases",
      "title": "Investigate the properties of gases",
      "page": "40",
      "image": "balloons.png",
-     "need": "two balloons the same size, two rulers, string, a heavy book, twist ties",
-     "steps": [
-      "Blow up both balloons to the same size; tie with twist ties.",
-      "Hang them from the ends of a ruler with 15 cm strings.",
-      "Hang that ruler from a second ruler held on the table by a heavy book, and balance it.",
-      "Loosen the twist tie on ONE balloon and watch."
-     ],
-     "result": "The side with the full balloon stays down — the air had mass and took up space."
+     "summary": "Two blown-up balloons are hung from a ruler so they balance, then the tie on one balloon is loosened to let the air out.",
+     "result": "The ruler tips towards the full balloon — the air inside had mass and took up space."
     }
    ]
   },
@@ -626,26 +614,16 @@
      "title": "Investigate how well different materials conduct heat",
      "page": "43",
      "image": "beads.png",
-     "need": "a beaker of hot water, a metal spoon, a plastic spoon, a glass rod, a pencil, polystyrene foam, five beads, petroleum jelly",
-     "steps": [
-      "Put a small bit of petroleum jelly on one end of each material and push a bead into it.",
-      "Stand all the materials in the beaker; teacher pours in hot water.",
-      "Watch which bead falls off first and last, and record the order."
-     ],
-     "result": "The bead on the metal spoon falls first (heat travels up it fastest); polystyrene last."
+     "summary": "A bead is stuck with petroleum jelly to the top of a metal spoon, a plastic spoon, a glass rod, a pencil and a piece of polystyrene foam, then all of them are stood in hot water.",
+     "result": "The bead on the metal spoon drops first and the polystyrene one last — metal conducts heat fastest."
     },
     {
      "concept": "c.materials.conductors.electricity",
      "title": "Investigate how well different substances conduct electricity",
      "page": "45-46",
      "image": "circuit.png",
-     "need": "two cells, a cell holder, a 1.5 V lamp, three copper connecting wires, steel paper clip, aluminium foil, tap water, sugar, pencil graphite",
-     "steps": [
-      "Set up the circuit; touch the two free wire ends together — the lamp shines.",
-      "Put each substance between the wire ends in turn.",
-      "Score the lamp: 0 ticks = does not shine, ✓ = dim, ✓✓ = bright."
-     ],
-     "result": "Copper wire, steel paper clip and aluminium foil light the lamp brightly; graphite dimly; sugar, water and plastic not at all."
+     "summary": "A lamp circuit is set up with two free wire ends, and different substances (copper, steel, aluminium foil, graphite, sugar, water) are placed between the ends in turn.",
+     "result": "Metals make the lamp shine brightly and graphite dimly; sugar, water and plastic do not light it at all."
     }
    ]
   },
@@ -807,39 +785,24 @@
      "title": "Getting started: ice cubes in the sun",
      "page": "49",
      "image": "icewater.png",
-     "need": "ice cubes, a saucer, a watch",
-     "steps": [
-      "Put the ice cubes on a saucer in the sun or another warm place for five minutes.",
-      "Draw what has happened.",
-      "Put the water back in the freezer."
-     ],
-     "result": "Ice melts, then freezes again — melting and freezing are reversible physical changes."
+     "summary": "Ice cubes are left on a saucer in a warm place for five minutes, then the water is put back in the freezer.",
+     "result": "The ice melts and the water freezes again — melting and freezing are reversible changes."
     },
     {
      "concept": "c.materials.reversible.dissolving",
      "title": "Describe dissolving",
      "page": "52",
-     "image": "particles.png",
-     "need": "the picture of copper sulfate dissolving in water",
-     "steps": [
-      "Name the solute (copper sulfate) and the solvent (water).",
-      "Draw the solution after the solute has dissolved.",
-      "Say why it is a reversible change."
-     ],
-     "result": "Solute particles spread evenly between the solvent particles — the solution looks uniform, and evaporating the water brings the solute back."
+     "image": "coppersulfate.png",
+     "summary": "Look at the picture of copper sulfate being added to water and describe what happens to it.",
+     "result": "Copper sulfate (the solute) spreads evenly through the water (the solvent) to make a uniform solution; evaporating the water brings it back."
     },
     {
      "concept": "c.materials.reversible.factors",
      "title": "Does water temperature affect the rate of dissolving?",
      "page": "54",
      "image": "marcus.png",
-     "need": "sugar, two glass jars, cold and hot water, a teaspoon, a measuring cylinder, a stopwatch",
-     "steps": [
-      "Put 100 ml of cold water in one jar and 100 ml of hot water in the other.",
-      "Stir a teaspoon of sugar into each.",
-      "Time how long the sugar takes to dissolve in each jar and record in a table."
-     ],
-     "result": "Sugar dissolves much faster in hot water — heat gives the particles energy to move and spread."
+     "summary": "A teaspoon of sugar is stirred into 100 ml of cold water and into 100 ml of hot water, and the time it takes to dissolve is measured for each.",
+     "result": "Sugar dissolves much faster in hot water — heat gives the particles energy to move and spread out."
     }
    ]
   },
@@ -990,38 +953,24 @@
      "title": "Identify reactants and products",
      "page": "57",
      "image": "vinegar.png",
-     "need": "vinegar, bicarbonate of soda, a jar with a wide mouth, a spoon",
-     "steps": [
-      "Pour some vinegar into the jar.",
-      "Add a teaspoon of bicarbonate of soda and observe.",
-      "Wait five minutes and look again for any other product."
-     ],
-     "result": "Bubbles of gas straight away — reactants: vinegar + bicarbonate of soda; product: the gas."
+     "summary": "A teaspoon of bicarbonate of soda is added to vinegar in a jar and watched for five minutes.",
+     "result": "Bubbles of gas form straight away — vinegar and bicarbonate of soda are the reactants, the gas is a product."
     },
     {
      "concept": "c.materials.chemical.evidence",
      "title": "Investigate evidence A — colour change and a new solid",
      "page": "58",
      "image": "limewater.png",
-     "need": "water, cornstarch, iodine solution, a dropper, a spoon, limewater, a drinking straw, beakers",
-     "steps": [
-      "Add three droppers of iodine solution to water; add a spoon of cornstarch and stir.",
-      "Pour limewater into another beaker; breathe into it through a straw."
-     ],
-     "result": "The iodine mixture changes colour; the limewater turns cloudy (calcium carbonate forms) — two kinds of evidence."
+     "summary": "Iodine solution is added to water and cornstarch is stirred in; in another beaker, air is breathed through a straw into limewater.",
+     "result": "The iodine mixture changes colour and the limewater turns cloudy — a colour change and a new solid are both evidence of a chemical reaction."
     },
     {
      "concept": "c.materials.chemical.evidence",
      "title": "Investigate evidence B — temperature change",
      "page": "59",
      "image": "wirewool.png",
-     "need": "wire wool, vinegar, a beaker, a thermometer, a timer",
-     "steps": [
-      "Loosen a ball of wire wool in a beaker; pour vinegar on it and let it stand 1–2 minutes.",
-      "Put a thermometer in the middle of the wool and record the reading.",
-      "Wait five minutes and record again."
-     ],
-     "result": "The temperature has changed — a chemical reaction gives out or takes in heat."
+     "summary": "Vinegar is poured over a ball of wire wool in a beaker, and the temperature is recorded straight away and again after five minutes.",
+     "result": "The temperature changes — a chemical reaction gives out or takes in heat."
     }
    ]
   }
