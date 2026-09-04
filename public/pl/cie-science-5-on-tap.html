@@ -1046,7 +1046,6 @@
               <div class="grid gap-2 sm:grid-cols-2">
                 <template x-for="(pt, i) in tagged(points(sec), leaf.id)" :key="i">
                   <div class="flex gap-2.5 rounded-lg border border-sky-200 bg-sky-50/40 p-3">
-                    <svg class="w-5 h-5 shrink-0 mt-0.5 text-sky-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
                     <p class="text-sm text-slate-700 leading-snug flex-1"><span class="font-semibold text-slate-900" x-text="lead(pt.t)[0]"></span><span x-text="lead(pt.t)[1]"></span></p>
                     <template x-if="pt.image"><img :src="'study/img/' + pt.image" alt="" class="w-16 shrink-0 self-start rounded border border-sky-200 bg-white object-contain"></template>
                   </div>
@@ -1063,7 +1062,6 @@
                 <ol class="grid gap-1.5 sm:grid-cols-2">
                   <template x-for="(it, i) in ck.items" :key="i">
                     <li class="flex items-start gap-2 rounded-lg border border-emerald-200 bg-emerald-50/60 px-2.5 py-1.5">
-                      <svg class="w-4 h-4 shrink-0 mt-0.5 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
                       <div class="min-w-0 text-sm leading-snug">
                         <span class="font-semibold text-slate-900" x-text="it.sign"></span>
                         <template x-if="it.look_for"><span><span class="text-slate-500"> — </span><span class="text-slate-700" x-text="it.look_for"></span></span></template>
@@ -1185,7 +1183,6 @@
             <div class="grid gap-2 sm:grid-cols-2">
               <template x-for="(pt, i) in untagged(sec).points" :key="i">
                 <div class="flex gap-2.5 rounded-lg border border-slate-200 p-3">
-                  <svg class="w-5 h-5 shrink-0 mt-0.5 text-indigo-500"><use :href="'#i-' + (pt.icon || 'cube')"/></svg>
                   <p class="text-sm text-slate-700 leading-snug"><span class="font-semibold text-slate-900" x-text="lead(pt.t)[0]"></span><span x-text="lead(pt.t)[1]"></span></p>
                 </div>
               </template>
@@ -1197,7 +1194,6 @@
               <ol class="space-y-2">
                 <template x-for="(it, i) in sec.checklist.items" :key="i">
                   <li class="flex gap-3 rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2.5">
-                    <svg class="w-6 h-6 shrink-0 text-emerald-600"><use :href="'#i-' + (it.icon || 'sparkle')"/></svg>
                     <div class="min-w-0">
                       <p class="text-sm font-semibold text-slate-900" x-text="it.sign"></p>
                       <p class="text-sm text-slate-700" x-text="it.look_for"></p>
