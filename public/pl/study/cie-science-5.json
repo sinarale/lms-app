@@ -472,13 +472,13 @@
     {
      "term": "conduction",
      "def": "Heat being transferred from one object to another.",
-     "example": "A cold metal teaspoon in hot tea: the handle feels warm after a while (p.42).",
+     "example": "A cold metal teaspoon in hot tea: after a while the handle feels warm (p.42-43).",
      "concept": "c.materials.conductors.heat"
     },
     {
      "term": "thermal conductor",
      "def": "A substance that conducts heat well.",
-     "example": "Metals. Silver is the best conductor of heat (p.44).",
+     "example": "Metals. Silver is the best conductor of heat (p.43-44).",
      "concept": "c.materials.conductors.heat"
     },
     {
@@ -496,8 +496,13 @@
    ],
    "points": [
     {
-     "t": "Metals are good thermal conductors; glass, plastic and polystyrene are poor ones. Silver conducts heat best (p.44).",
+     "t": "Metals are good thermal conductors; glass and plastic are not. Silver is the best conductor of heat (p.44).",
      "icon": "fire",
+     "concept": "c.materials.conductors.heat"
+    },
+    {
+     "t": "How well a substance conducts heat is a property of that substance. Some conduct heat much better than others (p.44).",
+     "icon": "cube",
      "concept": "c.materials.conductors.heat"
     },
     {
@@ -516,12 +521,17 @@
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "Metals such as copper, steel and aluminium conduct electricity well. They make the lamp shine brightly (p.46).",
+     "t": "Conducting electricity is a property of a substance. Metals conduct electricity; most other substances do not (p.45).",
      "icon": "bolt",
      "concept": "c.materials.conductors.electricity"
     },
     {
-     "t": "Graphite is the only non-metal that conducts electricity, and only weakly. Sugar, water and plastic do not conduct at all (p.47).",
+     "t": "Copper, steel and aluminium conduct electricity well. They make the lamp shine brightly (p.46).",
+     "icon": "bolt",
+     "concept": "c.materials.conductors.electricity"
+    },
+    {
+     "t": "Graphite is a non-metal that conducts electricity, but only weakly. Sugar, water and plastic do not conduct at all (p.46-47).",
      "icon": "sparkle",
      "concept": "c.materials.conductors.electricity"
     }
@@ -551,7 +561,7 @@
    ],
    "checklists": [
     {
-     "concept": "c.materials.conductors.heat",
+     "concept": "c.materials.conductors.electricity",
      "title": "How well substances conduct — the book's table (p.47)",
      "items": [
       {
@@ -580,7 +590,7 @@
        "icon": "heat"
       }
      ],
-     "note": "Silver is named the best conductor of heat in the text (p.44) but is not in this table."
+     "note": "Units W/m·K. Silver is named the best conductor of heat in the text (p.44) but is not in this table."
     }
    ],
    "compares": [
@@ -1142,7 +1152,7 @@
    "concept": "c.materials.conductors.heat",
    "front_en": "Conduction",
    "back_en": "Heat being transferred from one object to another.",
-   "example_en": "A cold metal teaspoon in hot tea: the handle feels warm after a while (p.42).",
+   "example_en": "A cold metal teaspoon in hot tea: after a while the handle feels warm (p.42-43).",
    "kind": "term"
   },
   {
@@ -1150,7 +1160,7 @@
    "concept": "c.materials.conductors.heat",
    "front_en": "Thermal conductor",
    "back_en": "A substance that conducts heat well.",
-   "example_en": "Metals. Silver is the best conductor of heat (p.44).",
+   "example_en": "Metals. Silver is the best conductor of heat (p.43-44).",
    "kind": "term"
   },
   {
@@ -1283,11 +1293,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "100 °C"
+     "en": "0 °C"
     },
     {
      "key": "b",
-     "en": "0 °C"
+     "en": "100 °C"
     },
     {
      "key": "c",
@@ -1298,7 +1308,7 @@
      "en": "60 °C"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "Ice melts at 0 °C (p.36).",
    "difficulty": 1
   },
@@ -1310,11 +1320,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "1064 °C"
+     "en": "100 °C"
     },
     {
      "key": "b",
-     "en": "100 °C"
+     "en": "1064 °C"
     },
     {
      "key": "c",
@@ -1325,7 +1335,7 @@
      "en": "2856 °C"
     }
    ],
-   "answer": "a",
+   "answer": "b",
    "why_en": "Gold melts at 1064 °C (p.36).",
    "difficulty": 1
   },
@@ -1368,18 +1378,18 @@
     },
     {
      "key": "b",
-     "en": "Because a substance must be a liquid before it can boil"
-    },
-    {
-     "key": "c",
      "en": "Because solids are hotter than liquids"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Because melting only happens in an oven"
+    },
+    {
+     "key": "d",
+     "en": "Because a substance must be a liquid before it can boil"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "A solid melts into a liquid first; the liquid then needs more energy to boil (p.38 Q5).",
    "difficulty": 3
   },
@@ -1391,22 +1401,22 @@
    "choices": [
     {
      "key": "a",
-     "en": "100 °C"
+     "en": "118 °C"
     },
     {
      "key": "b",
-     "en": "0 °C"
+     "en": "100 °C"
     },
     {
      "key": "c",
-     "en": "118 °C"
+     "en": "0 °C"
     },
     {
      "key": "d",
      "en": "2856 °C"
     }
    ],
-   "answer": "c",
+   "answer": "a",
    "why_en": "Vinegar boils at 118 °C (p.36).",
    "difficulty": 1
   },
@@ -1418,11 +1428,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "Boiling happens through the whole liquid; evaporation only at the surface"
+     "en": "Evaporation is faster than boiling"
     },
     {
      "key": "b",
-     "en": "Evaporation is faster than boiling"
+     "en": "Boiling happens through the whole liquid; evaporation only at the surface"
     },
     {
      "key": "c",
@@ -1433,7 +1443,7 @@
      "en": "There is no difference"
     }
    ],
-   "answer": "a",
+   "answer": "b",
    "why_en": "In boiling, all the particles gain enough energy; in evaporation only surface particles change to gas (p.36).",
    "difficulty": 2
   },
@@ -1476,18 +1486,18 @@
     },
     {
      "key": "b",
-     "en": "Water — it has the lower boiling point"
-    },
-    {
-     "key": "c",
      "en": "Both at the same time"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Vinegar — it is thicker"
+    },
+    {
+     "key": "d",
+     "en": "Water — it has the lower boiling point"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Water boils at 100 °C, vinegar at 118 °C, so water reaches its boiling point first (p.36, p.38).",
    "difficulty": 3
   },
@@ -1499,11 +1509,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "It is heavy and it is hot"
+     "en": "It takes up space and it has mass"
     },
     {
      "key": "b",
-     "en": "It takes up space and it has mass"
+     "en": "It is heavy and it is hot"
     },
     {
      "key": "c",
@@ -1514,7 +1524,7 @@
      "en": "It melts and it boils"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "All matter takes up space and has mass — including gases like air (p.39).",
    "difficulty": 1
   },
@@ -1530,18 +1540,18 @@
     },
     {
      "key": "b",
-     "en": "The ruler tips towards the empty balloon"
+     "en": "The ruler tips towards the full balloon"
     },
     {
      "key": "c",
-     "en": "The ruler tips towards the full balloon"
+     "en": "The ruler tips towards the empty balloon"
     },
     {
      "key": "d",
      "en": "Both balloons float up"
     }
    ],
-   "answer": "c",
+   "answer": "b",
    "why_en": "The full balloon still has the mass of its air, so its side goes down (p.40).",
    "difficulty": 2
   },
@@ -1584,18 +1594,18 @@
     },
     {
      "key": "b",
-     "en": "Conduction"
-    },
-    {
-     "key": "c",
      "en": "Dissolving"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Boiling"
+    },
+    {
+     "key": "d",
+     "en": "Conduction"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Heat is transferred along the spoon — conduction (p.42-43).",
    "difficulty": 1
   },
@@ -1607,22 +1617,22 @@
    "choices": [
     {
      "key": "a",
-     "en": "Copper"
+     "en": "Silver"
     },
     {
      "key": "b",
-     "en": "Steel"
+     "en": "Copper"
     },
     {
      "key": "c",
-     "en": "Silver"
+     "en": "Steel"
     },
     {
      "key": "d",
      "en": "Glass"
     }
    ],
-   "answer": "c",
+   "answer": "a",
    "why_en": "\"Silver is the best conductor of heat\" (p.44).",
    "difficulty": 1
   },
@@ -1692,47 +1702,20 @@
     },
     {
      "key": "b",
-     "en": "Metal conducts heat to the food faster than glass"
-    },
-    {
-     "key": "c",
      "en": "Glass reflects heat away"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Metal dishes are bigger"
+    },
+    {
+     "key": "d",
+     "en": "Metal conducts heat to the food faster than glass"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Metal is a good thermal conductor; glass is not (p.62 Q2, p.44).",
    "difficulty": 2
-  },
-  {
-   "id": "q.d2818135",
-   "concept": "c.materials.conductors.electricity",
-   "page": 46,
-   "stem_en": "In the circuit test, what does ✓✓ (two ticks) mean?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "The lamp does not shine"
-    },
-    {
-     "key": "b",
-     "en": "The lamp is dim"
-    },
-    {
-     "key": "c",
-     "en": "The lamp is bright"
-    },
-    {
-     "key": "d",
-     "en": "The wire is broken"
-    }
-   ],
-   "answer": "c",
-   "why_en": "0 ticks = does not shine, ✓ = dim, ✓✓ = bright (p.46).",
-   "difficulty": 1
   },
   {
    "id": "q.2f80057f",
@@ -1804,14 +1787,14 @@
     },
     {
      "key": "c",
-     "en": "Pencil graphite"
+     "en": "Glass"
     },
     {
      "key": "d",
-     "en": "Glass"
+     "en": "Pencil graphite"
     }
    ],
-   "answer": "c",
+   "answer": "d",
    "why_en": "Pencil graphite lights the lamp in the circuit test (p.45-46).",
    "difficulty": 2
   },
@@ -1823,11 +1806,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "They are good electrical conductors"
+     "en": "They are electrical insulators, so electricity cannot reach you"
     },
     {
      "key": "b",
-     "en": "They are electrical insulators, so electricity cannot reach you"
+     "en": "They are good electrical conductors"
     },
     {
      "key": "c",
@@ -1838,7 +1821,7 @@
      "en": "They conduct heat well"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "Plastic and rubber are electrical insulators (p.61).",
    "difficulty": 2
   },
@@ -1854,18 +1837,18 @@
     },
     {
      "key": "b",
-     "en": "Chemical"
+     "en": "Reversible"
     },
     {
      "key": "c",
-     "en": "Reversible"
+     "en": "Chemical"
     },
     {
      "key": "d",
      "en": "A reaction"
     }
    ],
-   "answer": "c",
+   "answer": "b",
    "why_en": "Water can change back to ice — a reversible physical change (p.50).",
    "difficulty": 1
   },
@@ -1881,18 +1864,18 @@
     },
     {
      "key": "b",
-     "en": "A black substance called carbon"
+     "en": "Melted wax"
     },
     {
      "key": "c",
-     "en": "Melted wax"
+     "en": "A black substance called carbon"
     },
     {
      "key": "d",
      "en": "Salt"
     }
    ],
-   "answer": "b",
+   "answer": "c",
    "why_en": "The wood changes into a black substance called carbon (p.50).",
    "difficulty": 1
   },
@@ -1908,18 +1891,18 @@
     },
     {
      "key": "b",
-     "en": "Irreversible — the egg cannot go back to raw"
-    },
-    {
-     "key": "c",
      "en": "Reversible — let it cool"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Neither"
+    },
+    {
+     "key": "d",
+     "en": "Irreversible — the egg cannot go back to raw"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "A cooked egg is a new substance and cannot be changed back (p.50 Q2).",
    "difficulty": 2
   },
@@ -1931,22 +1914,22 @@
    "choices": [
     {
      "key": "a",
-     "en": "freezing"
+     "en": "rusting"
     },
     {
      "key": "b",
-     "en": "dissolving"
+     "en": "freezing"
     },
     {
      "key": "c",
-     "en": "evaporating"
+     "en": "dissolving"
     },
     {
      "key": "d",
-     "en": "rusting"
+     "en": "evaporating"
     }
    ],
-   "answer": "d",
+   "answer": "a",
    "why_en": "Rusting makes a new substance and cannot be reversed; the others are physical changes (p.62 Q3).",
    "difficulty": 2
   },
@@ -1989,18 +1972,18 @@
     },
     {
      "key": "b",
-     "en": "The salt particles spread evenly between the water particles"
+     "en": "The salt turns into water"
     },
     {
      "key": "c",
-     "en": "The salt turns into water"
+     "en": "The salt particles spread evenly between the water particles"
     },
     {
      "key": "d",
      "en": "The salt sinks to the bottom"
     }
    ],
-   "answer": "b",
+   "answer": "c",
    "why_en": "Solute particles spread evenly among the solvent particles — the solution looks uniform (p.52).",
    "difficulty": 2
   },
@@ -2012,22 +1995,22 @@
    "choices": [
     {
      "key": "a",
-     "en": "Uniform"
-    },
-    {
-     "key": "b",
      "en": "Reversible"
     },
     {
-     "key": "c",
+     "key": "b",
      "en": "Irreversible"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Physical"
+    },
+    {
+     "key": "d",
+     "en": "Uniform"
     }
    ],
-   "answer": "a",
+   "answer": "d",
    "why_en": "A solution has a uniform appearance (p.52).",
    "difficulty": 1
   },
@@ -2039,11 +2022,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "The sugar was old"
+     "en": "He did not stir, so the sugar had not dissolved"
     },
     {
      "key": "b",
-     "en": "He did not stir, so the sugar had not dissolved"
+     "en": "The sugar was old"
     },
     {
      "key": "c",
@@ -2054,7 +2037,7 @@
      "en": "The water was too hot"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "Without stirring, the sugar stayed at the bottom (p.53).",
    "difficulty": 1
   },
@@ -2066,11 +2049,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "Stirring and heating"
+     "en": "Cooling and shaking"
     },
     {
      "key": "b",
-     "en": "Cooling and shaking"
+     "en": "Stirring and heating"
     },
     {
      "key": "c",
@@ -2081,7 +2064,7 @@
      "en": "Using a bigger jar and more water"
     }
    ],
-   "answer": "a",
+   "answer": "b",
    "why_en": "Stirring and heating both increase the rate of dissolving (p.53-54).",
    "difficulty": 1
   },
@@ -2097,18 +2080,18 @@
     },
     {
      "key": "b",
-     "en": "Heat gives the particles energy so they move faster and spread out"
+     "en": "Hot water melts the sugar"
     },
     {
      "key": "c",
-     "en": "Hot water melts the sugar"
+     "en": "Heat gives the particles energy so they move faster and spread out"
     },
     {
      "key": "d",
      "en": "Sugar particles get smaller in heat"
     }
    ],
-   "answer": "b",
+   "answer": "c",
    "why_en": "Heat adds energy; particles move faster and spread the solute through the solvent more easily (p.54).",
    "difficulty": 3
   },
@@ -2124,18 +2107,18 @@
     },
     {
      "key": "b",
-     "en": "Yes, but slowly — particles are always moving"
-    },
-    {
-     "key": "c",
      "en": "Only if the cup is metal"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Only in the fridge"
+    },
+    {
+     "key": "d",
+     "en": "Yes, but slowly — particles are always moving"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Particles in matter are always moving, so it dissolves on its own given time (p.54 Q4).",
    "difficulty": 2
   },
@@ -2147,11 +2130,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "The bubbles"
+     "en": "Vinegar and bicarbonate of soda"
     },
     {
      "key": "b",
-     "en": "Vinegar and bicarbonate of soda"
+     "en": "The bubbles"
     },
     {
      "key": "c",
@@ -2162,7 +2145,7 @@
      "en": "Only the vinegar"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "The reactants are the substances that react together (p.57).",
    "difficulty": 1
   },
@@ -2232,18 +2215,18 @@
     },
     {
      "key": "b",
-     "en": "Iron, water and oxygen"
-    },
-    {
-     "key": "c",
      "en": "Rust and water"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "Iron and salt"
+    },
+    {
+     "key": "d",
+     "en": "Iron, water and oxygen"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Iron reacts with water and oxygen; rust is the product (p.62 Q5).",
    "difficulty": 2
   },
@@ -2340,18 +2323,18 @@
     },
     {
      "key": "b",
-     "en": "Bubbles of gas"
-    },
-    {
-     "key": "c",
      "en": "The glass gets heavier"
     },
     {
-     "key": "d",
+     "key": "c",
      "en": "The tablet floats"
+    },
+    {
+     "key": "d",
+     "en": "Bubbles of gas"
     }
    ],
-   "answer": "b",
+   "answer": "d",
    "why_en": "Gas is produced — one of the signs of a reaction (p.59 Q3).",
    "difficulty": 1
   },
@@ -2363,11 +2346,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "Because the bubbles are small"
+     "en": "Because no new substance forms — the water just becomes a gas"
     },
     {
      "key": "b",
-     "en": "Because no new substance forms — the water just becomes a gas"
+     "en": "Because the bubbles are small"
     },
     {
      "key": "c",
@@ -2378,11 +2361,65 @@
      "en": "Because water cannot react"
     }
    ],
-   "answer": "b",
+   "answer": "a",
    "why_en": "Evidence means a PRODUCT has formed. Boiling is a change of state, not a new substance (p.58, p.36).",
    "difficulty": 3
+  },
+  {
+   "id": "q.348ff055",
+   "concept": "c.materials.conductors.electricity",
+   "page": 46,
+   "stem_en": "In the circuit test, aluminium foil is placed between the two wire ends. What happens?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The lamp does not shine"
+    },
+    {
+     "key": "b",
+     "en": "The lamp shines brightly"
+    },
+    {
+     "key": "c",
+     "en": "The lamp shines dimly"
+    },
+    {
+     "key": "d",
+     "en": "The cells run out"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Aluminium is a metal — the lamp shines brightly (two ticks) (p.46).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.fd4ea15b",
+   "concept": "c.materials.conductors.heat",
+   "page": 44,
+   "difficulty": 2,
+   "stem_en": "How well a substance conducts heat is described in the book as what?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A property of the substance"
+    },
+    {
+     "key": "b",
+     "en": "A change of state"
+    },
+    {
+     "key": "c",
+     "en": "A chemical reaction"
+    },
+    {
+     "key": "d",
+     "en": "A type of dissolving"
+    }
+   ],
+   "answer": "a",
+   "why_en": "How well a substance can conduct heat is a property of the substance (p.44)."
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T02:37:17+00:00"
+ "generated_at": "2026-09-04T04:44:17+00:00"
 }
