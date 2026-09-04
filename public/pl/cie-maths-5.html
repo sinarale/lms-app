@@ -7,7 +7,7 @@
   <title>CIE Maths 5 — PL</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.1a30f5b1.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="../assets/collapse.d0a27f2d.js"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <style>
@@ -267,7 +267,7 @@
         
         <div class="min-w-0 flex-1">
           <h1 class="text-lg font-bold text-slate-900 truncate">CIE Maths 5</h1>
-          <p class="text-xs text-slate-500">PL · 3 tuần/bài · cập nhật 2026-09-03 18:00</p>
+          <p class="text-xs text-slate-500">PL · 3 tuần/bài · cập nhật 2026-09-04 18:01</p>
         </div>
       </div>
       <div class="mt-2 flex items-center gap-2">
@@ -339,10 +339,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/79608/')).length / 32 * 100)) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('pl/79608/')).length / 36 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/79608/')).length + '/32 đã học')"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('pl/79608/')).length + '/36 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -356,7 +356,7 @@
              @expand-all.window="open = true"
              @collapse-all.window="open = false"
              x-effect="if (q || filtering) open = true"
-             data-module data-title="Week 3 - Unit 2.2 Special Numbers + Unit 2.3 Common Multiples and Factors"
+             data-module data-title="Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences"
              x-show="moduleMatches($el, f)"
              class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <button @click="open = !open"
@@ -366,14 +366,14 @@
              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
         </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 3 - Unit 2.2 Special Numbers + Unit 2.3 Common Multiples and Factors</span>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences</span>
         <template x-if="p.online">
           <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 9
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 12
                         ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/9'"></span>
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/12'"></span>
         </template>
-        <span class="text-xs text-slate-400 shrink-0">9 mục</span>
+        <span class="text-xs text-slate-400 shrink-0">12 mục</span>
       </button>
 
       <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
@@ -395,6 +395,70 @@
         
         
         
+        <div data-item data-title="Complete Workbook pages 15-25" data-type="page" data-sec="1"
+             data-pkey="pl/79608/8626017" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709" data-ts="1787806599000"
+             
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8626017'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8626017']"
+                     @change="await p.toggle('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709'); $el.checked = !!p.done['pl/79608/8626017']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-15-25" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Complete Workbook pages 15-25
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
+                  <button @click.stop="p.seen('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-15-25" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
         <div data-sechead data-title="Class Resources" data-sec="2"
              x-show="headingMatches($el, f)"
              class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
@@ -407,6 +471,969 @@
                    class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
           </template>
           <span>Class Resources</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8626019" data-hash="eff29ff0bfb1aa1ab7fca2326447c57a141e7a26" data-ts="1788252479000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8626019'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8626019']"
+                     @change="await p.toggle('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26'); $el.checked = !!p.done['pl/79608/8626019']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26')">
+                  <button @click.stop="p.seen('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>1.0 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 01/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="3. 6Nc.01 – Count on and count back in numbers of constant size.pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8626038" data-hash="de4d19d35ebe014b7d37cdfe58a2a1550424aee7" data-ts="1788338988000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8626038'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8626038']"
+                     @change="await p.toggle('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7'); $el.checked = !!p.done['pl/79608/8626038']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/3. 6Nc.01 – Count on and count back in numbers of constant size.pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                3. 6Nc.01 – Count on and count back in numbers of constant size.pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7')">
+                  <button @click.stop="p.seen('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>199.5 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8626048" data-hash="b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b" data-ts="1788339069000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8626048'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8626048']"
+                     @change="await p.toggle('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b'); $el.checked = !!p.done['pl/79608/8626048']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b')">
+                  <button @click.stop="p.seen('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>946.8 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8632034" data-hash="c0fa950ac5a35f04fc81e410f2ffea68603c2414" data-ts="1788359192000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8632034'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8632034']"
+                     @change="await p.toggle('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414'); $el.checked = !!p.done['pl/79608/8632034']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414')">
+                  <button @click.stop="p.seen('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>2.8 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-sechead data-title="Optional Activities" data-sec="3"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Optional Activities</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="Rounding Decimals - Youtube Video" data-type="external" data-sec="3"
+             data-pkey="pl/79608/7491515" data-hash="26dfe0cff9beb9f54523cfda3a245924ff9fdfc3" data-ts="1788167340000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/7491515'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/7491515']"
+                     @change="await p.toggle('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3'); $el.checked = !!p.done['pl/79608/7491515']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://www.youtube.com/watch?v=lw-z4AGhzgU" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Rounding Decimals - Youtube Video
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3')">
+                  <button @click.stop="p.seen('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Rounding to the nearest whole number - Practice" data-type="external" data-sec="3"
+             data-pkey="pl/79608/7491516" data-hash="3972438c81d9df5c8e45e22b66058c52db61c109" data-ts="1788167340000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/7491516'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/7491516']"
+                     @change="await p.toggle('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109'); $el.checked = !!p.done['pl/79608/7491516']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://drive.google.com/open?id=1glbL52GB1KG5Z-T7Fr-HHNQ9CBiTvA2j&amp;usp=drive_copy" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Rounding to the nearest whole number - Practice
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109')">
+                  <button @click.stop="p.seen('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Rounding to the nearest tenth - Practice" data-type="external" data-sec="3"
+             data-pkey="pl/79608/7491517" data-hash="5e5296f0d7320448451a305f4ff2203e9521269d" data-ts="1788167340000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/7491517'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/7491517']"
+                     @change="await p.toggle('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d'); $el.checked = !!p.done['pl/79608/7491517']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://drive.google.com/open?id=1uvoRzYvMqwmPL3u3V5X6PichPzJkyKkS&amp;usp=drive_copy" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Rounding to the nearest tenth - Practice
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d')">
+                  <button @click.stop="p.seen('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Rounding Decimals - Game" data-type="external" data-sec="3"
+             data-pkey="pl/79608/7491518" data-hash="0269ccaf07ebbeb39c896648bb55734f1d81af3c" data-ts="1788167340000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/7491518'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/7491518']"
+                     @change="await p.toggle('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c'); $el.checked = !!p.done['pl/79608/7491518']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://www.sheppardsoftware.com/math/decimals/scooter-quest/rounding/" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Rounding Decimals - Game
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c')">
+                  <button @click.stop="p.seen('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Complete the sequences.pdf" data-type="file" data-sec="3"
+             data-pkey="pl/79608/8632038" data-hash="839858c3b4c7117d29a6d74a0aac0ca74905509b" data-ts="1788515098000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8632038'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8632038']"
+                     @change="await p.toggle('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b'); $el.checked = !!p.done['pl/79608/8632038']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Complete the sequences.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Complete the sequences.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b')">
+                  <button @click.stop="p.seen('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>245.4 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Super Sequences!" data-type="file" data-sec="3"
+             data-pkey="pl/79608/8632040" data-hash="8ef1701237c8935a3ae808e7adb84d8963685312" data-ts="1788503879000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8632040'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8632040']"
+                     @change="await p.toggle('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312'); $el.checked = !!p.done['pl/79608/8632040']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/tp2-m-161-super-sequences-activity-sheet_ver_6.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Super Sequences!
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312')">
+                  <button @click.stop="p.seen('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>300.4 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf" data-type="file" data-sec="3"
+             data-pkey="pl/79608/8634849" data-hash="37a04349823223e58503f2e3b0b27522ce810833" data-ts="1788356903000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8634849'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8634849']"
+                     @change="await p.toggle('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833'); $el.checked = !!p.done['pl/79608/8634849']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833')">
+                  <button @click.stop="p.seen('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>1004.3 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 02/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="Week 3 - Unit 2.2 Special Numbers + Unit 2.3 Common Multiples and Factors"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 3 - Unit 2.2 Special Numbers + Unit 2.3 Common Multiples and Factors</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 13
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/13'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">13 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-sechead data-title="Homework" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Homework</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="Complete Workbook pages 27 - 35" data-type="page" data-sec="1"
+             data-pkey="pl/79608/8673441" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709" data-ts="1788481398000"
+             
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8673441'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8673441']"
+                     @change="await p.toggle('pl/79608/8673441', 'da39a3ee5e6b4b0d3255bfef95601890afd80709'); $el.checked = !!p.done['pl/79608/8673441']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
+              <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-27-35" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Complete Workbook pages 27 - 35
+                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8673441', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
+                  <button @click.stop="p.seen('pl/79608/8673441', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+                <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-27-35" target="_blank" rel="noopener"
+                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-sechead data-title="Class Resources" data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>Class Resources</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="1. 6Ni.08 – Use knowledge of multiplication and square numbers to recognise cube numbers..pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8673456" data-hash="bf233c87321884f03b3992d26364b7185d8b1ff4" data-ts="1788498506000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8673456'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8673456']"
+                     @change="await p.toggle('pl/79608/8673456', 'bf233c87321884f03b3992d26364b7185d8b1ff4'); $el.checked = !!p.done['pl/79608/8673456']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-3-unit-2-2-special-numbers-unit-2-3-common-multiples-and-factors/6. 6Ni.08 – Use knowledge of multiplication and square numbers to recognise cube numbers..pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                1. 6Ni.08 – Use knowledge of multiplication and square numbers to recognise cube numbers..pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8673456', 'bf233c87321884f03b3992d26364b7185d8b1ff4')">
+                  <button @click.stop="p.seen('pl/79608/8673456', 'bf233c87321884f03b3992d26364b7185d8b1ff4')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>596.8 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="2. 6Nc.04 6Ni.08 Use knowledge of square numbers to generate terms in a sequence given it’s position.pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8673455" data-hash="2f21603bb7ce35273667167e867506f42d6a60c7" data-ts="1788498764000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8673455'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8673455']"
+                     @change="await p.toggle('pl/79608/8673455', '2f21603bb7ce35273667167e867506f42d6a60c7'); $el.checked = !!p.done['pl/79608/8673455']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-3-unit-2-2-special-numbers-unit-2-3-common-multiples-and-factors/1. 6Nc.04 6Ni.08 Use knowledge of square numbers to generate terms in a sequence given it’s position.pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                2. 6Nc.04 6Ni.08 Use knowledge of square numbers to generate terms in a sequence given it’s position.pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8673455', '2f21603bb7ce35273667167e867506f42d6a60c7')">
+                  <button @click.stop="p.seen('pl/79608/8673455', '2f21603bb7ce35273667167e867506f42d6a60c7')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>783.2 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="3-4. 6Ni.06 – Understand common multiples and common factors..pptx" data-type="file" data-sec="2"
+             data-pkey="pl/79608/8701920" data-hash="fa685145cb95b9ff8ba3990c019d125494a238db" data-ts="1788511433000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['pl/79608/8701920'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['pl/79608/8701920']"
+                     @change="await p.toggle('pl/79608/8701920', 'fa685145cb95b9ff8ba3990c019d125494a238db'); $el.checked = !!p.done['pl/79608/8701920']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-3-unit-2-2-special-numbers-unit-2-3-common-multiples-and-factors/2-3. 6Ni.06 – Understand common multiples and common factors..pptx" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                3-4. 6Ni.06 – Understand common multiples and common factors..pptx
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('pl/79608/8701920', 'fa685145cb95b9ff8ba3990c019d125494a238db')">
+                  <button @click.stop="p.seen('pl/79608/8701920', 'fa685145cb95b9ff8ba3990c019d125494a238db')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>3.4 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 04/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
         </div>
         
         
@@ -957,795 +1984,6 @@
                 
                 
                 <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 03/09</span>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-      </div>
-    </section>
-    
-    <!-- Một Tuần học / Bài học -->
-    <section x-data="{ open: false }"
-             @expand-all.window="open = true"
-             @collapse-all.window="open = false"
-             x-effect="if (q || filtering) open = true"
-             data-module data-title="Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences"
-             x-show="moduleMatches($el, f)"
-             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <button @click="open = !open"
-              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
-        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
-             :class="open ? 'rotate-90' : ''"
-             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-        </svg>
-        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 2 - Unit 1.2 Rounding Decimal Numbers + Unit 2 - Number Sequences</span>
-        <template x-if="p.online">
-          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
-                :class="moduleDone($el.closest('[data-module]'), p.done) === 12
-                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
-                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/12'"></span>
-        </template>
-        <span class="text-xs text-slate-400 shrink-0">12 mục</span>
-      </button>
-
-      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
-        
-        
-        <div data-sechead data-title="Homework" data-sec="1"
-             x-show="headingMatches($el, f)"
-             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
-             style="padding-left: 1.0rem">
-          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
-          <template x-if="p.online">
-            <input type="checkbox" title="Đánh dấu cả nhóm này"
-                   x-effect="syncSecBox($el, p.done)"
-                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-          </template>
-          <span>Homework</span>
-        </div>
-        
-        
-        
-        <div data-item data-title="Complete Workbook pages 15-25" data-type="page" data-sec="1"
-             data-pkey="pl/79608/8626017" data-hash="da39a3ee5e6b4b0d3255bfef95601890afd80709" data-ts="1787806599000"
-             
-             data-hw="1"
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8626017'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8626017']"
-                     @change="await p.toggle('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709'); $el.checked = !!p.done['pl/79608/8626017']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="văn bản">📄</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-15-25" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Complete Workbook pages 15-25
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">văn bản</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')">
-                  <button @click.stop="p.seen('pl/79608/8626017', 'da39a3ee5e6b4b0d3255bfef95601890afd80709')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
-                
-                
-                <a href="https://lms.vinschool.edu.vn/courses/79608/pages/complete-workbook-pages-15-25" target="_blank" rel="noopener"
-                   class="text-indigo-400 hover:text-indigo-600 hover:underline">Xem bản gốc ↗</a>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-sechead data-title="Class Resources" data-sec="2"
-             x-show="headingMatches($el, f)"
-             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
-             style="padding-left: 1.0rem">
-          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
-          <template x-if="p.online">
-            <input type="checkbox" title="Đánh dấu cả nhóm này"
-                   x-effect="syncSecBox($el, p.done)"
-                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-          </template>
-          <span>Class Resources</span>
-        </div>
-        
-        
-        
-        <div data-item data-title="1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79608/8626019" data-hash="eff29ff0bfb1aa1ab7fca2326447c57a141e7a26" data-ts="1787933070000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8626019'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8626019']"
-                     @change="await p.toggle('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26'); $el.checked = !!p.done['pl/79608/8626019']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                1. 6Np.04 – Round numbers with two decimal places to the nearest tenth or whole number..pptx
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26')">
-                  <button @click.stop="p.seen('pl/79608/8626019', 'eff29ff0bfb1aa1ab7fca2326447c57a141e7a26')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>1.0 MB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="3. 6Nc.01 – Count on and count back in numbers of constant size.pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79608/8626038" data-hash="de4d19d35ebe014b7d37cdfe58a2a1550424aee7" data-ts="1787806667000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8626038'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8626038']"
-                     @change="await p.toggle('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7'); $el.checked = !!p.done['pl/79608/8626038']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/3. 6Nc.01 – Count on and count back in numbers of constant size.pptx" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                3. 6Nc.01 – Count on and count back in numbers of constant size.pptx
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7')">
-                  <button @click.stop="p.seen('pl/79608/8626038', 'de4d19d35ebe014b7d37cdfe58a2a1550424aee7')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>199.5 KB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79608/8626048" data-hash="b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b" data-ts="1787820903000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8626048'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8626048']"
-                     @change="await p.toggle('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b'); $el.checked = !!p.done['pl/79608/8626048']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                4. 6Nc.03 – Use the relationship between repeated addition of a constant and multiplication to find and use a position to term rule..pptx
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b')">
-                  <button @click.stop="p.seen('pl/79608/8626048', 'b3a2a931b715d9f7d236b84cad3c69eb87cc2e1b')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>946.8 KB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 27/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx" data-type="file" data-sec="2"
-             data-pkey="pl/79608/8632034" data-hash="c0fa950ac5a35f04fc81e410f2ffea68603c2414" data-ts="1787891097000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8632034'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8632034']"
-                     @change="await p.toggle('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414'); $el.checked = !!p.done['pl/79608/8632034']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                5. 6Nc.04 – Use knowledge of square numbers to generate terms in a sequence given it’s position..pptx
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414')">
-                  <button @click.stop="p.seen('pl/79608/8632034', 'c0fa950ac5a35f04fc81e410f2ffea68603c2414')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>2.8 MB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-sechead data-title="Optional Activities" data-sec="3"
-             x-show="headingMatches($el, f)"
-             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
-             style="padding-left: 1.0rem">
-          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
-          <template x-if="p.online">
-            <input type="checkbox" title="Đánh dấu cả nhóm này"
-                   x-effect="syncSecBox($el, p.done)"
-                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
-                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-          </template>
-          <span>Optional Activities</span>
-        </div>
-        
-        
-        
-        <div data-item data-title="Rounding Decimals - Youtube Video" data-type="external" data-sec="3"
-             data-pkey="pl/79608/7491515" data-hash="26dfe0cff9beb9f54523cfda3a245924ff9fdfc3" data-ts="1788167340000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/7491515'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/7491515']"
-                     @change="await p.toggle('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3'); $el.checked = !!p.done['pl/79608/7491515']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://www.youtube.com/watch?v=lw-z4AGhzgU" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Rounding Decimals - Youtube Video
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3')">
-                  <button @click.stop="p.seen('pl/79608/7491515', '26dfe0cff9beb9f54523cfda3a245924ff9fdfc3')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Rounding to the nearest whole number - Practice" data-type="external" data-sec="3"
-             data-pkey="pl/79608/7491516" data-hash="3972438c81d9df5c8e45e22b66058c52db61c109" data-ts="1788167340000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/7491516'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/7491516']"
-                     @change="await p.toggle('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109'); $el.checked = !!p.done['pl/79608/7491516']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://drive.google.com/open?id=1glbL52GB1KG5Z-T7Fr-HHNQ9CBiTvA2j&amp;usp=drive_copy" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Rounding to the nearest whole number - Practice
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109')">
-                  <button @click.stop="p.seen('pl/79608/7491516', '3972438c81d9df5c8e45e22b66058c52db61c109')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Rounding to the nearest tenth - Practice" data-type="external" data-sec="3"
-             data-pkey="pl/79608/7491517" data-hash="5e5296f0d7320448451a305f4ff2203e9521269d" data-ts="1788167340000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/7491517'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/7491517']"
-                     @change="await p.toggle('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d'); $el.checked = !!p.done['pl/79608/7491517']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://drive.google.com/open?id=1uvoRzYvMqwmPL3u3V5X6PichPzJkyKkS&amp;usp=drive_copy" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Rounding to the nearest tenth - Practice
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d')">
-                  <button @click.stop="p.seen('pl/79608/7491517', '5e5296f0d7320448451a305f4ff2203e9521269d')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Rounding Decimals - Game" data-type="external" data-sec="3"
-             data-pkey="pl/79608/7491518" data-hash="0269ccaf07ebbeb39c896648bb55734f1d81af3c" data-ts="1788167340000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/7491518'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/7491518']"
-                     @change="await p.toggle('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c'); $el.checked = !!p.done['pl/79608/7491518']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="liên kết ngoài">🔗</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Link ngoài / link tới trang nguồn: luôn mở tab mới -->
-              <a href="https://www.sheppardsoftware.com/math/decimals/scooter-quest/rounding/" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Rounding Decimals - Game
-                <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">liên kết ngoài</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c')">
-                  <button @click.stop="p.seen('pl/79608/7491518', '0269ccaf07ebbeb39c896648bb55734f1d81af3c')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                
-                
-                
-                
-                <span title="Nguồn không cung cấp thời gian cho loại mục này — đây là thời điểm hệ thống ghi nhận lần đầu">➕ 31/08</span>
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Complete the sequences.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/79608/8632038" data-hash="839858c3b4c7117d29a6d74a0aac0ca74905509b" data-ts="1787876510000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8632038'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8632038']"
-                     @change="await p.toggle('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b'); $el.checked = !!p.done['pl/79608/8632038']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Complete the sequences.pdf" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Complete the sequences.pdf
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b')">
-                  <button @click.stop="p.seen('pl/79608/8632038', '839858c3b4c7117d29a6d74a0aac0ca74905509b')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>245.4 KB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Super Sequences!" data-type="file" data-sec="3"
-             data-pkey="pl/79608/8632040" data-hash="8ef1701237c8935a3ae808e7adb84d8963685312" data-ts="1787876569000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8632040'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8632040']"
-                     @change="await p.toggle('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312'); $el.checked = !!p.done['pl/79608/8632040']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/tp2-m-161-super-sequences-activity-sheet_ver_6.pdf" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Super Sequences!
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312')">
-                  <button @click.stop="p.seen('pl/79608/8632040', '8ef1701237c8935a3ae808e7adb84d8963685312')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>300.4 KB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
-                
-                
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
-        
-        
-        
-        <div data-item data-title="Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf" data-type="file" data-sec="3"
-             data-pkey="pl/79608/8634849" data-hash="37a04349823223e58503f2e3b0b27522ce810833" data-ts="1787891088000"
-             
-             
-             x-show="itemMatches($el, f)"
-             x-data="{ o: false }"
-             @expand-all.window="o = true" @collapse-all.window="o = false"
-             class="group" :class="p.done['pl/79608/8634849'] ? 'bg-emerald-50/60' : ''">
-          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
-            <!-- Đánh dấu đã học -->
-            <template x-if="p.online">
-              
-              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
-                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
-              <input type="checkbox" title="Đánh dấu đã học"
-                     x-effect="$el.checked = !!p.done['pl/79608/8634849']"
-                     @change="await p.toggle('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833'); $el.checked = !!p.done['pl/79608/8634849']"
-                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-              
-            </template>
-            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
-            <div class="min-w-0 flex-1">
-              
-              <!-- Tài liệu đã tải về local -->
-              <a href="https://sinarale.github.io/lms/pl/materials/cie-maths-5/week-2-unit-1-2-rounding-decimal-numbers-unit-2-number-sequences/Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf" target="_blank" rel="noopener"
-                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
-                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
-                Y5 Summer Block 4 WO2 Count through zero in 1s 2022.pdf
-              </a>
-              
-
-              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
-                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
-                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
-                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
-                <template x-if="p.stale('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833')">
-                  <button @click.stop="p.seen('pl/79608/8634849', '37a04349823223e58503f2e3b0b27522ce810833')"
-                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
-                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
-                    ⟳ có cập nhật mới
-                  </button>
-                </template>
-                <span>1004.3 KB</span>
-                
-                
-                
-                <span title="Cập nhật lần cuối tại nguồn">🕓 28/08</span>
-                
                 
               </div>
 

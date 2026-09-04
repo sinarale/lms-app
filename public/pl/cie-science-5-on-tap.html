@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.1a30f5b1.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -130,9 +130,14 @@
         // Câu đã thuộc vẫn được ôn, nhưng CHỈ khi thật sự đến hạn (bậc 6 ≈ 32
         // ngày) và không bao giờ chen vào phần ưu tiên. Thiếu bước này thì bộ
         // thẻ phình mãi và mỗi phiên càng lúc càng toàn bài đã thuộc.
+        // Ngưỡng "đã nắm chắc". Ba điều kiện đánh vào ba kiểu may rủi khác nhau:
+        // số lần chặn đúng-vài-lần-đầu, tỉ lệ sai chặn sai rải rác, bậc ôn chặn
+        // đúng dồn trong MỘT buổi (muốn lên bậc phải đúng ở các lần cách nhau
+        // nhiều ngày). Hạ ngưỡng thì hạ cả ba, đừng bỏ hẳn điều kiện nào.
+        RETIRE: { n: 3, box: 3, err: 0.25 },
         retired(q) {
-          const c = this.cards[q.id];
-          return !!c && c.n >= 8 && c.box >= 5 && c.wrong / c.n <= 0.10;
+          const c = this.cards[q.id], R = this.RETIRE;
+          return !!c && c.n >= R.n && c.box >= R.box && c.wrong / c.n <= R.err;
         },
         get nRetired() { return this.scopedItems.filter(q => this.retired(q)).length; },
         // Thanh "đã nắm chắc" ở màn hình đầu tính theo ĐÚNG tab đang mở (trắc nghiệm
@@ -754,9 +759,10 @@
               <div class="h-full bg-emerald-500 transition-all duration-300"
                    :style="'width:' + Math.round(modeRetired / modeItems.length * 100) + '%'"></div>
             </div>
-            <!-- "nắm chắc" ≠ nút "Đã thuộc" trong Kiểm tra: đây là mức nghỉ hưu
-                 (≥8 lần, sai ≤10%, bậc ≥5) — một lần may mắn không thành "thuộc". -->
-            <span class="text-slate-500 whitespace-nowrap" title="Đã làm ≥ 8 lần, sai ≤ 10%, bậc ôn ≥ 5">
+            <!-- "nắm chắc" ≠ nút "Đã thuộc" trong Kiểm tra: đây là mức nghỉ hưu,
+                 lấy ngưỡng từ RETIRE — một lần may mắn không thành "thuộc". -->
+            <span class="text-slate-500 whitespace-nowrap"
+                  :title="'Đã làm ≥ ' + RETIRE.n + ' lần, sai ≤ ' + Math.round(RETIRE.err * 100) + '%, bậc ôn ≥ ' + RETIRE.box">
               <span x-text="modeRetired"></span>/<span x-text="modeItems.length"></span> đã nắm chắc
             </span>
           </div>
