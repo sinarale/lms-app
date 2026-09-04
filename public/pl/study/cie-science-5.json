@@ -258,14 +258,14 @@
    "glossary": [
     {
      "term": "property",
-     "def": "Something about a substance that lets us tell it apart from other substances.",
+     "def": "Something about a substance that allows us to tell it apart from other substances.",
      "example": "Each substance has its own melting point (p.36).",
      "concept": "c.materials.properties.state"
     },
     {
      "term": "melting point",
      "def": "The temperature at which a solid becomes a liquid.",
-     "example": "Ice melts at 0 °C; gold melts at 1064 °C (p.36).",
+     "example": "Ice melts at 0 °C; the melting point of gold is 1064 °C (p.36).",
      "concept": "c.materials.properties.state"
     },
     {
@@ -275,41 +275,33 @@
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "term": "boiling",
-     "def": "All the particles in the liquid have enough energy to become a gas — it happens through the whole liquid.",
-     "example": "Most liquids boil only when they are heated (p.36).",
-     "concept": "c.materials.properties.boiling_evaporation"
-    },
-    {
      "term": "evaporation",
-     "def": "Particles on the surface of a liquid change into a gas.",
+     "def": "When particles on the surface of a liquid change into a gas.",
      "example": "Evaporation can occur at any temperature (p.36).",
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
      "term": "matter",
-     "def": "Anything that takes up space and has mass. Solid, liquid and gas are its three states.",
-     "example": "Air is a mixture of gases, so air is matter (p.39).",
-     "concept": "c.materials.properties.gases"
-    },
-    {
-     "term": "mass",
-     "def": "The amount of matter in something.",
-     "example": "A balloon full of air has more mass than an empty one (p.40).",
+     "def": "Everything that takes up space and has mass. Solid, liquid and gas are its three states.",
+     "example": "Air is a mixture of gases, and gas is one of the states of matter (p.35, p.39).",
      "concept": "c.materials.properties.gases"
     }
    ],
    "points": [
     {
-     "t": "Every substance has its own melting point, so melting point tells substances apart (p.36).",
+     "t": "Melting point is a property of a substance, so each substance has its own melting point (p.36).",
      "concept": "c.materials.properties.state"
     },
     {
-     "t": "Boiling point is a property too: every substance boils at its own temperature (p.36).",
+     "t": "Boiling point is a property too. Each substance boils at a certain temperature (p.36).",
      "concept": "c.materials.properties.boiling_evaporation"
     },
     {
-     "t": "A gas is matter, like a solid or a liquid. Matter is anything that takes up space and has mass (p.39).",
+     "t": "Boiling and evaporation both change a liquid into a gas, but they are not the same process (p.36).",
+     "concept": "c.materials.properties.boiling_evaporation"
+    },
+    {
+     "t": "All matter takes up space and has mass. Air is a mixture of gases, so air is matter (p.39).",
      "concept": "c.materials.properties.gases"
     }
    ],
@@ -318,10 +310,8 @@
     "property",
     "melting point",
     "boiling point",
-    "boiling",
     "evaporation",
-    "matter",
-    "mass"
+    "matter"
    ],
    "checklists": [
     {
@@ -329,92 +319,61 @@
      "title": "Melting points in the book (p.36, p.62)",
      "items": [
       {
-       "sign": "ice 0 °C",
-       "icon": "ice"
+       "sign": "ice 0 °C"
       },
       {
-       "sign": "candle wax 60 °C",
-       "icon": "fire"
+       "sign": "candle wax 60 °C"
       },
       {
-       "sign": "aluminium 660 °C",
-       "icon": "bar"
+       "sign": "aluminium 660 °C"
       },
       {
-       "sign": "silver 962 °C",
-       "icon": "sparkle"
+       "sign": "silver 962 °C"
       },
       {
-       "sign": "gold 1064 °C",
-       "icon": "fire"
+       "sign": "gold 1064 °C"
       },
       {
-       "sign": "copper 1083 °C",
-       "icon": "bar"
+       "sign": "copper 1083 °C"
       }
      ],
-     "note": "Each substance has its own melting point — that is why it is a property (p.36)."
+     "note": "The Check your progress table (p.62) asks you to list these from highest to lowest."
     },
     {
      "concept": "c.materials.properties.boiling_evaporation",
      "title": "Boiling points in the book (p.36)",
      "items": [
       {
-       "sign": "pure water 100 °C",
-       "icon": "drop"
+       "sign": "pure water 100 °C"
       },
       {
-       "sign": "vinegar 118 °C",
-       "icon": "beaker"
+       "sign": "vinegar 118 °C"
       },
       {
-       "sign": "liquid gold 2856 °C",
-       "icon": "fire"
+       "sign": "liquid gold 2856 °C"
       }
      ]
-    },
-    {
-     "concept": "c.materials.properties.gases",
-     "title": "Properties of gases (p.39)",
-     "items": [
-      {
-       "sign": "Takes up space",
-       "look_for": "fills its container",
-       "icon": "cloud"
-      },
-      {
-       "sign": "Has mass",
-       "look_for": "weighs something, even air",
-       "icon": "scale"
-      }
-     ],
-     "note": "\"We can't feel air unless it is moving\" (p.39) — but it is still matter."
     }
    ],
    "compares": [
     {
      "concept": "c.materials.properties.boiling_evaporation",
+     "page": "36",
      "title": "Boiling vs evaporation",
      "label_a": "Boiling",
      "label_b": "Evaporation",
      "rows": [
       {
-       "aspect": "Where",
-       "a": "All the particles, through the whole liquid",
+       "aspect": "Which particles",
+       "a": "All the particles in the liquid",
        "b": "Only particles on the surface"
       },
       {
        "aspect": "Temperature",
-       "a": "Only at the boiling point — usually needs heating",
-       "b": "At any temperature"
-      },
-      {
-       "aspect": "Speed",
-       "a": "Fast",
-       "b": "Slow"
+       "a": "Most liquids boil only when heated",
+       "b": "Can occur at any temperature"
       }
-     ],
-     "page": "36-37"
+     ]
     }
    ],
    "experiments": [
@@ -424,7 +383,7 @@
      "page": "37",
      "image": "melting.png",
      "summary": "The teacher heats three different solids in pans on a hotplate and measures the temperature of each one the moment it melts.",
-     "result": "The three solids melt at three different temperatures on the thermometer."
+     "result": "Each solid melts at a different temperature on the thermometer, and the readings go in a table."
     },
     {
      "concept": "c.materials.properties.gases",
@@ -432,7 +391,7 @@
      "page": "40",
      "image": "balloons.png",
      "summary": "Two blown-up balloons are hung from a ruler so they balance, then the tie on one balloon is loosened to let the air out.",
-     "result": "As the air leaves one balloon, the ruler tips down on the side of the full balloon."
+     "result": "When the tie on one balloon is loosened, the balanced ruler tips down on the side of the full balloon."
     }
    ]
   },
@@ -444,55 +403,43 @@
     {
      "term": "conduction",
      "def": "Heat being transferred from one object to another.",
-     "example": "A cold metal teaspoon in hot tea: after a while the handle feels warm (p.42-43).",
+     "example": "A cold metal teaspoon in a hot cup of tea: the handle feels warm after a while (p.42-43).",
      "concept": "c.materials.conductors.heat"
     },
     {
      "term": "thermal conductor",
-     "def": "A substance that conducts heat well.",
+     "def": "A substance or material that conducts heat well.",
      "example": "Metals. Silver is the best conductor of heat (p.43-44).",
      "concept": "c.materials.conductors.heat"
     },
     {
      "term": "electrical conductor",
-     "def": "A substance that lets electricity pass through it.",
-     "example": "Copper connecting wire, steel paper clip, aluminium foil (p.45-46).",
+     "def": "A substance or material that is able to conduct electricity.",
+     "example": "Metals, such as the copper connecting wire in the circuit (p.45).",
      "concept": "c.materials.conductors.electricity"
     },
     {
      "term": "insulator",
-     "def": "A substance that is NOT a good conductor of heat or electricity.",
-     "example": "Plastic, rubber, glass and most non-metals (p.45, p.61).",
+     "def": "A material or substance that is not a good conductor of electricity.",
+     "example": "Plastic, rubber, glass and most non-metal substances (p.61).",
      "concept": "c.materials.conductors.electricity"
     }
    ],
    "points": [
     {
-     "t": "Metals are good thermal conductors; glass and plastic are not. Silver is the best conductor of heat (p.44).",
+     "t": "Metals are good conductors of heat and silver is the best. Non-metals such as glass and plastic are not good conductors of heat (p.44).",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "How well a substance conducts heat is a property of that substance (p.44).",
+     "t": "How well a substance can conduct heat is a property of the substance. Some substances conduct heat better than others (p.44).",
      "concept": "c.materials.conductors.heat"
     },
     {
-     "t": "Poor conductors keep things warm. Tea stays hot longest in a polystyrene foam cup (p.45).",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Pots are metal but handles are plastic. Metal lets heat into the food; plastic keeps heat away from your hand (p.45).",
-     "concept": "c.materials.conductors.heat"
-    },
-    {
-     "t": "Conducting electricity is a property of a substance. Metals conduct electricity; most other substances do not (p.45).",
+     "t": "The ability to conduct electricity is a property of materials and substances. Metals conduct electricity (p.45).",
      "concept": "c.materials.conductors.electricity"
     },
     {
-     "t": "Graphite is a non-metal that conducts electricity, but only weakly. Sugar, water and plastic do not conduct at all (p.46-47).",
-     "concept": "c.materials.conductors.electricity"
-    },
-    {
-     "t": "Wires are metal, but their covering is plastic or rubber. Insulators stop the electricity reaching you (p.61).",
+     "t": "Substances that are not good conductors of electricity are called insulators (p.61).",
      "concept": "c.materials.conductors.electricity"
     }
    ],
@@ -510,31 +457,26 @@
      "items": [
       {
        "sign": "copper",
-       "look_for": "heat 386 · electricity 59 — best for both",
-       "icon": "heat"
+       "look_for": "heat 386 · electricity 59"
       },
       {
        "sign": "aluminium",
-       "look_for": "237 · 37",
-       "icon": "heat"
+       "look_for": "237 · 37"
       },
       {
        "sign": "graphite",
-       "look_for": "168 · 1 — good for heat, very poor for electricity",
-       "icon": "bar"
+       "look_for": "168 · 1"
       },
       {
        "sign": "brass",
-       "look_for": "150 · 16",
-       "icon": "heat"
+       "look_for": "150 · 16"
       },
       {
        "sign": "steel",
-       "look_for": "80 · 10 — lowest for heat",
-       "icon": "heat"
+       "look_for": "80 · 10"
       }
      ],
-     "note": "Units W/m·K. Silver is named the best conductor of heat in the text (p.44) but is not in this table."
+     "note": "Measured in W/m−K. Question 4 asks you to find the measurements that do not fit the pattern."
     }
    ],
    "compares": [],
@@ -545,7 +487,7 @@
      "page": "43",
      "image": "beads.png",
      "summary": "A bead is stuck with petroleum jelly to the top of a metal spoon, a plastic spoon, a glass rod, a pencil and a piece of polystyrene foam, then all of them are stood in hot water.",
-     "result": "The bead on the metal spoon drops first, then the glass rod; the polystyrene bead stays on longest."
+     "result": "The beads fall off one after another, and the order shows which material carried the heat fastest."
     },
     {
      "concept": "c.materials.conductors.electricity",
@@ -553,7 +495,7 @@
      "page": "45-46",
      "image": "circuit.png",
      "summary": "A lamp circuit is set up with two free wire ends, and different substances (copper, steel, aluminium foil, graphite, sugar, water) are placed between the ends in turn.",
-     "result": "The lamp is bright with the copper wire, paper clip and foil, dim with the pencil graphite, and dark with sugar, water and plastic."
+     "result": "For each substance the lamp is bright, dim or does not shine, recorded as two ticks, one tick or none."
     }
    ]
   },
@@ -564,44 +506,38 @@
    "glossary": [
     {
      "term": "physical change",
-     "def": "A change in how a substance looks or feels. It does not become a new substance.",
-     "example": "Ice melting into water (p.50).",
+     "def": "A change that alters how a substance looks or feels, without turning it into a new substance.",
+     "example": "A change of state, such as ice melting into water (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
      "term": "reversible",
-     "def": "A change that can be changed back.",
-     "example": "Freeze the water and it becomes ice again (p.50).",
+     "def": "A change that can be changed back again.",
+     "example": "Solid ice to liquid water, and liquid water back to solid ice (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
      "term": "irreversible",
-     "def": "A change that cannot be reversed — one substance turns into another.",
-     "example": "Burning a match: wood becomes black carbon (p.50).",
+     "def": "A change that cannot be reversed.",
+     "example": "Burning a match: the wood changes into a black substance called carbon (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
      "term": "solute",
      "def": "The substance that dissolves.",
-     "example": "Salt in sea water (p.51).",
+     "example": "The dissolved salt in sea water (p.51).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
      "term": "solvent",
-     "def": "The substance the solute dissolves in.",
-     "example": "Water (p.51).",
-     "concept": "c.materials.reversible.dissolving"
-    },
-    {
-     "term": "solution",
-     "def": "A solute and a solvent together.",
-     "example": "Salt water (p.51).",
+     "def": "The substance in which the solute dissolves.",
+     "example": "The water in sea water (p.51).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
      "term": "uniform",
-     "def": "Looks the same throughout.",
-     "example": "A solution is uniform — you cannot see the solute particles (p.52).",
+     "def": "Looking the same throughout.",
+     "example": "A solution has a uniform appearance, so you cannot see the solute in it (p.52).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
@@ -613,23 +549,31 @@
    ],
    "points": [
     {
-     "t": "A physical change alters how a substance looks or feels, not what it is. No new substance forms (p.50).",
+     "t": "A physical change alters how a substance looks or feels. The substance does not change into a new substance (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "Heating and cooling drive reversible changes. Heat melts ice; losing heat freezes water again (p.50).",
+     "t": "A change is reversible when the substance can be changed back to the way it was (p.50).",
      "concept": "c.materials.reversible.changes"
     },
     {
-     "t": "A solution is a solute dissolved in a solvent. Sea water is salt (solute) dissolved in water (solvent) (p.51).",
+     "t": "Irreversible changes cannot be reversed, and some turn one substance into another. That is a chemical change (p.50).",
+     "concept": "c.materials.reversible.changes"
+    },
+    {
+     "t": "The solute and the solvent together form a solution. Sea water is salty because there is dissolved salt in the water (p.51).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Dissolving is reversible: the solute is still there, spread evenly through the solvent. The solution looks uniform (p.52).",
+     "t": "When a solute dissolves, its particles move between the solvent particles and spread evenly. That is why you cannot see the solute afterwards (p.52).",
      "concept": "c.materials.reversible.dissolving"
     },
     {
-     "t": "Solutes dissolve faster in hot water and when stirred. Heat and stirring make the particles move faster and spread out (p.53-54).",
+     "t": "Stirring increases the rate at which a solute dissolves. It spreads the solute particles into the spaces between the solvent particles more quickly (p.53).",
+     "concept": "c.materials.reversible.factors"
+    },
+    {
+     "t": "In a heated solvent the particles gain energy and move faster, so the solute dissolves faster (p.54).",
      "concept": "c.materials.reversible.factors"
     }
    ],
@@ -640,53 +584,34 @@
     "irreversible",
     "solute",
     "solvent",
-    "solution",
     "uniform",
     "rate"
    ],
-   "checklists": [
-    {
-     "concept": "c.materials.reversible.factors",
-     "title": "Ways to make a solid dissolve faster (p.53)",
-     "items": [
-      {
-       "sign": "Stir",
-       "look_for": "spreads solute particles between solvent particles faster",
-       "icon": "beaker"
-      },
-      {
-       "sign": "Heat",
-       "look_for": "particles gain energy, move faster, spread out more",
-       "icon": "heat"
-      }
-     ],
-     "note": "Left long enough, sugar dissolves by itself even in cold water — particles are always moving (p.54 Q4)."
-    }
-   ],
+   "checklists": [],
    "compares": [
     {
      "concept": "c.materials.reversible.changes",
+     "page": "50",
      "title": "Reversible vs irreversible",
      "label_a": "Reversible",
      "label_b": "Irreversible",
      "rows": [
       {
-       "aspect": "Change back?",
+       "aspect": "Change it back?",
        "a": "Yes",
        "b": "No"
       },
       {
-       "aspect": "New substance?",
-       "a": "No — physical change",
-       "b": "Yes — chemical change"
+       "aspect": "A new substance?",
+       "a": "No — a physical change",
+       "b": "Sometimes — then it is a chemical change"
       },
       {
-       "aspect": "Book examples",
-       "a": "Ice ⇄ water; dissolving salt",
-       "b": "Burning a match; boiling an egg"
+       "aspect": "The book's example",
+       "a": "Ice melts to water, water freezes to ice",
+       "b": "A burning match: wood becomes carbon"
       }
-     ],
-     "page": "50"
+     ]
     }
    ],
    "experiments": [
@@ -696,7 +621,7 @@
      "page": "49",
      "image": "icewater.png",
      "summary": "Ice cubes are left on a saucer in a warm place for five minutes, then the water is put back in the freezer.",
-     "result": "After five minutes the ice cubes have become a puddle of water, and in the freezer the water turns back into ice."
+     "result": "After five minutes in the warm the ice has melted, and back in the freezer it becomes solid again."
     },
     {
      "concept": "c.materials.reversible.dissolving",
@@ -704,7 +629,7 @@
      "page": "52",
      "image": "coppersulfate.png",
      "summary": "Look at the picture of copper sulfate being added to water and describe what happens to it.",
-     "result": "The blue copper sulfate spreads out until the whole liquid is the same pale blue and no grains can be seen."
+     "result": "The copper sulfate spreads through the water until you can no longer see it in the solution."
     },
     {
      "concept": "c.materials.reversible.factors",
@@ -712,7 +637,7 @@
      "page": "54",
      "image": "marcus.png",
      "summary": "A teaspoon of sugar is stirred into 100 ml of cold water and into 100 ml of hot water, and the time it takes to dissolve is measured for each.",
-     "result": "The sugar in the hot-water jar disappears in far less time than the sugar in the cold-water jar."
+     "result": "The sugar in the hot water takes less time on the stopwatch than the sugar in the cold water."
     }
    ]
   },
@@ -723,14 +648,14 @@
    "glossary": [
     {
      "term": "chemical reaction",
-     "def": "Substances mixed together change and form a new substance.",
-     "example": "Vinegar and bicarbonate of soda (p.57).",
+     "def": "When substances are mixed together, change, and form a new substance.",
+     "example": "Vinegar mixed with bicarbonate of soda (p.57).",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
      "term": "react",
-     "def": "What substances do together in a chemical reaction.",
-     "example": "Vinegar and bicarbonate of soda react in the jar (p.57).",
+     "def": "What substances do when they change together and form a new substance.",
+     "example": "Vinegar and bicarbonate of soda react together (p.57).",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
@@ -741,8 +666,8 @@
     },
     {
      "term": "products",
-     "def": "The new substances that form.",
-     "example": "The gas that bubbles out of the jar (p.57).",
+     "def": "The new substances that form in a reaction.",
+     "example": "The gas that is produced in the jar (p.57-58).",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
@@ -754,19 +679,15 @@
    ],
    "points": [
     {
-     "t": "A chemical reaction makes a new substance. The substances that react are the reactants; the new substances are the products (p.57).",
+     "t": "In a chemical reaction substances react together and form new substances. The substances that react are the reactants and the new ones are the products (p.57).",
      "concept": "c.materials.chemical.reactants_products"
     },
     {
-     "t": "Evidence is something you can observe that shows a product has formed. No new substance means no chemical reaction (p.58).",
+     "t": "Sometimes we can see that a product has formed, and that is evidence of the reaction. There are also other ways to tell (p.58).",
      "concept": "c.materials.chemical.evidence"
     },
     {
-     "t": "Limewater turns cloudy when carbon dioxide reacts with it. The new solid is calcium carbonate (p.58-59).",
-     "concept": "c.materials.chemical.evidence"
-    },
-    {
-     "t": "A chemical reaction can give out heat or take it in. That is why the temperature changes (p.59).",
+     "t": "When clear limewater is mixed with carbon dioxide, the reaction forms a substance called calcium carbonate (p.59).",
      "concept": "c.materials.chemical.evidence"
     }
    ],
@@ -781,56 +702,43 @@
    "checklists": [
     {
      "concept": "c.materials.chemical.evidence",
-     "title": "Evidence for chemical reactions (p.58-59)",
+     "title": "Three ways to tell a reaction has taken place (p.59 Q1)",
      "items": [
       {
        "sign": "A gas is produced",
-       "look_for": "bubbles appear",
-       "icon": "bubbles"
+       "look_for": "vinegar and bicarbonate of soda (p.58)"
       },
       {
        "sign": "A colour change",
-       "look_for": "the mixture changes colour",
-       "icon": "swap"
+       "look_for": "iodine solution and cornstarch (p.58)"
       },
       {
        "sign": "A temperature change",
-       "look_for": "the thermometer reading changes",
-       "icon": "heat"
-      },
-      {
-       "sign": "A new solid forms",
-       "look_for": "a clear liquid turns cloudy",
-       "icon": "cloud"
+       "look_for": "vinegar on wire wool (p.59)"
       }
      ],
-     "note": "Question 1 (p.59) asks for THREE ways: gas, colour change, temperature change."
+     "note": "Question 1 asks for three ways with an example of each; the topic's investigations show one each."
     }
    ],
    "compares": [
     {
      "concept": "c.materials.chemical.reactants_products",
+     "page": "57-59",
      "title": "Reactants → products",
      "label_a": "Reactants",
-     "label_b": "Products",
+     "label_b": "Product",
      "rows": [
       {
-       "aspect": "Vinegar + bicarbonate of soda",
+       "aspect": "In the jar",
        "a": "vinegar, bicarbonate of soda",
-       "b": "a gas (p.57)"
+       "b": "a gas (p.57-58)"
       },
       {
-       "aspect": "Limewater + carbon dioxide",
+       "aspect": "In the beaker",
        "a": "limewater, carbon dioxide",
        "b": "calcium carbonate (p.59 Q2)"
-      },
-      {
-       "aspect": "Iron nail in water",
-       "a": "iron, water, oxygen",
-       "b": "rust (p.62 Q5)"
       }
-     ],
-     "page": "57-59"
+     ]
     }
    ],
    "experiments": [
@@ -840,7 +748,7 @@
      "page": "57",
      "image": "vinegar.png",
      "summary": "A teaspoon of bicarbonate of soda is added to vinegar in a jar and watched for five minutes.",
-     "result": "Bubbles rise from the jar straight away, and after five minutes a layer of liquid is left behind."
+     "result": "A gas is produced straight away, and after five minutes you look for any other product."
     },
     {
      "concept": "c.materials.chemical.evidence",
@@ -848,7 +756,7 @@
      "page": "58",
      "image": "limewater.png",
      "summary": "Iodine solution is added to water and cornstarch is stirred in; in another beaker, air is breathed through a straw into limewater.",
-     "result": "The iodine mixture turns dark blue-black when the cornstarch goes in, and the limewater turns milky."
+     "result": "Adding cornstarch to the iodine solution changes what you see, and breathing carbon dioxide into the limewater forms a new substance."
     },
     {
      "concept": "c.materials.chemical.evidence",
@@ -856,7 +764,7 @@
      "page": "59",
      "image": "wirewool.png",
      "summary": "Vinegar is poured over a ball of wire wool in a beaker, and the temperature is recorded straight away and again after five minutes.",
-     "result": "After five minutes the thermometer reading is different from the first reading."
+     "result": "The thermometer reading after five minutes is different from the reading taken at the start."
     }
    ]
   }
@@ -903,14 +811,14 @@
    "id": "f.120eb92b",
    "concept": "c.materials.conductors.heat",
    "front_en": "Which cup keeps tea warm longest?",
-   "back_en": "Polystyrene foam — a poor conductor of heat.",
-   "example_en": "p.45 Q4"
+   "back_en": "Polystyrene foam — a non-metal, so not a good conductor of heat.",
+   "example_en": "p.44-45 Q4"
   },
   {
    "id": "f.b6737cf3",
    "concept": "c.materials.conductors.electricity",
    "front_en": "A non-metal that conducts electricity?",
-   "back_en": "Pencil graphite — the lamp shines, dimly.",
+   "back_en": "Pencil graphite — the table gives it 1 for conducting electricity.",
    "example_en": "p.45-47"
   },
   {
@@ -953,20 +861,20 @@
    "concept": "c.materials.chemical.evidence",
    "front_en": "Three kinds of evidence for a chemical reaction?",
    "back_en": "A gas is produced, a colour change, a temperature change.",
-   "example_en": "p.58-59"
+   "example_en": "p.59 Q1"
   },
   {
    "id": "f.461e6646",
    "concept": "c.materials.chemical.evidence",
    "front_en": "What happens to limewater with carbon dioxide?",
-   "back_en": "It turns cloudy — calcium carbonate forms.",
-   "example_en": "p.58-59"
+   "back_en": "It reacts with the carbon dioxide and forms calcium carbonate.",
+   "example_en": "p.59 Q2"
   },
   {
    "id": "f.9ae33a7d",
    "concept": "c.materials.properties.state",
    "front_en": "Property",
-   "back_en": "Something about a substance that lets us tell it apart from other substances.",
+   "back_en": "Something about a substance that allows us to tell it apart from other substances.",
    "example_en": "Each substance has its own melting point (p.36).",
    "kind": "term"
   },
@@ -975,7 +883,7 @@
    "concept": "c.materials.properties.state",
    "front_en": "Melting point",
    "back_en": "The temperature at which a solid becomes a liquid.",
-   "example_en": "Ice melts at 0 °C; gold melts at 1064 °C (p.36).",
+   "example_en": "Ice melts at 0 °C; the melting point of gold is 1064 °C (p.36).",
    "kind": "term"
   },
   {
@@ -987,18 +895,10 @@
    "kind": "term"
   },
   {
-   "id": "f.177a695d",
-   "concept": "c.materials.properties.boiling_evaporation",
-   "front_en": "Boiling",
-   "back_en": "All the particles in the liquid have enough energy to become a gas — it happens through the whole liquid.",
-   "example_en": "Most liquids boil only when they are heated (p.36).",
-   "kind": "term"
-  },
-  {
    "id": "f.3fe997b6",
    "concept": "c.materials.properties.boiling_evaporation",
    "front_en": "Evaporation",
-   "back_en": "Particles on the surface of a liquid change into a gas.",
+   "back_en": "When particles on the surface of a liquid change into a gas.",
    "example_en": "Evaporation can occur at any temperature (p.36).",
    "kind": "term"
   },
@@ -1006,16 +906,8 @@
    "id": "f.0a94e1dd",
    "concept": "c.materials.properties.gases",
    "front_en": "Matter",
-   "back_en": "Anything that takes up space and has mass. Solid, liquid and gas are its three states.",
-   "example_en": "Air is a mixture of gases, so air is matter (p.39).",
-   "kind": "term"
-  },
-  {
-   "id": "f.af0ad10b",
-   "concept": "c.materials.properties.gases",
-   "front_en": "Mass",
-   "back_en": "The amount of matter in something.",
-   "example_en": "A balloon full of air has more mass than an empty one (p.40).",
+   "back_en": "Everything that takes up space and has mass. Solid, liquid and gas are its three states.",
+   "example_en": "Air is a mixture of gases, and gas is one of the states of matter (p.35, p.39).",
    "kind": "term"
   },
   {
@@ -1023,14 +915,14 @@
    "concept": "c.materials.conductors.heat",
    "front_en": "Conduction",
    "back_en": "Heat being transferred from one object to another.",
-   "example_en": "A cold metal teaspoon in hot tea: after a while the handle feels warm (p.42-43).",
+   "example_en": "A cold metal teaspoon in a hot cup of tea: the handle feels warm after a while (p.42-43).",
    "kind": "term"
   },
   {
    "id": "f.06dd155a",
    "concept": "c.materials.conductors.heat",
    "front_en": "Thermal conductor",
-   "back_en": "A substance that conducts heat well.",
+   "back_en": "A substance or material that conducts heat well.",
    "example_en": "Metals. Silver is the best conductor of heat (p.43-44).",
    "kind": "term"
   },
@@ -1038,40 +930,40 @@
    "id": "f.e6856b98",
    "concept": "c.materials.conductors.electricity",
    "front_en": "Electrical conductor",
-   "back_en": "A substance that lets electricity pass through it.",
-   "example_en": "Copper connecting wire, steel paper clip, aluminium foil (p.45-46).",
+   "back_en": "A substance or material that is able to conduct electricity.",
+   "example_en": "Metals, such as the copper connecting wire in the circuit (p.45).",
    "kind": "term"
   },
   {
    "id": "f.9235ba82",
    "concept": "c.materials.conductors.electricity",
    "front_en": "Insulator",
-   "back_en": "A substance that is NOT a good conductor of heat or electricity.",
-   "example_en": "Plastic, rubber, glass and most non-metals (p.45, p.61).",
+   "back_en": "A material or substance that is not a good conductor of electricity.",
+   "example_en": "Plastic, rubber, glass and most non-metal substances (p.61).",
    "kind": "term"
   },
   {
    "id": "f.ac0ae625",
    "concept": "c.materials.reversible.changes",
    "front_en": "Physical change",
-   "back_en": "A change in how a substance looks or feels. It does not become a new substance.",
-   "example_en": "Ice melting into water (p.50).",
+   "back_en": "A change that alters how a substance looks or feels, without turning it into a new substance.",
+   "example_en": "A change of state, such as ice melting into water (p.50).",
    "kind": "term"
   },
   {
    "id": "f.86b6e483",
    "concept": "c.materials.reversible.changes",
    "front_en": "Reversible",
-   "back_en": "A change that can be changed back.",
-   "example_en": "Freeze the water and it becomes ice again (p.50).",
+   "back_en": "A change that can be changed back again.",
+   "example_en": "Solid ice to liquid water, and liquid water back to solid ice (p.50).",
    "kind": "term"
   },
   {
    "id": "f.3dac8cdc",
    "concept": "c.materials.reversible.changes",
    "front_en": "Irreversible",
-   "back_en": "A change that cannot be reversed — one substance turns into another.",
-   "example_en": "Burning a match: wood becomes black carbon (p.50).",
+   "back_en": "A change that cannot be reversed.",
+   "example_en": "Burning a match: the wood changes into a black substance called carbon (p.50).",
    "kind": "term"
   },
   {
@@ -1079,31 +971,23 @@
    "concept": "c.materials.reversible.dissolving",
    "front_en": "Solute",
    "back_en": "The substance that dissolves.",
-   "example_en": "Salt in sea water (p.51).",
+   "example_en": "The dissolved salt in sea water (p.51).",
    "kind": "term"
   },
   {
    "id": "f.df5d884e",
    "concept": "c.materials.reversible.dissolving",
    "front_en": "Solvent",
-   "back_en": "The substance the solute dissolves in.",
-   "example_en": "Water (p.51).",
-   "kind": "term"
-  },
-  {
-   "id": "f.b4f91bdb",
-   "concept": "c.materials.reversible.dissolving",
-   "front_en": "Solution",
-   "back_en": "A solute and a solvent together.",
-   "example_en": "Salt water (p.51).",
+   "back_en": "The substance in which the solute dissolves.",
+   "example_en": "The water in sea water (p.51).",
    "kind": "term"
   },
   {
    "id": "f.e96b0da8",
    "concept": "c.materials.reversible.dissolving",
    "front_en": "Uniform",
-   "back_en": "Looks the same throughout.",
-   "example_en": "A solution is uniform — you cannot see the solute particles (p.52).",
+   "back_en": "Looking the same throughout.",
+   "example_en": "A solution has a uniform appearance, so you cannot see the solute in it (p.52).",
    "kind": "term"
   },
   {
@@ -1118,16 +1002,16 @@
    "id": "f.5aedf181",
    "concept": "c.materials.chemical.reactants_products",
    "front_en": "Chemical reaction",
-   "back_en": "Substances mixed together change and form a new substance.",
-   "example_en": "Vinegar and bicarbonate of soda (p.57).",
+   "back_en": "When substances are mixed together, change, and form a new substance.",
+   "example_en": "Vinegar mixed with bicarbonate of soda (p.57).",
    "kind": "term"
   },
   {
    "id": "f.4d1f996a",
    "concept": "c.materials.chemical.reactants_products",
    "front_en": "React",
-   "back_en": "What substances do together in a chemical reaction.",
-   "example_en": "Vinegar and bicarbonate of soda react in the jar (p.57).",
+   "back_en": "What substances do when they change together and form a new substance.",
+   "example_en": "Vinegar and bicarbonate of soda react together (p.57).",
    "kind": "term"
   },
   {
@@ -1142,8 +1026,8 @@
    "id": "f.fe0a091f",
    "concept": "c.materials.chemical.reactants_products",
    "front_en": "Products",
-   "back_en": "The new substances that form.",
-   "example_en": "The gas that bubbles out of the jar (p.57).",
+   "back_en": "The new substances that form in a reaction.",
+   "example_en": "The gas that is produced in the jar (p.57-58).",
    "kind": "term"
   },
   {
@@ -2075,33 +1959,6 @@
    "difficulty": 1
   },
   {
-   "id": "q.cc5a4b3b",
-   "concept": "c.materials.chemical.reactants_products",
-   "page": 62,
-   "stem_en": "An iron nail left in a saucer of water rusts. Which are the reactants?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Iron and rust"
-    },
-    {
-     "key": "b",
-     "en": "Rust and water"
-    },
-    {
-     "key": "c",
-     "en": "Iron and salt"
-    },
-    {
-     "key": "d",
-     "en": "Iron, water and oxygen"
-    }
-   ],
-   "answer": "d",
-   "why_en": "Iron reacts with water and oxygen; rust is the product (p.62 Q5).",
-   "difficulty": 2
-  },
-  {
    "id": "q.53dcd282",
    "concept": "c.materials.chemical.evidence",
    "page": 58,
@@ -2237,33 +2094,6 @@
    "difficulty": 3
   },
   {
-   "id": "q.348ff055",
-   "concept": "c.materials.conductors.electricity",
-   "page": 46,
-   "stem_en": "In the circuit test, aluminium foil is placed between the two wire ends. What happens?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "The lamp does not shine"
-    },
-    {
-     "key": "b",
-     "en": "The lamp shines brightly"
-    },
-    {
-     "key": "c",
-     "en": "The lamp shines dimly"
-    },
-    {
-     "key": "d",
-     "en": "The cells run out"
-    }
-   ],
-   "answer": "b",
-   "why_en": "Aluminium is a metal — the lamp shines brightly (two ticks) (p.46).",
-   "difficulty": 1
-  },
-  {
    "id": "q.fd4ea15b",
    "concept": "c.materials.conductors.heat",
    "page": 44,
@@ -2272,11 +2102,11 @@
    "choices": [
     {
      "key": "a",
-     "en": "A property of the substance"
+     "en": "A change of state"
     },
     {
      "key": "b",
-     "en": "A change of state"
+     "en": "A property of the substance"
     },
     {
      "key": "c",
@@ -2287,10 +2117,64 @@
      "en": "A type of dissolving"
     }
    ],
-   "answer": "a",
+   "answer": "b",
    "why_en": "How well a substance can conduct heat is a property of the substance (p.44)."
+  },
+  {
+   "id": "q.99ffaea7",
+   "concept": "c.materials.conductors.electricity",
+   "page": 47,
+   "stem_en": "From the book's table, which substance conducts heat WORST?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "steel (80)"
+    },
+    {
+     "key": "b",
+     "en": "graphite (168)"
+    },
+    {
+     "key": "c",
+     "en": "brass (150)"
+    },
+    {
+     "key": "d",
+     "en": "copper (386)"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Steel has the lowest heat value in the table, 80 W/m−K (p.47).",
+   "difficulty": 2
+  },
+  {
+   "id": "q.27685397",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": 62,
+   "stem_en": "Class 6 put an iron nail in a saucer of water and a few days later it had rusted. What is the product of the reaction?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The iron nail"
+    },
+    {
+     "key": "b",
+     "en": "The water"
+    },
+    {
+     "key": "c",
+     "en": "The saucer"
+    },
+    {
+     "key": "d",
+     "en": "Rust"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The nail had rusted, so rust is the new substance that formed (p.62 Q5).",
+   "difficulty": 2
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T09:56:36+00:00"
+ "generated_at": "2026-09-04T10:15:15+00:00"
 }
