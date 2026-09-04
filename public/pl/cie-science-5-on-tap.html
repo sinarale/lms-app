@@ -167,6 +167,16 @@
           { k: 'compare', t: '⇄ So sánh',      on: 'bg-slate-700 text-white border-slate-700',    off: 'bg-white text-slate-700 border-slate-300' },
         ],
         toggleShow(k) { this.show[k] = !this.show[k]; localStorage.setItem('lms_show', JSON.stringify(this.show)); },
+        // Chip nào không có nội dung trong phạm vi đang xem thì ẩn hẳn: bấm vào
+        // một bộ lọc rỗng chỉ làm trẻ tưởng trang hỏng. Tính theo scopedSummary
+        // nên đổi phạm vi ở cây bên trái là chip tự hiện/ẩn theo.
+        hasKind(k) {
+          const F = { gloss: 'glossary', facts: null, list: 'checklists',
+                      watch: 'watch_out', exp: 'experiments', compare: 'compares' };
+          return this.scopedSummary.some(sec =>
+            (k === 'facts' ? this.points(sec) : (sec[F[k]] || [])).length);
+        },
+        get kinds() { return this.KINDS.filter(kd => this.hasKind(kd.k)); },
         toggleDetail() { this.detail = !this.detail; localStorage.setItem('lms_detail', this.detail ? '1' : '0'); },
 
         // ── Phạm vi học ───────────────────────────────────────────────────────
@@ -915,7 +925,7 @@
     <div class="space-y-5">
       <!-- Lọc loại nội dung + bật chi tiết. Class ở KINDS là literal để Tailwind quét thấy. -->
       <div class="flex flex-wrap items-center gap-1.5">
-        <template x-for="kd in KINDS" :key="kd.k">
+        <template x-for="kd in kinds" :key="kd.k">
           <button @click="toggleShow(kd.k)" :class="show[kd.k] ? kd.on : kd.off"
                   class="px-2.5 py-1 text-xs font-medium rounded-full border transition-colors" x-text="kd.t"></button>
         </template>
