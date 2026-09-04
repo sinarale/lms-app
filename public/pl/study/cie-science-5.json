@@ -1037,6 +1037,41 @@
    "back_en": "Something we can see that shows a product has formed.",
    "example_en": "The gas produced when vinegar and bicarbonate of soda react (p.58).",
    "kind": "term"
+  },
+  {
+   "id": "f.ad2b902f",
+   "concept": "c.materials.conductors.heat",
+   "front_en": "Best and worst heat conductor in the workbook table?",
+   "back_en": "Best silver 420, worst stainless steel 15.",
+   "example_en": "WB p.24"
+  },
+  {
+   "id": "f.f0376a2b",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Iron + sulfur makes what?",
+   "back_en": "Iron sulfide — the product of the reaction.",
+   "example_en": "WB p.33"
+  },
+  {
+   "id": "f.4b728e6c",
+   "concept": "c.materials.chemical.reactants_products",
+   "front_en": "Reactants and products when plants make food?",
+   "back_en": "Reactants: carbon dioxide and water. Products: oxygen and glucose.",
+   "example_en": "WB p.35"
+  },
+  {
+   "id": "f.ca152e21",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "front_en": "Boiling point of acetone in the workbook?",
+   "back_en": "50.5 °C.",
+   "example_en": "WB p.19"
+  },
+  {
+   "id": "f.4637f898",
+   "concept": "c.materials.conductors.electricity",
+   "front_en": "Which part of a lamp is not an electrical conductor?",
+   "back_en": "The glass bulb; the filament and wires are metal.",
+   "example_en": "WB p.23"
   }
  ],
  "quiz": [
@@ -1257,33 +1292,6 @@
    "difficulty": 3
   },
   {
-   "id": "q.5d5a3948",
-   "concept": "c.materials.properties.gases",
-   "page": 39,
-   "stem_en": "Which TWO properties does the book say all matter has?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "It takes up space and it has mass"
-    },
-    {
-     "key": "b",
-     "en": "It is heavy and it is hot"
-    },
-    {
-     "key": "c",
-     "en": "It can be seen and it can be felt"
-    },
-    {
-     "key": "d",
-     "en": "It melts and it boils"
-    }
-   ],
-   "answer": "a",
-   "why_en": "All matter takes up space and has mass — including gases like air (p.39).",
-   "difficulty": 1
-  },
-  {
    "id": "q.48e71790",
    "concept": "c.materials.properties.gases",
    "page": 40,
@@ -1365,60 +1373,6 @@
    "difficulty": 1
   },
   {
-   "id": "q.b0f711b0",
-   "concept": "c.materials.conductors.heat",
-   "page": 44,
-   "stem_en": "Which substance does the book say is the best conductor of heat?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Silver"
-    },
-    {
-     "key": "b",
-     "en": "Copper"
-    },
-    {
-     "key": "c",
-     "en": "Steel"
-    },
-    {
-     "key": "d",
-     "en": "Glass"
-    }
-   ],
-   "answer": "a",
-   "why_en": "\"Silver is the best conductor of heat\" (p.44).",
-   "difficulty": 1
-  },
-  {
-   "id": "q.f119166d",
-   "concept": "c.materials.conductors.heat",
-   "page": 43,
-   "stem_en": "In the bead investigation, why does the bead fall off the metal spoon first?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Metal is the heaviest"
-    },
-    {
-     "key": "b",
-     "en": "Metal conducts heat best, so the jelly melts first"
-    },
-    {
-     "key": "c",
-     "en": "The bead was stuck on badly"
-    },
-    {
-     "key": "d",
-     "en": "Hot water rises up metal"
-    }
-   ],
-   "answer": "b",
-   "why_en": "Metal conducts heat fastest, melting the petroleum jelly first (p.43-44).",
-   "difficulty": 2
-  },
-  {
    "id": "q.6531e990",
    "concept": "c.materials.conductors.heat",
    "page": 45,
@@ -1471,60 +1425,6 @@
    "answer": "d",
    "why_en": "Metal is a good thermal conductor; glass is not (p.62 Q2, p.44).",
    "difficulty": 2
-  },
-  {
-   "id": "q.2f80057f",
-   "concept": "c.materials.conductors.electricity",
-   "page": 47,
-   "stem_en": "From the book's table, which substance conducts electricity BEST?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "aluminium (37)"
-    },
-    {
-     "key": "b",
-     "en": "copper (59)"
-    },
-    {
-     "key": "c",
-     "en": "graphite (1)"
-    },
-    {
-     "key": "d",
-     "en": "steel (10)"
-    }
-   ],
-   "answer": "b",
-   "why_en": "Copper has the highest electricity value, 59 (p.47).",
-   "difficulty": 1
-  },
-  {
-   "id": "q.e328f03d",
-   "concept": "c.materials.conductors.electricity",
-   "page": 47,
-   "stem_en": "Which substance in the table does NOT fit the pattern 'good heat conductor = good electricity conductor'?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "copper"
-    },
-    {
-     "key": "b",
-     "en": "brass"
-    },
-    {
-     "key": "c",
-     "en": "graphite"
-    },
-    {
-     "key": "d",
-     "en": "aluminium"
-    }
-   ],
-   "answer": "c",
-   "why_en": "Graphite conducts heat well (168) but electricity very poorly (1) (p.47 Q4).",
-   "difficulty": 3
   },
   {
    "id": "q.6805c61a",
@@ -1743,87 +1643,6 @@
    "difficulty": 2
   },
   {
-   "id": "q.45b66474",
-   "concept": "c.materials.reversible.dissolving",
-   "page": 52,
-   "stem_en": "A solution looks the same all the way through. What word does the book use for this?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Reversible"
-    },
-    {
-     "key": "b",
-     "en": "Irreversible"
-    },
-    {
-     "key": "c",
-     "en": "Physical"
-    },
-    {
-     "key": "d",
-     "en": "Uniform"
-    }
-   ],
-   "answer": "d",
-   "why_en": "A solution has a uniform appearance (p.52).",
-   "difficulty": 1
-  },
-  {
-   "id": "q.2b8ec59c",
-   "concept": "c.materials.reversible.factors",
-   "page": 53,
-   "stem_en": "Why did Marcus's coffee taste bitter even though he put in two teaspoons of sugar?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "He did not stir, so the sugar had not dissolved"
-    },
-    {
-     "key": "b",
-     "en": "The sugar was old"
-    },
-    {
-     "key": "c",
-     "en": "Coffee always tastes bitter"
-    },
-    {
-     "key": "d",
-     "en": "The water was too hot"
-    }
-   ],
-   "answer": "a",
-   "why_en": "Without stirring, the sugar stayed at the bottom (p.53).",
-   "difficulty": 1
-  },
-  {
-   "id": "q.4e7fd7b7",
-   "concept": "c.materials.reversible.factors",
-   "page": 53,
-   "stem_en": "Name the TWO factors the book says make a solid dissolve faster.",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Cooling and shaking"
-    },
-    {
-     "key": "b",
-     "en": "Stirring and heating"
-    },
-    {
-     "key": "c",
-     "en": "Adding more solute and waiting"
-    },
-    {
-     "key": "d",
-     "en": "Using a bigger jar and more water"
-    }
-   ],
-   "answer": "b",
-   "why_en": "Stirring and heating both increase the rate of dissolving (p.53-54).",
-   "difficulty": 1
-  },
-  {
    "id": "q.2ca031b0",
    "concept": "c.materials.reversible.factors",
    "page": 54,
@@ -2013,33 +1832,6 @@
    "difficulty": 2
   },
   {
-   "id": "q.064e7afd",
-   "concept": "c.materials.chemical.evidence",
-   "page": 59,
-   "stem_en": "In investigation B you pour vinegar on wire wool and wait five minutes. What are you measuring?",
-   "choices": [
-    {
-     "key": "a",
-     "en": "Colour"
-    },
-    {
-     "key": "b",
-     "en": "Mass"
-    },
-    {
-     "key": "c",
-     "en": "Temperature"
-    },
-    {
-     "key": "d",
-     "en": "Volume"
-    }
-   ],
-   "answer": "c",
-   "why_en": "You record the thermometer before and after — a temperature change is evidence (p.59).",
-   "difficulty": 1
-  },
-  {
    "id": "q.0f6e25e3",
    "concept": "c.materials.chemical.evidence",
    "page": 59,
@@ -2094,37 +1886,388 @@
    "difficulty": 3
   },
   {
-   "id": "q.fd4ea15b",
-   "concept": "c.materials.conductors.heat",
-   "page": 44,
-   "difficulty": 2,
-   "stem_en": "How well a substance conducts heat is described in the book as what?",
+   "id": "q.83274c97",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "page": "WB 21",
+   "difficulty": 3,
+   "stem_en": "Water boils at 100 °C, vinegar at 118 °C and olive oil at 300 °C. Heated equally, which turns into a gas first?",
    "choices": [
     {
      "key": "a",
-     "en": "A change of state"
+     "en": "Olive oil — it is the thickest"
     },
     {
      "key": "b",
-     "en": "A property of the substance"
+     "en": "Vinegar — it is in the middle"
     },
     {
      "key": "c",
-     "en": "A chemical reaction"
+     "en": "They all turn to gas together"
     },
     {
      "key": "d",
-     "en": "A type of dissolving"
+     "en": "Water — it has the lowest boiling point"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The liquid with the lowest boiling point reaches it first (WB p.21)."
+  },
+  {
+   "id": "q.afd0c294",
+   "concept": "c.materials.conductors.heat",
+   "page": "WB 23",
+   "difficulty": 2,
+   "stem_en": "Why is a wooden spoon good for stirring soup cooking in a pot?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Wood is heavier than metal"
+    },
+    {
+     "key": "b",
+     "en": "Wood makes the soup taste better"
+    },
+    {
+     "key": "c",
+     "en": "Wood is a poor conductor, so heat does not travel to your hand"
+    },
+    {
+     "key": "d",
+     "en": "Wood conducts heat faster than metal"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Non-metals such as wood are not good conductors of heat (p.44, WB p.24)."
+  },
+  {
+   "id": "q.31b4c974",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": "WB 33",
+   "difficulty": 1,
+   "stem_en": "Iron and sulfur are mixed and form iron sulfide. Which is the product?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Iron"
+    },
+    {
+     "key": "b",
+     "en": "Sulfur"
+    },
+    {
+     "key": "c",
+     "en": "Both iron and sulfur"
+    },
+    {
+     "key": "d",
+     "en": "Iron sulfide"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The new substance that forms is the product (WB p.33)."
+  },
+  {
+   "id": "q.37f13b05",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": "WB 34",
+   "difficulty": 2,
+   "stem_en": "Cooking gas burns in oxygen and forms carbon dioxide and water. Which of these is a reactant?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Oxygen"
+    },
+    {
+     "key": "b",
+     "en": "Water"
+    },
+    {
+     "key": "c",
+     "en": "Carbon dioxide"
+    },
+    {
+     "key": "d",
+     "en": "Heat"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Oxygen is one of the substances that react; carbon dioxide and water are the products (WB p.34)."
+  },
+  {
+   "id": "q.07395317",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": "WB 34",
+   "difficulty": 2,
+   "stem_en": "Magnesium is mixed with oxygen: there is a bright white flame and a white powder. Which is the product?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The flame"
+    },
+    {
+     "key": "b",
+     "en": "The white powder"
+    },
+    {
+     "key": "c",
+     "en": "The oxygen"
+    },
+    {
+     "key": "d",
+     "en": "The magnesium"
     }
    ],
    "answer": "b",
-   "why_en": "How well a substance can conduct heat is a property of the substance (p.44)."
+   "why_en": "The powder is the new substance formed; the flame is evidence, not a product (WB p.34)."
   },
   {
-   "id": "q.99ffaea7",
+   "id": "q.ec4f692e",
+   "concept": "c.materials.chemical.reactants_products",
+   "page": "WB 35",
+   "difficulty": 3,
+   "stem_en": "Plants use carbon dioxide and water to make oxygen and glucose. Which are the reactants?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Oxygen and glucose"
+    },
+    {
+     "key": "b",
+     "en": "Sunlight and glucose"
+    },
+    {
+     "key": "c",
+     "en": "Carbon dioxide and water"
+    },
+    {
+     "key": "d",
+     "en": "Oxygen and water"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The substances that react together are the reactants (WB p.35)."
+  },
+  {
+   "id": "q.cd031e26",
+   "concept": "c.materials.properties.gases",
+   "page": "LMS Week 7 slides",
+   "difficulty": 2,
+   "stem_en": "True or false: gases do not have mass because we cannot see them.",
+   "choices": [
+    {
+     "key": "a",
+     "en": "True — you cannot weigh a gas"
+    },
+    {
+     "key": "b",
+     "en": "True — only solids and liquids have mass"
+    },
+    {
+     "key": "c",
+     "en": "False — gases have mass only when cold"
+    },
+    {
+     "key": "d",
+     "en": "False — gases have mass even though we cannot see them"
+    }
+   ],
+   "answer": "d",
+   "why_en": "All matter takes up space and has mass (p.39); the teacher's slide sets this as false (LMS: Week 7 slides)."
+  },
+  {
+   "id": "q.afae3abe",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "page": "LMS Week 7 slides",
+   "difficulty": 2,
+   "stem_en": "True or false: evaporation only happens when a liquid reaches its boiling point.",
+   "choices": [
+    {
+     "key": "a",
+     "en": "False — evaporation can happen at any temperature"
+    },
+    {
+     "key": "b",
+     "en": "True — it needs the boiling point"
+    },
+    {
+     "key": "c",
+     "en": "True — it needs a flame"
+    },
+    {
+     "key": "d",
+     "en": "False — it happens only above 100 °C"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Evaporation can occur at any temperature (p.36); the slide sets this as false (LMS: Week 7 slides)."
+  },
+  {
+   "id": "q.bcffff8d",
+   "concept": "c.materials.properties.state",
+   "page": "LMS Homework 28",
+   "difficulty": 1,
+   "stem_en": "Which of these is a property of a substance?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Owner"
+    },
+    {
+     "key": "b",
+     "en": "Colour"
+    },
+    {
+     "key": "c",
+     "en": "Location"
+    },
+    {
+     "key": "d",
+     "en": "Price"
+    }
+   ],
+   "answer": "b",
+   "why_en": "A property is something about the substance itself (LMS: Homework 28)."
+  },
+  {
+   "id": "q.51040e70",
+   "concept": "c.materials.properties.state",
+   "page": "LMS Homework 28",
+   "difficulty": 2,
+   "stem_en": "Three substances melt at 25 °C, 80 °C and 150 °C. Which melts first when they are heated together?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The one that melts at 80 °C"
+    },
+    {
+     "key": "b",
+     "en": "The one that melts at 150 °C"
+    },
+    {
+     "key": "c",
+     "en": "The one that melts at 25 °C"
+    },
+    {
+     "key": "d",
+     "en": "They all melt at the same time"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The lowest melting point is reached first (LMS: Homework 28)."
+  },
+  {
+   "id": "q.1e047712",
+   "concept": "c.materials.reversible.changes",
+   "page": "LMS Homework 28",
+   "difficulty": 1,
+   "stem_en": "Which of these is a reversible change?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Burning paper"
+    },
+    {
+     "key": "b",
+     "en": "Cooking an egg"
+    },
+    {
+     "key": "c",
+     "en": "Burning wood"
+    },
+    {
+     "key": "d",
+     "en": "Melting ice"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Melting can be reversed by freezing; burning and cooking make new substances (p.50, LMS: Homework 28)."
+  },
+  {
+   "id": "q.f90adbf1",
+   "concept": "c.materials.properties.gases",
+   "page": 39,
+   "stem_en": "Which TWO properties does all matter have?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "It takes up space and it has mass"
+    },
+    {
+     "key": "b",
+     "en": "It is heavy and it is hot"
+    },
+    {
+     "key": "c",
+     "en": "It can be seen and it can be felt"
+    },
+    {
+     "key": "d",
+     "en": "It melts and it boils"
+    }
+   ],
+   "answer": "a",
+   "why_en": "All matter takes up space and has mass — including gases like air (p.39).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.9d1c01ce",
+   "concept": "c.materials.conductors.heat",
+   "page": 44,
+   "stem_en": "Which substance is the best conductor of heat?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Silver"
+    },
+    {
+     "key": "b",
+     "en": "Copper"
+    },
+    {
+     "key": "c",
+     "en": "Steel"
+    },
+    {
+     "key": "d",
+     "en": "Glass"
+    }
+   ],
+   "answer": "a",
+   "why_en": "\"Silver is the best conductor of heat\" (p.44).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.5819655b",
+   "concept": "c.materials.conductors.heat",
+   "page": 43,
+   "stem_en": "A bead is stuck with petroleum jelly onto a metal spoon, a plastic spoon and a glass rod, and all three are stood in hot water. Why does the bead on the metal spoon fall off first?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Metal is the heaviest"
+    },
+    {
+     "key": "b",
+     "en": "Metal conducts heat best, so the jelly melts first"
+    },
+    {
+     "key": "c",
+     "en": "The bead was stuck on badly"
+    },
+    {
+     "key": "d",
+     "en": "Hot water rises up metal"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Metal conducts heat fastest, melting the petroleum jelly first (p.43-44).",
+   "difficulty": 2
+  },
+  {
+   "id": "q.0fbb24c1",
    "concept": "c.materials.conductors.electricity",
    "page": 47,
-   "stem_en": "From the book's table, which substance conducts heat WORST?",
+   "stem_en": "These are values for conducting heat: copper 386, aluminium 237, graphite 168, brass 150, steel 80. Which conducts heat worst?",
    "choices": [
     {
      "key": "a",
@@ -2148,10 +2291,145 @@
    "difficulty": 2
   },
   {
-   "id": "q.27685397",
+   "id": "q.9b829a8c",
+   "concept": "c.materials.conductors.electricity",
+   "page": 47,
+   "stem_en": "These are values for conducting electricity: copper 59, aluminium 37, brass 16, steel 10, graphite 1. Which conducts electricity best?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "aluminium (37)"
+    },
+    {
+     "key": "b",
+     "en": "copper (59)"
+    },
+    {
+     "key": "c",
+     "en": "graphite (1)"
+    },
+    {
+     "key": "d",
+     "en": "steel (10)"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Copper has the highest electricity value, 59 (p.47).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.1b10437f",
+   "concept": "c.materials.conductors.electricity",
+   "page": 47,
+   "stem_en": "Heat and electricity values: copper 386 and 59, aluminium 237 and 37, brass 150 and 16, steel 80 and 10, graphite 168 and 1. Which substance does not fit the pattern that a good heat conductor is also a good electrical conductor?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "copper"
+    },
+    {
+     "key": "b",
+     "en": "brass"
+    },
+    {
+     "key": "c",
+     "en": "graphite"
+    },
+    {
+     "key": "d",
+     "en": "aluminium"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Graphite conducts heat well (168) but electricity very poorly (1) (p.47 Q4).",
+   "difficulty": 3
+  },
+  {
+   "id": "q.dfe189c0",
+   "concept": "c.materials.reversible.dissolving",
+   "page": 52,
+   "stem_en": "A solution looks the same all the way through. What word describes this?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Reversible"
+    },
+    {
+     "key": "b",
+     "en": "Irreversible"
+    },
+    {
+     "key": "c",
+     "en": "Physical"
+    },
+    {
+     "key": "d",
+     "en": "Uniform"
+    }
+   ],
+   "answer": "d",
+   "why_en": "A solution has a uniform appearance (p.52).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.2f1c4689",
+   "concept": "c.materials.reversible.factors",
+   "page": 53,
+   "stem_en": "Two teaspoons of sugar are put into a cup of coffee, which is then drunk without being stirred. It still tastes bitter. Why?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "He did not stir, so the sugar had not dissolved"
+    },
+    {
+     "key": "b",
+     "en": "The sugar was old"
+    },
+    {
+     "key": "c",
+     "en": "Coffee always tastes bitter"
+    },
+    {
+     "key": "d",
+     "en": "The water was too hot"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Without stirring, the sugar stayed at the bottom (p.53).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.4aae7131",
+   "concept": "c.materials.reversible.factors",
+   "page": 53,
+   "stem_en": "Name TWO things that make a solid dissolve faster.",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Cooling and shaking"
+    },
+    {
+     "key": "b",
+     "en": "Stirring and heating"
+    },
+    {
+     "key": "c",
+     "en": "Adding more solute and waiting"
+    },
+    {
+     "key": "d",
+     "en": "Using a bigger jar and more water"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Stirring and heating both increase the rate of dissolving (p.53-54).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.088b16ea",
    "concept": "c.materials.chemical.reactants_products",
    "page": 62,
-   "stem_en": "Class 6 put an iron nail in a saucer of water and a few days later it had rusted. What is the product of the reaction?",
+   "stem_en": "An iron nail is left in a saucer of water. A few days later it has rusted. What is the product of the reaction?",
    "choices": [
     {
      "key": "a",
@@ -2173,8 +2451,251 @@
    "answer": "d",
    "why_en": "The nail had rusted, so rust is the new substance that formed (p.62 Q5).",
    "difficulty": 2
+  },
+  {
+   "id": "q.66898c3d",
+   "concept": "c.materials.chemical.evidence",
+   "page": 59,
+   "stem_en": "Vinegar is poured over a ball of wire wool. A reading is taken straight away and again after five minutes. What is being measured?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Colour"
+    },
+    {
+     "key": "b",
+     "en": "Mass"
+    },
+    {
+     "key": "c",
+     "en": "Temperature"
+    },
+    {
+     "key": "d",
+     "en": "Volume"
+    }
+   ],
+   "answer": "c",
+   "why_en": "You record the thermometer before and after — a temperature change is evidence (p.59).",
+   "difficulty": 1
+  },
+  {
+   "id": "q.8689cae1",
+   "concept": "c.materials.conductors.heat",
+   "page": 44,
+   "difficulty": 2,
+   "stem_en": "How well a substance conducts heat is an example of what?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A change of state"
+    },
+    {
+     "key": "b",
+     "en": "A property of the substance"
+    },
+    {
+     "key": "c",
+     "en": "A chemical reaction"
+    },
+    {
+     "key": "d",
+     "en": "A type of dissolving"
+    }
+   ],
+   "answer": "b",
+   "why_en": "How well a substance can conduct heat is a property of the substance (p.44)."
+  },
+  {
+   "id": "q.ae4c30d6",
+   "concept": "c.materials.properties.boiling_evaporation",
+   "page": "WB 19",
+   "difficulty": 2,
+   "stem_en": "At what temperature does acetone boil?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "60 °C"
+    },
+    {
+     "key": "b",
+     "en": "100 °C"
+    },
+    {
+     "key": "c",
+     "en": "50.5 °C"
+    },
+    {
+     "key": "d",
+     "en": "118 °C"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Acetone boils at 50.5 °C (WB p.19)."
+  },
+  {
+   "id": "q.bf295fd9",
+   "concept": "c.materials.conductors.heat",
+   "page": "WB 24",
+   "difficulty": 2,
+   "stem_en": "These are values for conducting heat: silver 420, copper 400, aluminium 250, brass 109, iron 80, stainless steel 15. Which metal conducts heat best?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "silver (420)"
+    },
+    {
+     "key": "b",
+     "en": "copper (400)"
+    },
+    {
+     "key": "c",
+     "en": "aluminium (250)"
+    },
+    {
+     "key": "d",
+     "en": "stainless steel (15)"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Silver has the highest value, 420 (WB p.24). Note this is a different table from the one on p.47."
+  },
+  {
+   "id": "q.b859c776",
+   "concept": "c.materials.conductors.heat",
+   "page": "WB 24",
+   "difficulty": 2,
+   "stem_en": "These are values for conducting heat: silver 420, copper 400, aluminium 250, brass 109, iron 80, stainless steel 15. Which metal conducts heat worst?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "iron (80)"
+    },
+    {
+     "key": "b",
+     "en": "stainless steel (15)"
+    },
+    {
+     "key": "c",
+     "en": "brass (109)"
+    },
+    {
+     "key": "d",
+     "en": "aluminium (250)"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Stainless steel has the lowest value, 15 (WB p.24)."
+  },
+  {
+   "id": "q.cc17ce7e",
+   "concept": "c.materials.conductors.electricity",
+   "page": "WB 23",
+   "difficulty": 1,
+   "stem_en": "A lamp has a metal filament, metal support wires, a metal screw-in base and a glass bulb. Which part is not an electrical conductor?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The metal filament"
+    },
+    {
+     "key": "b",
+     "en": "The support wires"
+    },
+    {
+     "key": "c",
+     "en": "The screw-in base"
+    },
+    {
+     "key": "d",
+     "en": "The glass bulb"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Glass is an insulator; the metal parts carry the electricity (WB p.23)."
+  },
+  {
+   "id": "q.c0f3b54d",
+   "concept": "c.materials.conductors.electricity",
+   "page": "WB 26",
+   "difficulty": 3,
+   "stem_en": "Different lengths of graphite are put in a circuit and the lamp brightness is scored 0–5. A 2 cm piece scores 5 and a 12 cm piece scores 0. What does that show?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The longer the graphite, the dimmer the lamp"
+    },
+    {
+     "key": "b",
+     "en": "Graphite is not a conductor at all"
+    },
+    {
+     "key": "c",
+     "en": "Longer graphite makes the lamp brighter"
+    },
+    {
+     "key": "d",
+     "en": "Length makes no difference"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Brightness falls as the graphite gets longer in their results table (WB p.26)."
+  },
+  {
+   "id": "q.90396e66",
+   "concept": "c.materials.reversible.factors",
+   "page": "WB 30",
+   "difficulty": 2,
+   "stem_en": "Sugar is stirred a few times into a cup of warm tea, and afterwards some sugar is still at the bottom of the cup. What two things would have made it all dissolve?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Adding more sugar"
+    },
+    {
+     "key": "b",
+     "en": "Stirring more, and hotter tea"
+    },
+    {
+     "key": "c",
+     "en": "Drinking it faster"
+    },
+    {
+     "key": "d",
+     "en": "Using a bigger cup"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Stirring and a higher temperature both increase the rate of dissolving (p.53-54, WB p.30)."
+  },
+  {
+   "id": "q.d1c181f4",
+   "concept": "c.materials.reversible.factors",
+   "page": "WB 31",
+   "difficulty": 3,
+   "stem_en": "Sugar takes 90 s to dissolve at 20 °C, 40 s at 40 °C, 25 s at 60 °C and 15 s at 80 °C. What is the pattern?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The hotter the water, the longer it takes"
+    },
+    {
+     "key": "b",
+     "en": "Temperature makes no difference"
+    },
+    {
+     "key": "c",
+     "en": "The hotter the water, the less time the sugar takes"
+    },
+    {
+     "key": "d",
+     "en": "The time doubles each step"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Their results show the dissolving time falling as temperature rises (WB p.31)."
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T10:15:15+00:00"
+ "generated_at": "2026-09-04T10:51:57+00:00"
 }
