@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tw.bf108bbc.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -135,6 +135,38 @@
         // đúng dồn trong MỘT buổi (muốn lên bậc phải đúng ở các lần cách nhau
         // nhiều ngày). Hạ ngưỡng thì hạ cả ba, đừng bỏ hẳn điều kiện nào.
         RETIRE: { n: 3, box: 3, err: 0.25 },
+        // Bỏ qua mục đã nắm chắc — MẶC ĐỊNH TẮT: người mới vào chưa có mục nào
+        // "nắm chắc", bật sẵn thì chẳng lọc gì mà lại giấu mất một lựa chọn.
+        skipKnown: localStorage.getItem('lms_skip_known') === '1',
+        toggleSkip() { this.skipKnown = !this.skipKnown; localStorage.setItem('lms_skip_known', this.skipKnown ? '1' : '0'); },
+        showList: false,
+        // Nguồn của MỌI lượt chọn câu: bật lọc thì mục đã nắm chắc đứng ngoài hẳn.
+        pool(kind) {
+          const all = kind === 'cards' ? this.scopedCards : this.scopedQuiz;
+          return this.skipKnown ? all.filter(q => !this.retired(q)) : all;
+        },
+        get poolItems() { return this.pool(this.mode === 'cards' ? 'cards' : 'quiz'); },
+        // Bảng trạng thái: một dòng mỗi mục, sắp mục yếu lên trước.
+        get listRows() {
+          const now = Math.floor(Date.now() / 1000);
+          return this.modeItems.map(q => {
+            const c = this.cards[q.id];
+            const n = c?.n || 0, wrong = c?.wrong || 0;
+            const st = !c || !n ? 'new' : (this.retired(q) ? 'known'
+                     : (wrong / n > 0.34 ? 'weak' : 'learning'));
+            return {
+              id: q.id, text: q.stem_en || q.front_en || '', concept: this.conceptName(q.concept),
+              n, wrong, box: c?.box || 0, st,
+              due: c?.due ? Math.round((c.due - now) / 86400) : null,
+            };
+          }).sort((a, b) => ({ weak: 0, learning: 1, new: 2, known: 3 })[a.st]
+                          - ({ weak: 0, learning: 1, new: 2, known: 3 })[b.st]
+                          || (b.wrong / (b.n || 1)) - (a.wrong / (a.n || 1)));
+        },
+        ST: { weak:    { t: 'Hay sai',    c: 'bg-rose-100 text-rose-700' },
+              learning:{ t: 'Đang học',   c: 'bg-amber-100 text-amber-700' },
+              new:     { t: 'Chưa làm',   c: 'bg-slate-100 text-slate-500' },
+              known:   { t: 'Nắm chắc',   c: 'bg-emerald-100 text-emerald-700' } },
         retired(q) {
           const c = this.cards[q.id], R = this.RETIRE;
           return !!c && c.n >= R.n && c.box >= R.box && c.wrong / c.n <= R.err;
@@ -311,7 +343,7 @@
           this._cerr = {};                       // xoá bộ nhớ đệm mỗi phiên
           const now = Math.floor(Date.now() / 1000);
           const seen = [], fresh = [];
-          const pool = this.mode === 'cards' ? this.scopedCards : this.scopedQuiz;
+          const pool = this.poolItems;
           for (const q of pool) {
             (this.cards[q.id] && this.cards[q.id].n > 0 ? seen : fresh).push(q);
           }
@@ -444,7 +476,7 @@
         learnList: [],
         get learnDeck() { return this.learnList; },
         shuffleLearn() {
-          const a = [...this.scopedCards];
+          const a = [...this.pool('cards')];
           for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
           this.learnList = a; this.learnAt = 0;
           this.autoRead(this.learnCard?.front_en);
@@ -466,8 +498,9 @@
           return 1.0 + 3.0 * err;
         },
         pickWeighted() {
-          let pool = this.scopedCards.filter(q => q.id !== this.lastId);
-          if (!pool.length) pool = this.scopedCards;
+          const src = this.pool('cards');
+          let pool = src.filter(q => q.id !== this.lastId);
+          if (!pool.length) pool = src;
           const total = pool.reduce((a, q) => a + this.weight(q), 0);
           let r = Math.random() * total;
           for (const q of pool) { r -= this.weight(q); if (r <= 0) return q; }
@@ -778,16 +811,32 @@
           <button @click="askSecret()" class="underline hover:text-indigo-600">Nhập mã bí mật</button>
           để lưu kết quả và được gợi ý ôn đúng chỗ hay sai.
         </p>
+        <!-- Lọc + mở bảng trạng thái. Class ở ST là literal để Tailwind quét thấy. -->
+        <div x-show="online && modeItems.length" x-cloak class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <label class="flex items-center gap-1.5 text-sm text-slate-600 cursor-pointer select-none">
+            <input type="checkbox" :checked="skipKnown" @change="toggleSkip()" class="accent-indigo-600">
+            Bỏ qua mục đã nắm chắc
+            <span x-show="skipKnown" x-cloak class="text-xs text-slate-400"
+                  x-text="'(còn ' + poolItems.length + '/' + modeItems.length + ')'"></span>
+          </label>
+          <button @click="showList = !showList"
+                  class="ml-auto text-sm text-slate-500 hover:text-indigo-600 underline"
+                  x-text="showList ? 'Ẩn danh sách' : '📋 Xem danh sách'"></button>
+        </div>
+        <p x-show="skipKnown && !poolItems.length" x-cloak
+           class="mt-3 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-2 text-xs text-emerald-800">
+          Đã nắm chắc hết rồi. Bỏ tick ở trên để ôn lại.
+        </p>
         <div x-show="mode === 'cards'" x-cloak class="mt-4 flex gap-2">
-          <button @click="startLearn()" :disabled="!scopedCards.length"
+          <button @click="startLearn()" :disabled="!pool('cards').length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 disabled:opacity-40">📖 Học</button>
-          <button @click="startTest()" :disabled="!scopedCards.length"
+          <button @click="startTest()" :disabled="!pool('cards').length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">✍️ Kiểm tra</button>
         </div>
         <div x-show="mode === 'quiz'" class="mt-4 flex gap-2">
           <!-- Không chọn 10/20: làm bao nhiêu tuỳ, Kết thúc lúc nào cũng được,
                kết quả lưu định kỳ mỗi 5 câu; hết câu thì tự kết thúc. -->
-          <button @click="start(scopedQuiz.length)" :disabled="!scopedQuiz.length"
+          <button @click="start(poolItems.length)" :disabled="!poolItems.length"
                   class="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40">
             ✍️ Bắt đầu kiểm tra
           </button>
@@ -798,6 +847,43 @@
           </button>
         </div>
       </div>
+
+      <!-- ── Bảng trạng thái từng mục ────────────────────────────────────
+           Trả lời "tôi đang đứng ở đâu": mục nào hay sai, mục nào chưa đụng tới.
+           Sắp hay-sai lên đầu; trạng thái suy từ cards[] nên luôn khớp lịch ôn. -->
+      <template x-if="showList && modeItems.length">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="flex flex-wrap items-center gap-3 px-4 py-2.5 border-b border-slate-200 bg-slate-50 text-xs">
+          <span class="font-semibold text-slate-700" x-text="modeItems.length + (mode === 'cards' ? ' thẻ' : ' câu hỏi')"></span>
+          <template x-for="k in ['weak','learning','new','known']" :key="k">
+            <span class="flex items-center gap-1">
+              <span class="px-1.5 py-0.5 rounded font-medium" :class="ST[k].c" x-text="ST[k].t"></span>
+              <span class="text-slate-500" x-text="listRows.filter(r => r.st === k).length"></span>
+            </span>
+          </template>
+        </div>
+        <div class="max-h-[28rem] overflow-y-auto divide-y divide-slate-100">
+          <template x-for="r in listRows" :key="r.id">
+            <div class="flex items-start gap-3 px-4 py-2.5 text-sm">
+              <span class="shrink-0 mt-0.5 px-1.5 py-0.5 rounded text-[11px] font-medium"
+                    :class="ST[r.st].c" x-text="ST[r.st].t"></span>
+              <div class="min-w-0 flex-1">
+                <p class="text-slate-800 leading-snug" x-text="r.text"></p>
+                <p class="text-xs text-slate-400 truncate" x-text="r.concept"></p>
+              </div>
+              <div class="shrink-0 text-right text-xs text-slate-500 tabular-nums">
+                <p x-show="r.n"><span x-text="r.n - r.wrong"></span>/<span x-text="r.n"></span> đúng</p>
+                <p x-show="r.n" class="text-slate-400">
+                  bậc <span x-text="r.box"></span><template x-if="r.due !== null"><span
+                    x-text="r.due > 0 ? ' · ôn sau ' + r.due + 'ng' : ' · đến hạn'"></span></template>
+                </p>
+                <p x-show="!r.n" class="text-slate-400">chưa làm</p>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+      </template>
 
       <!-- Điểm yếu, chỉ hiện khi đã có dữ liệu làm bài -->
       <template x-if="online && Object.keys(cards).length">
