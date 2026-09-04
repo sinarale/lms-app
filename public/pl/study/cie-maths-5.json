@@ -1,0 +1,1318 @@
+{
+ "schema": 1,
+ "user": "pl",
+ "course": "cie-maths-5",
+ "profile": "reader",
+ "lang": {
+  "primary": "en",
+  "gloss": null
+ },
+ "source": {
+  "notebook_id": ""
+ },
+ "concepts": [
+  {
+   "id": "c.maths6",
+   "parent": null,
+   "en": "CIE Maths 5"
+  },
+  {
+   "id": "c.maths6.numsys",
+   "parent": "c.maths6",
+   "en": "The number system",
+   "no": "1"
+  },
+  {
+   "id": "c.maths6.numsys.pv",
+   "parent": "c.maths6.numsys",
+   "en": "Place value",
+   "no": "1.1",
+   "pages": "12-15"
+  },
+  {
+   "id": "c.maths6.numsys.place_value",
+   "parent": "c.maths6.numsys.pv",
+   "en": "Value of each digit in decimals"
+  },
+  {
+   "id": "c.maths6.numsys.pv.times",
+   "parent": "c.maths6.numsys.pv",
+   "en": "Multiply and divide by 10, 100 and 1000"
+  },
+  {
+   "id": "c.maths6.numsys.pv.compose",
+   "parent": "c.maths6.numsys.pv",
+   "en": "Compose, decompose and regroup"
+  },
+  {
+   "id": "c.maths6.numsys.rd",
+   "parent": "c.maths6.numsys",
+   "en": "Rounding decimal numbers",
+   "no": "1.2",
+   "pages": "16-19"
+  },
+  {
+   "id": "c.maths6.numsys.rounding",
+   "parent": "c.maths6.numsys.rd",
+   "en": "Round to the nearest whole number"
+  },
+  {
+   "id": "c.maths6.numsys.rd.tenth",
+   "parent": "c.maths6.numsys.rd",
+   "en": "Round to the nearest tenth"
+  }
+ ],
+ "summary": [
+  {
+   "concept": "c.maths6.numsys.pv",
+   "diagram": null,
+   "big_en": "Every digit in a number has a value that depends on its place. Moving a digit one place changes its value ten times.",
+   "glossary": [
+    {
+     "term": "digit",
+     "def": "One of the symbols 0 to 9 that a number is written with.",
+     "example": "The digit 7 in 213.807 stands for 7 thousandths (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "term": "place value",
+     "def": "The value a digit has because of its position in the number.",
+     "example": "In 6703.46 the digit 7 has a place value of 7 hundreds (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "term": "decimal point",
+     "def": "The dot that separates the whole-number part from the part smaller than one.",
+     "example": "In 13.136 the decimal point comes after the 13 (p.13).",
+     "concept": "c.maths6.numsys.pv.times"
+    },
+    {
+     "term": "decimal number",
+     "def": "A number written with a decimal point, so it can show parts smaller than one.",
+     "example": "0.375 inches is the wingspan of a Western Pygmy Blue Butterfly (p.12).",
+     "concept": "c.maths6.numsys.pv.times"
+    },
+    {
+     "term": "tenths",
+     "def": "The first place after the decimal point, worth one tenth each.",
+     "example": "In 13.136 the 1 stands for 1 tenth (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "term": "hundredths",
+     "def": "The second place after the decimal point, worth one hundredth each.",
+     "example": "In 13.136 the 3 stands for 3 hundredths (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "term": "thousandths",
+     "def": "The third place after the decimal point, worth one thousandth each.",
+     "example": "In 13.136 the 6 stands for 6 thousandths (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "term": "compose",
+     "def": "Putting parts together to make a number.",
+     "example": "3 + 10 + one tenth + 3 hundredths + 6 thousandths composes 13.136 (p.13).",
+     "concept": "c.maths6.numsys.pv.compose"
+    },
+    {
+     "term": "decompose",
+     "def": "Splitting a number into the parts it is made of.",
+     "example": "87.655 decomposes into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
+     "concept": "c.maths6.numsys.pv.compose"
+    },
+    {
+     "term": "regroup",
+     "def": "Writing the same number as a different set of parts.",
+     "example": "56.079 regroups as 56 ones and 79 thousandths (WB p.9).",
+     "concept": "c.maths6.numsys.pv.compose"
+    }
+   ],
+   "points": [
+    {
+     "t": "The value of a digit depends on its place, not on the digit itself. The 7 in 6703.46 is 7 hundreds; the 7 in 213.807 is 7 thousandths (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "t": "The three places after the decimal point are tenths, hundredths and thousandths (p.13).",
+     "concept": "c.maths6.numsys.place_value"
+    },
+    {
+     "t": "Multiplying by 10, 100 or 1000 moves every digit 1, 2 or 3 places to the left. Dividing moves them the same number of places to the right (p.14).",
+     "concept": "c.maths6.numsys.pv.times"
+    },
+    {
+     "t": "Adding zeros is not the same as multiplying by 100. 5.6 × 100 is 560, not 5.600 (WB p.12).",
+     "concept": "c.maths6.numsys.pv.times"
+    },
+    {
+     "t": "The same number can be regrouped in many ways, and every way has the same total (p.13).",
+     "concept": "c.maths6.numsys.pv.compose"
+    }
+   ],
+   "checklists": [
+    {
+     "concept": "c.maths6.numsys.place_value",
+     "title": "Places in 13.136 (p.13)",
+     "items": [
+      {
+       "sign": "1",
+       "look_for": "1 ten"
+      },
+      {
+       "sign": "3",
+       "look_for": "3 ones"
+      },
+      {
+       "sign": "1",
+       "look_for": "1 tenth"
+      },
+      {
+       "sign": "3",
+       "look_for": "3 hundredths"
+      },
+      {
+       "sign": "6",
+       "look_for": "6 thousandths"
+      }
+     ],
+     "note": "Reading a number aloud place by place is the quickest way to check a digit's value."
+    }
+   ],
+   "compares": [],
+   "watch_out": [
+    {
+     "wrong": "I can multiply by 100 by adding two zeros.",
+     "right": "That only works for whole numbers: 5.6 × 100 is 560, because every digit moves two places left (WB p.12).",
+     "concept": "c.maths6.numsys.pv.times"
+    }
+   ],
+   "worked": [
+    {
+     "concept": "c.maths6.numsys.pv.compose",
+     "title": "Worked example 1 — write it as a decimal",
+     "page": "13",
+     "problem": "Write 3 + 6 thousandths + 10 + 3 hundredths + 1 tenth as a decimal number.",
+     "steps": [
+      "Write the terms in order of size, starting with the highest place value: 10 + 3 + 1 tenth + 3 hundredths + 6 thousandths.",
+      "Put each digit in its column on a place value grid: 1 ten, 3 ones, 1 tenth, 3 hundredths, 6 thousandths.",
+      "Read the grid straight off, keeping every column."
+     ],
+     "answer": "13.136",
+     "why": "Ordering by place value first means no digit ends up in the wrong column."
+    },
+    {
+     "concept": "c.maths6.numsys.pv.times",
+     "title": "Worked example 1 — reverse the operations",
+     "page": "WB 8",
+     "problem": "A number is divided by 10 and then by 100, and the answer is 0.375. What was the number?",
+     "steps": [
+      "Dividing is undone by multiplying, so work backwards: 0.375 × 100 × 10.",
+      "× 100 × 10 is the same as × 1000, so every digit moves three places left.",
+      "0.375 × 1000 = 375."
+     ],
+     "answer": "375",
+     "why": "Reversing the operations turns a puzzle into one calculation."
+    }
+   ],
+   "terms": [
+    "digit",
+    "place value",
+    "decimal point",
+    "decimal number",
+    "tenths",
+    "hundredths",
+    "thousandths",
+    "compose",
+    "decompose",
+    "regroup"
+   ]
+  },
+  {
+   "concept": "c.maths6.numsys.rd",
+   "diagram": null,
+   "big_en": "Rounding replaces a number with a nearby simpler one. Look at the digit just after the place you are rounding to.",
+   "glossary": [
+    {
+     "term": "round",
+     "def": "Replace a number with a nearby number that is easier to use.",
+     "example": "9.63 seconds rounds to 10 seconds (p.16).",
+     "concept": "c.maths6.numsys.rounding"
+    },
+    {
+     "term": "nearest",
+     "def": "The closest of the possible answers.",
+     "example": "$14.65 to the nearest dollar (p.16).",
+     "concept": "c.maths6.numsys.rounding"
+    },
+    {
+     "term": "decimal place",
+     "def": "One of the positions after the decimal point.",
+     "example": "An answer rounded to the nearest tenth has one decimal place (p.16).",
+     "concept": "c.maths6.numsys.rd.tenth"
+    }
+   ],
+   "points": [
+    {
+     "t": "Rounding makes numbers easier to describe and understand. Saying a race took under 10 seconds is easier than 9.63 seconds (p.16).",
+     "concept": "c.maths6.numsys.rounding"
+    },
+    {
+     "t": "The digit you look at is always the one just after the place you are rounding to (p.16).",
+     "concept": "c.maths6.numsys.rd.tenth"
+    },
+    {
+     "t": "An answer rounded to the nearest tenth always has one decimal place, even when it is zero (p.16).",
+     "concept": "c.maths6.numsys.rd.tenth"
+    },
+    {
+     "t": "To round to the nearest whole number, look at the tenths digit by the same rule (p.16).",
+     "concept": "c.maths6.numsys.rounding"
+    }
+   ],
+   "checklists": [
+    {
+     "concept": "c.maths6.numsys.rd.tenth",
+     "title": "Which way to round (p.16)",
+     "items": [
+      {
+       "sign": "0, 1, 2, 3 or 4",
+       "look_for": "round down — keep the digit the same"
+      },
+      {
+       "sign": "5, 6, 7, 8 or 9",
+       "look_for": "round up — add 1 to the digit"
+      }
+     ],
+     "note": "The same rule works for any place; only the digit you look at changes."
+    }
+   ],
+   "compares": [
+    {
+     "concept": "c.maths6.numsys.rounding",
+     "page": "16",
+     "title": "Nearest whole number vs nearest tenth",
+     "label_a": "Nearest whole number",
+     "label_b": "Nearest tenth",
+     "rows": [
+      {
+       "aspect": "Look at",
+       "a": "The tenths digit",
+       "b": "The hundredths digit"
+      },
+      {
+       "aspect": "Answer has",
+       "a": "No decimal places",
+       "b": "Exactly one decimal place"
+      },
+      {
+       "aspect": "3.08 becomes",
+       "a": "3",
+       "b": "3.1"
+      }
+     ]
+    }
+   ],
+   "watch_out": [
+    {
+     "wrong": "6.95 is 7 when rounded to the nearest whole number and 6.9 when rounded to the nearest tenth.",
+     "right": "6.95 rounds to 7.0 to the nearest tenth, because the hundredths digit 5 rounds up (p.17).",
+     "concept": "c.maths6.numsys.rd.tenth"
+    }
+   ],
+   "worked": [
+    {
+     "concept": "c.maths6.numsys.rd.tenth",
+     "title": "Worked example 2 — round to the nearest tenth",
+     "page": "16",
+     "problem": "Round 8.80, 6.45 and 3.95 to the nearest tenth.",
+     "steps": [
+      "Look at the hundredths digit of each number: 0, 5 and 5.",
+      "0 is in 0–4, so 8.80 rounds down and the tenths digit stays 8.",
+      "5 is in 5–9, so 6.45 rounds up to 6.5 and 3.95 rounds up, carrying into the ones to give 4.0.",
+      "Keep one decimal place in every answer."
+     ],
+     "answer": "8.8, 6.5 and 4.0",
+     "why": "3.95 shows why the carry matters: rounding the tenths digit up from 9 changes the whole number too."
+    }
+   ],
+   "terms": [
+    "round",
+    "nearest",
+    "decimal place"
+   ]
+  }
+ ],
+ "glossary": [],
+ "misconceptions": [],
+ "flashcards": [
+  {
+   "id": "f.05379128",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Name the three places after the decimal point.",
+   "back_en": "Tenths, hundredths, thousandths.",
+   "example_en": "p.13"
+  },
+  {
+   "id": "f.8d4914c4",
+   "concept": "c.maths6.numsys.pv.times",
+   "front_en": "What happens to the digits when you multiply by 1000?",
+   "back_en": "Every digit moves three places to the left.",
+   "example_en": "p.14"
+  },
+  {
+   "id": "f.ffb5087c",
+   "concept": "c.maths6.numsys.pv.times",
+   "front_en": "What happens to the digits when you divide by 100?",
+   "back_en": "Every digit moves two places to the right.",
+   "example_en": "p.14"
+  },
+  {
+   "id": "f.166a0e34",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "front_en": "Rounding to the nearest tenth: which digit do you look at?",
+   "back_en": "The hundredths digit. 0–4 rounds down, 5–9 rounds up.",
+   "example_en": "p.16"
+  },
+  {
+   "id": "f.571f464a",
+   "concept": "c.maths6.numsys.rounding",
+   "front_en": "Rounding to the nearest whole number: which digit do you look at?",
+   "back_en": "The tenths digit, using the same 0–4 down, 5–9 up rule.",
+   "example_en": "p.16"
+  },
+  {
+   "id": "f.9569466c",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "front_en": "How many decimal places has an answer rounded to the nearest tenth?",
+   "back_en": "Always one, even if it is zero.",
+   "example_en": "p.16"
+  },
+  {
+   "id": "f.6cf60c1a",
+   "concept": "c.maths6.numsys.pv.compose",
+   "front_en": "What does it mean to regroup a number?",
+   "back_en": "Write the same number as a different set of parts, with the same total.",
+   "example_en": "WB p.9"
+  },
+  {
+   "id": "f.2f093cef",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Digit",
+   "back_en": "One of the symbols 0 to 9 that a number is written with.",
+   "example_en": "The digit 7 in 213.807 stands for 7 thousandths (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.bcac8e25",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Place value",
+   "back_en": "The value a digit has because of its position in the number.",
+   "example_en": "In 6703.46 the digit 7 has a place value of 7 hundreds (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.429e5498",
+   "concept": "c.maths6.numsys.pv.times",
+   "front_en": "Decimal point",
+   "back_en": "The dot that separates the whole-number part from the part smaller than one.",
+   "example_en": "In 13.136 the decimal point comes after the 13 (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.94a39016",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Tenths",
+   "back_en": "The first place after the decimal point, worth one tenth each.",
+   "example_en": "In 13.136 the 1 stands for 1 tenth (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.e10c7e78",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Hundredths",
+   "back_en": "The second place after the decimal point, worth one hundredth each.",
+   "example_en": "In 13.136 the 3 stands for 3 hundredths (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.d09813df",
+   "concept": "c.maths6.numsys.place_value",
+   "front_en": "Thousandths",
+   "back_en": "The third place after the decimal point, worth one thousandth each.",
+   "example_en": "In 13.136 the 6 stands for 6 thousandths (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.47da6f08",
+   "concept": "c.maths6.numsys.pv.compose",
+   "front_en": "Compose",
+   "back_en": "Putting parts together to make a number.",
+   "example_en": "3 + 10 + one tenth + 3 hundredths + 6 thousandths composes 13.136 (p.13).",
+   "kind": "term"
+  },
+  {
+   "id": "f.9b0a363a",
+   "concept": "c.maths6.numsys.pv.compose",
+   "front_en": "Decompose",
+   "back_en": "Splitting a number into the parts it is made of.",
+   "example_en": "87.655 decomposes into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
+   "kind": "term"
+  },
+  {
+   "id": "f.a17c1123",
+   "concept": "c.maths6.numsys.pv.compose",
+   "front_en": "Regroup",
+   "back_en": "Writing the same number as a different set of parts.",
+   "example_en": "56.079 regroups as 56 ones and 79 thousandths (WB p.9).",
+   "kind": "term"
+  },
+  {
+   "id": "f.ec7b5983",
+   "concept": "c.maths6.numsys.rounding",
+   "front_en": "Round",
+   "back_en": "Replace a number with a nearby number that is easier to use.",
+   "example_en": "9.63 seconds rounds to 10 seconds (p.16).",
+   "kind": "term"
+  },
+  {
+   "id": "f.76b1ebc8",
+   "concept": "c.maths6.numsys.rounding",
+   "front_en": "Nearest",
+   "back_en": "The closest of the possible answers.",
+   "example_en": "$14.65 to the nearest dollar (p.16).",
+   "kind": "term"
+  },
+  {
+   "id": "f.5b7088c3",
+   "concept": "c.maths6.numsys.pv.times",
+   "front_en": "Decimal number",
+   "back_en": "A number written with a decimal point, so it can show parts smaller than one.",
+   "example_en": "0.375 inches is the wingspan of a Western Pygmy Blue Butterfly (p.12).",
+   "kind": "term"
+  },
+  {
+   "id": "f.edfd4e92",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "front_en": "Decimal place",
+   "back_en": "One of the positions after the decimal point.",
+   "example_en": "An answer rounded to the nearest tenth has one decimal place (p.16).",
+   "kind": "term"
+  }
+ ],
+ "quiz": [
+  {
+   "id": "q.c490cb03",
+   "concept": "c.maths6.numsys.place_value",
+   "page": 13,
+   "difficulty": 1,
+   "stem_en": "What is the value of the digit 7 in 6703.46?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7 hundreds"
+    },
+    {
+     "key": "b",
+     "en": "7 tens"
+    },
+    {
+     "key": "c",
+     "en": "7 tenths"
+    },
+    {
+     "key": "d",
+     "en": "7 thousandths"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The 7 sits in the hundreds column (p.13)."
+  },
+  {
+   "id": "q.bffd8c86",
+   "concept": "c.maths6.numsys.place_value",
+   "page": 13,
+   "difficulty": 1,
+   "stem_en": "What is the value of the digit 7 in 213.807?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7 hundredths"
+    },
+    {
+     "key": "b",
+     "en": "7 thousandths"
+    },
+    {
+     "key": "c",
+     "en": "7 tenths"
+    },
+    {
+     "key": "d",
+     "en": "7 ones"
+    }
+   ],
+   "answer": "b",
+   "why_en": "It is the third place after the decimal point (p.13)."
+  },
+  {
+   "id": "q.5997c970",
+   "concept": "c.maths6.numsys.place_value",
+   "page": 13,
+   "difficulty": 2,
+   "stem_en": "What is the value of the digit 7 in 456.702?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7 hundredths"
+    },
+    {
+     "key": "b",
+     "en": "7 thousandths"
+    },
+    {
+     "key": "c",
+     "en": "7 tenths"
+    },
+    {
+     "key": "d",
+     "en": "7 ones"
+    }
+   ],
+   "answer": "c",
+   "why_en": "It is the first place after the decimal point (p.13)."
+  },
+  {
+   "id": "q.23c64581",
+   "concept": "c.maths6.numsys.place_value",
+   "page": "WB 9",
+   "difficulty": 1,
+   "stem_en": "What does the digit 5 in 3.065 represent?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5 hundredths"
+    },
+    {
+     "key": "b",
+     "en": "5 tenths"
+    },
+    {
+     "key": "c",
+     "en": "5 ones"
+    },
+    {
+     "key": "d",
+     "en": "5 thousandths"
+    }
+   ],
+   "answer": "d",
+   "why_en": "It is the third place after the decimal point (WB p.9)."
+  },
+  {
+   "id": "q.000c6a27",
+   "concept": "c.maths6.numsys.place_value",
+   "page": 19,
+   "difficulty": 3,
+   "stem_en": "How many times bigger is the value of the digit 6 in 64.53 than the value of the digit 6 in 0.367?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1000 times"
+    },
+    {
+     "key": "b",
+     "en": "10 times"
+    },
+    {
+     "key": "c",
+     "en": "100 times"
+    },
+    {
+     "key": "d",
+     "en": "10000 times"
+    }
+   ],
+   "answer": "a",
+   "why_en": "6 tens against 6 hundredths is three places, so 1000 times (p.19)."
+  },
+  {
+   "id": "q.de789a39",
+   "concept": "c.maths6.numsys.place_value",
+   "page": 13,
+   "difficulty": 2,
+   "stem_en": "In the number 13.136, which digit is in the hundredths place?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1"
+    },
+    {
+     "key": "b",
+     "en": "3"
+    },
+    {
+     "key": "c",
+     "en": "6"
+    },
+    {
+     "key": "d",
+     "en": "the second 1"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Hundredths is the second place after the decimal point (p.13)."
+  },
+  {
+   "id": "q.7c7bddd7",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": "WB 11",
+   "difficulty": 1,
+   "stem_en": "What is 5.6 × 100?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5.600"
+    },
+    {
+     "key": "b",
+     "en": "56"
+    },
+    {
+     "key": "c",
+     "en": "560"
+    },
+    {
+     "key": "d",
+     "en": "5600"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Every digit moves two places to the left (WB p.11)."
+  },
+  {
+   "id": "q.8763183f",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": "WB 11",
+   "difficulty": 1,
+   "stem_en": "What is 0.88 × 1000?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "88"
+    },
+    {
+     "key": "b",
+     "en": "8.8"
+    },
+    {
+     "key": "c",
+     "en": "8800"
+    },
+    {
+     "key": "d",
+     "en": "880"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Every digit moves three places to the left (WB p.11)."
+  },
+  {
+   "id": "q.418a96cb",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": "WB 11",
+   "difficulty": 2,
+   "stem_en": "What is 670 ÷ 1000?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "0.67"
+    },
+    {
+     "key": "b",
+     "en": "6.7"
+    },
+    {
+     "key": "c",
+     "en": "0.067"
+    },
+    {
+     "key": "d",
+     "en": "67"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Every digit moves three places to the right (WB p.11)."
+  },
+  {
+   "id": "q.fe9a1c0a",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": "WB 11",
+   "difficulty": 2,
+   "stem_en": "What is 191 ÷ 100?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "19.1"
+    },
+    {
+     "key": "b",
+     "en": "1.91"
+    },
+    {
+     "key": "c",
+     "en": "0.191"
+    },
+    {
+     "key": "d",
+     "en": "1910"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Every digit moves two places to the right (WB p.11)."
+  },
+  {
+   "id": "q.0531abbe",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": 19,
+   "difficulty": 3,
+   "stem_en": "Find the missing number: ___ × 0.9 = 9",
+   "choices": [
+    {
+     "key": "a",
+     "en": "100"
+    },
+    {
+     "key": "b",
+     "en": "0.1"
+    },
+    {
+     "key": "c",
+     "en": "10"
+    },
+    {
+     "key": "d",
+     "en": "1000"
+    }
+   ],
+   "answer": "c",
+   "why_en": "0.9 must move one place to the left, so multiply by 10 (p.19)."
+  },
+  {
+   "id": "q.de3bfb3f",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": 19,
+   "difficulty": 3,
+   "stem_en": "Find the missing number: 705 ÷ ___ = 7.05",
+   "choices": [
+    {
+     "key": "a",
+     "en": "10"
+    },
+    {
+     "key": "b",
+     "en": "1000"
+    },
+    {
+     "key": "c",
+     "en": "0.01"
+    },
+    {
+     "key": "d",
+     "en": "100"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The digits move two places to the right, so divide by 100 (p.19)."
+  },
+  {
+   "id": "q.79a16d15",
+   "concept": "c.maths6.numsys.pv.times",
+   "page": "WB 12",
+   "difficulty": 3,
+   "stem_en": "A number is multiplied by 10, then by 10 again, then by 10 again, and the answer is 7. What was the starting number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "0.007"
+    },
+    {
+     "key": "b",
+     "en": "0.07"
+    },
+    {
+     "key": "c",
+     "en": "0.7"
+    },
+    {
+     "key": "d",
+     "en": "70"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Three multiplications by 10 is × 1000, so reverse it: 7 ÷ 1000 (WB p.12)."
+  },
+  {
+   "id": "q.48546310",
+   "concept": "c.maths6.numsys.pv.compose",
+   "page": 13,
+   "difficulty": 2,
+   "stem_en": "Write 10 + 3 + 1 tenth + 3 hundredths + 6 thousandths as a decimal number.",
+   "choices": [
+    {
+     "key": "a",
+     "en": "13.316"
+    },
+    {
+     "key": "b",
+     "en": "13.136"
+    },
+    {
+     "key": "c",
+     "en": "10.136"
+    },
+    {
+     "key": "d",
+     "en": "13.163"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Each part goes in its own place value column (p.13)."
+  },
+  {
+   "id": "q.8fe74ac2",
+   "concept": "c.maths6.numsys.pv.compose",
+   "page": 19,
+   "difficulty": 2,
+   "stem_en": "Copy and complete: 87.655 = 80 + 7 + ___",
+   "choices": [
+    {
+     "key": "a",
+     "en": "0.6 + 0.5 + 0.5"
+    },
+    {
+     "key": "b",
+     "en": "6 + 5 + 5"
+    },
+    {
+     "key": "c",
+     "en": "0.6 + 0.05 + 0.005"
+    },
+    {
+     "key": "d",
+     "en": "0.06 + 0.05 + 0.005"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The decimal part decomposes into 6 tenths, 5 hundredths and 5 thousandths (p.19)."
+  },
+  {
+   "id": "q.dc05dcb2",
+   "concept": "c.maths6.numsys.pv.compose",
+   "page": 19,
+   "difficulty": 2,
+   "stem_en": "What decimal number is 90 + 7 + 3 tenths + 1 hundredth + 4 thousandths?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "97.134"
+    },
+    {
+     "key": "b",
+     "en": "907.314"
+    },
+    {
+     "key": "c",
+     "en": "97.34"
+    },
+    {
+     "key": "d",
+     "en": "97.314"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Put each part in its place value column (p.19)."
+  },
+  {
+   "id": "q.055c3f48",
+   "concept": "c.maths6.numsys.pv.compose",
+   "page": "WB 9",
+   "difficulty": 3,
+   "stem_en": "Magda regroups 56.079. Which of these is NOT the same number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "56 + 0.79"
+    },
+    {
+     "key": "b",
+     "en": "5607 tenths + 9 thousandths"
+    },
+    {
+     "key": "c",
+     "en": "56 ones and 79 thousandths"
+    },
+    {
+     "key": "d",
+     "en": "50 + 6 + 0.07 + 0.009"
+    }
+   ],
+   "answer": "a",
+   "why_en": "56 + 0.79 is 56.79, which is ten times bigger in the decimal part (WB p.9)."
+  },
+  {
+   "id": "q.7c86b32d",
+   "concept": "c.maths6.numsys.pv.compose",
+   "page": "WB 11",
+   "difficulty": 2,
+   "stem_en": "Which expression is equal to 4.063?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4 + 0.6 + 0.3"
+    },
+    {
+     "key": "b",
+     "en": "4 + 0.06 + 0.003"
+    },
+    {
+     "key": "c",
+     "en": "4 + 0.6 + 0.03"
+    },
+    {
+     "key": "d",
+     "en": "4 + 0.06 + 0.03"
+    }
+   ],
+   "answer": "b",
+   "why_en": "6 is in the hundredths place and 3 in the thousandths place (WB p.11)."
+  },
+  {
+   "id": "q.eb1c8c87",
+   "concept": "c.maths6.numsys.rounding",
+   "page": 16,
+   "difficulty": 1,
+   "stem_en": "Why do we round numbers?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "To make them bigger"
+    },
+    {
+     "key": "b",
+     "en": "To make them exact"
+    },
+    {
+     "key": "c",
+     "en": "To make them easier to describe and understand"
+    },
+    {
+     "key": "d",
+     "en": "To remove the decimal point"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Rounding makes numbers easier to describe and understand (p.16)."
+  },
+  {
+   "id": "q.ab3927fb",
+   "concept": "c.maths6.numsys.rounding",
+   "page": 16,
+   "difficulty": 1,
+   "stem_en": "What is 4.09 rounded to the nearest whole number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4.1"
+    },
+    {
+     "key": "b",
+     "en": "5"
+    },
+    {
+     "key": "c",
+     "en": "4.0"
+    },
+    {
+     "key": "d",
+     "en": "4"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The tenths digit is 0, so round down (p.16)."
+  },
+  {
+   "id": "q.bdb00350",
+   "concept": "c.maths6.numsys.rounding",
+   "page": 16,
+   "difficulty": 2,
+   "stem_en": "What is 7.45 rounded to the nearest whole number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7"
+    },
+    {
+     "key": "b",
+     "en": "8"
+    },
+    {
+     "key": "c",
+     "en": "7.5"
+    },
+    {
+     "key": "d",
+     "en": "7.4"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The tenths digit is 4, which is in 0–4, so round down (p.16)."
+  },
+  {
+   "id": "q.9a8b3a24",
+   "concept": "c.maths6.numsys.rounding",
+   "page": 16,
+   "difficulty": 2,
+   "stem_en": "A book costs $14.65. What is that to the nearest dollar?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "$14"
+    },
+    {
+     "key": "b",
+     "en": "$15"
+    },
+    {
+     "key": "c",
+     "en": "$14.70"
+    },
+    {
+     "key": "d",
+     "en": "$14.60"
+    }
+   ],
+   "answer": "b",
+   "why_en": "The tenths digit is 6, so round up (p.16)."
+  },
+  {
+   "id": "q.ea481104",
+   "concept": "c.maths6.numsys.rounding",
+   "page": 19,
+   "difficulty": 2,
+   "stem_en": "What is 9.55 rounded to the nearest whole number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "9"
+    },
+    {
+     "key": "b",
+     "en": "9.5"
+    },
+    {
+     "key": "c",
+     "en": "10"
+    },
+    {
+     "key": "d",
+     "en": "9.6"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The tenths digit is 5, so round up from 9 to 10 (p.19)."
+  },
+  {
+   "id": "q.4f5c6fd4",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 16,
+   "difficulty": 1,
+   "stem_en": "What is 8.80 rounded to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "8.9"
+    },
+    {
+     "key": "b",
+     "en": "9.0"
+    },
+    {
+     "key": "c",
+     "en": "8.80"
+    },
+    {
+     "key": "d",
+     "en": "8.8"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The hundredths digit is 0, so round down (p.16)."
+  },
+  {
+   "id": "q.02bb77b6",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 16,
+   "difficulty": 2,
+   "stem_en": "What is 3.95 rounded to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4.0"
+    },
+    {
+     "key": "b",
+     "en": "3.9"
+    },
+    {
+     "key": "c",
+     "en": "4"
+    },
+    {
+     "key": "d",
+     "en": "3.10"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The hundredths digit 5 rounds the tenths digit up from 9, carrying into the ones (p.16)."
+  },
+  {
+   "id": "q.db881301",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 19,
+   "difficulty": 2,
+   "stem_en": "What is 3.08 rounded to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "3.0"
+    },
+    {
+     "key": "b",
+     "en": "3.1"
+    },
+    {
+     "key": "c",
+     "en": "3"
+    },
+    {
+     "key": "d",
+     "en": "3.08"
+    }
+   ],
+   "answer": "b",
+   "why_en": "The hundredths digit is 8, so round up (p.19)."
+  },
+  {
+   "id": "q.a2ab1981",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 17,
+   "difficulty": 2,
+   "stem_en": "What is 9.07 rounded to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "9.0"
+    },
+    {
+     "key": "b",
+     "en": "9"
+    },
+    {
+     "key": "c",
+     "en": "9.1"
+    },
+    {
+     "key": "d",
+     "en": "9.07"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The hundredths digit is 7, so round up (p.17)."
+  },
+  {
+   "id": "q.c991c2af",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 17,
+   "difficulty": 3,
+   "stem_en": "Which of these rounds to 7.5 to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7.35"
+    },
+    {
+     "key": "b",
+     "en": "7.05"
+    },
+    {
+     "key": "c",
+     "en": "7.56"
+    },
+    {
+     "key": "d",
+     "en": "7.49"
+    }
+   ],
+   "answer": "d",
+   "why_en": "7.49 has hundredths digit 9, so the 4 tenths round up to 5 (p.17)."
+  },
+  {
+   "id": "q.4df04e49",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 16,
+   "difficulty": 2,
+   "stem_en": "Rounded to the nearest tenth, how many decimal places must the answer always have?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Exactly one, even if it is zero"
+    },
+    {
+     "key": "b",
+     "en": "None"
+    },
+    {
+     "key": "c",
+     "en": "Two"
+    },
+    {
+     "key": "d",
+     "en": "As many as the original number"
+    }
+   ],
+   "answer": "a",
+   "why_en": "There must always be one decimal place in the answer (p.16)."
+  },
+  {
+   "id": "q.bec13cde",
+   "concept": "c.maths6.numsys.rd.tenth",
+   "page": 17,
+   "difficulty": 3,
+   "stem_en": "Is this true: 3.04 is 3 to the nearest whole number and 3 to the nearest tenth?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Yes, both are 3"
+    },
+    {
+     "key": "b",
+     "en": "No — to the nearest tenth it is 3.0"
+    },
+    {
+     "key": "c",
+     "en": "No, both should be 3.1"
+    },
+    {
+     "key": "d",
+     "en": "No, to the nearest whole number it is 4"
+    }
+   ],
+   "answer": "b",
+   "why_en": "A number rounded to the nearest tenth keeps one decimal place (p.17)."
+  }
+ ],
+ "retired": [],
+ "generated_at": "2026-09-04T11:30:59+00:00"
+}
