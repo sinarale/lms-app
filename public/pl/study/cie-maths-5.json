@@ -19,54 +19,204 @@
   {
    "id": "c.maths6.numsys",
    "parent": "c.maths6",
-   "en": "The number system",
-   "no": "1"
-  },
-  {
-   "id": "c.maths6.numsys.pv",
-   "parent": "c.maths6.numsys",
-   "en": "Place value",
-   "no": "1.1",
-   "pages": "12-15"
+   "en": "Place value and rounding decimal numbers",
+   "no": "1",
+   "pages": "12-19"
   },
   {
    "id": "c.maths6.numsys.place_value",
-   "parent": "c.maths6.numsys.pv",
-   "en": "Value of each digit in decimals"
-  },
-  {
-   "id": "c.maths6.numsys.pv.times",
-   "parent": "c.maths6.numsys.pv",
-   "en": "Multiply and divide by 10, 100 and 1000"
+   "parent": "c.maths6.numsys",
+   "en": "Place value"
   },
   {
    "id": "c.maths6.numsys.pv.compose",
-   "parent": "c.maths6.numsys.pv",
+   "parent": "c.maths6.numsys",
    "en": "Compose, decompose and regroup"
   },
   {
-   "id": "c.maths6.numsys.rd",
+   "id": "c.maths6.numsys.pv.word",
    "parent": "c.maths6.numsys",
-   "en": "Rounding decimal numbers",
-   "no": "1.2",
-   "pages": "16-19"
+   "en": "Word form"
+  },
+  {
+   "id": "c.maths6.numsys.pv.times",
+   "parent": "c.maths6.numsys",
+   "en": "Multiply and divide by 10, 100 and 1000"
   },
   {
    "id": "c.maths6.numsys.rounding",
-   "parent": "c.maths6.numsys.rd",
-   "en": "Round to the nearest whole number"
+   "parent": "c.maths6.numsys",
+   "en": "Rounding decimal numbers"
   },
   {
-   "id": "c.maths6.numsys.rd.tenth",
-   "parent": "c.maths6.numsys.rd",
-   "en": "Round to the nearest tenth"
+   "id": "c.maths6.seq",
+   "parent": "c.maths6",
+   "en": "Number sequences",
+   "no": "2",
+   "pages": "20-34"
+  },
+  {
+   "id": "c.maths6.seq.count",
+   "parent": "c.maths6.seq",
+   "en": "Counting on and counting back"
+  },
+  {
+   "id": "c.maths6.seq.rule",
+   "parent": "c.maths6.seq",
+   "en": "Position-to-term rule"
+  },
+  {
+   "id": "c.maths6.seq.square",
+   "parent": "c.maths6.seq",
+   "en": "Square numbers"
+  },
+  {
+   "id": "c.maths6.seq.cube",
+   "parent": "c.maths6.seq",
+   "en": "Cube numbers"
+  },
+  {
+   "id": "c.maths6.seq.factors",
+   "parent": "c.maths6.seq",
+   "en": "Common multiples and common factors"
   }
  ],
  "summary": [
   {
-   "concept": "c.maths6.numsys.pv",
+   "concept": "c.maths6.numsys",
    "diagram": null,
-   "big_en": "Every digit in a number has a value that depends on its place. Moving a digit one place changes its value ten times.",
+   "big_en": "Every digit has a value that depends on its place. Rounding replaces a number with a nearby simpler one.",
+   "topics": [
+    {
+     "concept": "c.maths6.numsys.place_value",
+     "title": "Place value",
+     "subtitle": "value | position",
+     "page": "13",
+     "rules": [
+      "Understand the value of each digit in a decimal number.",
+      "Moving a digit one place to the left makes it ten times bigger."
+     ],
+     "example": {
+      "kind": "grid",
+      "rows": [
+       [
+        "Tens",
+        "Ones",
+        "Tenths",
+        "Hundredths",
+        "Thousandths"
+       ],
+       [
+        "10",
+        "1",
+        "0.1",
+        "0.01",
+        "0.001"
+       ],
+       [
+        "1",
+        "3",
+        "1",
+        "3",
+        "6"
+       ]
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.numsys.pv.compose",
+     "title": "Compose, decompose, regroup",
+     "page": "13",
+     "rules": [
+      "Write a number in expanded form (compose).",
+      "Break a number into its place values (decompose).",
+      "Group the values a different way, keeping the same total (regroup)."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "With 87.655",
+      "lines": [
+       "Compose: 80 + 7 + 0.6 + 0.05 + 0.005 = 87.655",
+       "Decompose: 87.655 = 80 + 7 + 0.6 + 0.05 + 0.005",
+       "Regroup: 87.655 = 87 + 0.6 + 0.055",
+       "Regroup: 87.655 = 87 ones and 655 thousandths"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.numsys.pv.word",
+     "title": "Word form",
+     "subtitle": "read & write",
+     "page": "14",
+     "rules": [
+      "Write and read decimal numbers in words.",
+      "After the decimal point, say the digits one by one."
+     ],
+     "example": {
+      "kind": "calc",
+      "lines": [
+       "2.139 → two point one three nine",
+       "20.431 → twenty point four three one",
+       "0.375 → zero point three seven five"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.numsys.pv.times",
+     "title": "Multiply & divide by 10, 100, 1000",
+     "page": "WB 11",
+     "rules": [
+      "Multiply or divide a decimal number by 10, 100 or 1000.",
+      "Every digit moves 1, 2 or 3 places: left to multiply, right to divide."
+     ],
+     "example": {
+      "kind": "calc",
+      "lines": [
+       "5.48 × 10 = 54.8",
+       "5.48 ÷ 10 = 0.548",
+       "5.48 × 100 = 548",
+       "5.48 ÷ 100 = 0.0548",
+       "5.48 × 1000 = 5480",
+       "5.48 ÷ 1000 = 0.00548"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.numsys.rounding",
+     "title": "Rounding",
+     "subtitle": "rounding off",
+     "page": "16",
+     "rules": [
+      "Round a number with 2 decimal places to the nearest tenth or whole number.",
+      "Look at the digit just after the place you are rounding to."
+     ],
+     "example": {
+      "kind": "ifthen",
+      "branches": [
+       {
+        "when": "Nearest tenth · hundredths digit is 5, 6, 7, 8, 9",
+        "then": "increase the tenths digit by 1",
+        "eg": "5.67 → 5.7"
+       },
+       {
+        "when": "Nearest tenth · hundredths digit is 0, 1, 2, 3, 4",
+        "then": "keep the tenths digit the same",
+        "eg": "5.44 → 5.4"
+       },
+       {
+        "when": "Nearest whole number · tenths digit is 5, 6, 7, 8, 9",
+        "then": "increase the ones digit by 1",
+        "eg": "5.67 → 6"
+       },
+       {
+        "when": "Nearest whole number · tenths digit is 0, 1, 2, 3, 4",
+        "then": "keep the ones digit the same",
+        "eg": "5.47 → 5"
+       }
+      ]
+     }
+    }
+   ],
    "glossary": [
     {
      "term": "digit",
@@ -77,163 +227,51 @@
     {
      "term": "place value",
      "def": "The value a digit has because of its position in the number.",
-     "example": "In 6703.46 the digit 7 has a place value of 7 hundreds (p.13).",
+     "example": "In 6703.46 the 7 has a place value of 7 hundreds (p.13).",
      "concept": "c.maths6.numsys.place_value"
     },
     {
      "term": "decimal point",
      "def": "The dot that separates the whole-number part from the part smaller than one.",
-     "example": "In 13.136 the decimal point comes after the 13 (p.13).",
-     "concept": "c.maths6.numsys.pv.times"
-    },
-    {
-     "term": "decimal number",
-     "def": "A number written with a decimal point, so it can show parts smaller than one.",
-     "example": "0.375 inches is the wingspan of a Western Pygmy Blue Butterfly (p.12).",
-     "concept": "c.maths6.numsys.pv.times"
+     "example": "In 13.136 it comes after the 13 (p.13).",
+     "concept": "c.maths6.numsys.pv.word"
     },
     {
      "term": "tenths",
-     "def": "The first place after the decimal point, worth one tenth each.",
-     "example": "In 13.136 the 1 stands for 1 tenth (p.13).",
+     "def": "The first place after the decimal point.",
+     "example": "In 13.136 the 1 after the point is 1 tenth (p.13).",
      "concept": "c.maths6.numsys.place_value"
     },
     {
      "term": "hundredths",
-     "def": "The second place after the decimal point, worth one hundredth each.",
-     "example": "In 13.136 the 3 stands for 3 hundredths (p.13).",
+     "def": "The second place after the decimal point.",
+     "example": "In 13.136 the 3 is 3 hundredths (p.13).",
      "concept": "c.maths6.numsys.place_value"
     },
     {
      "term": "thousandths",
-     "def": "The third place after the decimal point, worth one thousandth each.",
-     "example": "In 13.136 the 6 stands for 6 thousandths (p.13).",
+     "def": "The third place after the decimal point.",
+     "example": "In 13.136 the 6 is 6 thousandths (p.13).",
      "concept": "c.maths6.numsys.place_value"
     },
     {
      "term": "compose",
      "def": "Putting parts together to make a number.",
-     "example": "3 + 10 + one tenth + 3 hundredths + 6 thousandths composes 13.136 (p.13).",
+     "example": "3 + 10 + 1 tenth + 3 hundredths + 6 thousandths makes 13.136 (p.13).",
      "concept": "c.maths6.numsys.pv.compose"
     },
     {
      "term": "decompose",
      "def": "Splitting a number into the parts it is made of.",
-     "example": "87.655 decomposes into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
+     "example": "87.655 splits into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
      "concept": "c.maths6.numsys.pv.compose"
     },
     {
      "term": "regroup",
      "def": "Writing the same number as a different set of parts.",
-     "example": "56.079 regroups as 56 ones and 79 thousandths (WB p.9).",
+     "example": "56.079 is also 56 ones and 79 thousandths (WB p.9).",
      "concept": "c.maths6.numsys.pv.compose"
-    }
-   ],
-   "points": [
-    {
-     "t": "The value of a digit depends on its place, not on the digit itself. The 7 in 6703.46 is 7 hundreds; the 7 in 213.807 is 7 thousandths (p.13).",
-     "concept": "c.maths6.numsys.place_value"
     },
-    {
-     "t": "The three places after the decimal point are tenths, hundredths and thousandths (p.13).",
-     "concept": "c.maths6.numsys.place_value"
-    },
-    {
-     "t": "Multiplying by 10, 100 or 1000 moves every digit 1, 2 or 3 places to the left. Dividing moves them the same number of places to the right (p.14).",
-     "concept": "c.maths6.numsys.pv.times"
-    },
-    {
-     "t": "Adding zeros is not the same as multiplying by 100. 5.6 × 100 is 560, not 5.600 (WB p.12).",
-     "concept": "c.maths6.numsys.pv.times"
-    },
-    {
-     "t": "The same number can be regrouped in many ways, and every way has the same total (p.13).",
-     "concept": "c.maths6.numsys.pv.compose"
-    }
-   ],
-   "checklists": [
-    {
-     "concept": "c.maths6.numsys.place_value",
-     "title": "Places in 13.136 (p.13)",
-     "items": [
-      {
-       "sign": "1",
-       "look_for": "1 ten"
-      },
-      {
-       "sign": "3",
-       "look_for": "3 ones"
-      },
-      {
-       "sign": "1",
-       "look_for": "1 tenth"
-      },
-      {
-       "sign": "3",
-       "look_for": "3 hundredths"
-      },
-      {
-       "sign": "6",
-       "look_for": "6 thousandths"
-      }
-     ],
-     "note": "Reading a number aloud place by place is the quickest way to check a digit's value."
-    }
-   ],
-   "compares": [],
-   "watch_out": [
-    {
-     "wrong": "I can multiply by 100 by adding two zeros.",
-     "right": "That only works for whole numbers: 5.6 × 100 is 560, because every digit moves two places left (WB p.12).",
-     "concept": "c.maths6.numsys.pv.times"
-    }
-   ],
-   "worked": [
-    {
-     "concept": "c.maths6.numsys.pv.compose",
-     "title": "Worked example 1 — write it as a decimal",
-     "page": "13",
-     "problem": "Write 3 + 6 thousandths + 10 + 3 hundredths + 1 tenth as a decimal number.",
-     "steps": [
-      "Write the terms in order of size, starting with the highest place value: 10 + 3 + 1 tenth + 3 hundredths + 6 thousandths.",
-      "Put each digit in its column on a place value grid: 1 ten, 3 ones, 1 tenth, 3 hundredths, 6 thousandths.",
-      "Read the grid straight off, keeping every column."
-     ],
-     "answer": "13.136",
-     "why": "Ordering by place value first means no digit ends up in the wrong column."
-    },
-    {
-     "concept": "c.maths6.numsys.pv.times",
-     "title": "Worked example 1 — reverse the operations",
-     "page": "WB 8",
-     "problem": "A number is divided by 10 and then by 100, and the answer is 0.375. What was the number?",
-     "steps": [
-      "Dividing is undone by multiplying, so work backwards: 0.375 × 100 × 10.",
-      "× 100 × 10 is the same as × 1000, so every digit moves three places left.",
-      "0.375 × 1000 = 375."
-     ],
-     "answer": "375",
-     "why": "Reversing the operations turns a puzzle into one calculation."
-    }
-   ],
-   "terms": [
-    "digit",
-    "place value",
-    "decimal point",
-    "decimal number",
-    "tenths",
-    "hundredths",
-    "thousandths",
-    "compose",
-    "decompose",
-    "regroup"
-   ]
-  },
-  {
-   "concept": "c.maths6.numsys.rd",
-   "diagram": null,
-   "big_en": "Rounding replaces a number with a nearby simpler one. Look at the digit just after the place you are rounding to.",
-   "glossary": [
     {
      "term": "round",
      "def": "Replace a number with a nearby number that is easier to use.",
@@ -243,104 +281,245 @@
     {
      "term": "nearest",
      "def": "The closest of the possible answers.",
-     "example": "$14.65 to the nearest dollar (p.16).",
+     "example": "$14.65 to the nearest dollar is $15 (p.16).",
      "concept": "c.maths6.numsys.rounding"
     },
     {
-     "term": "decimal place",
-     "def": "One of the positions after the decimal point.",
-     "example": "An answer rounded to the nearest tenth has one decimal place (p.16).",
-     "concept": "c.maths6.numsys.rd.tenth"
-    }
-   ],
-   "points": [
-    {
-     "t": "Rounding makes numbers easier to describe and understand. Saying a race took under 10 seconds is easier than 9.63 seconds (p.16).",
-     "concept": "c.maths6.numsys.rounding"
-    },
-    {
-     "t": "The digit you look at is always the one just after the place you are rounding to (p.16).",
-     "concept": "c.maths6.numsys.rd.tenth"
-    },
-    {
-     "t": "An answer rounded to the nearest tenth always has one decimal place, even when it is zero (p.16).",
-     "concept": "c.maths6.numsys.rd.tenth"
-    },
-    {
-     "t": "To round to the nearest whole number, look at the tenths digit by the same rule (p.16).",
-     "concept": "c.maths6.numsys.rounding"
-    }
-   ],
-   "checklists": [
-    {
-     "concept": "c.maths6.numsys.rd.tenth",
-     "title": "Which way to round (p.16)",
-     "items": [
-      {
-       "sign": "0, 1, 2, 3 or 4",
-       "look_for": "round down — keep the digit the same"
-      },
-      {
-       "sign": "5, 6, 7, 8 or 9",
-       "look_for": "round up — add 1 to the digit"
-      }
-     ],
-     "note": "The same rule works for any place; only the digit you look at changes."
-    }
-   ],
-   "compares": [
-    {
-     "concept": "c.maths6.numsys.rounding",
-     "page": "16",
-     "title": "Nearest whole number vs nearest tenth",
-     "label_a": "Nearest whole number",
-     "label_b": "Nearest tenth",
-     "rows": [
-      {
-       "aspect": "Look at",
-       "a": "The tenths digit",
-       "b": "The hundredths digit"
-      },
-      {
-       "aspect": "Answer has",
-       "a": "No decimal places",
-       "b": "Exactly one decimal place"
-      },
-      {
-       "aspect": "3.08 becomes",
-       "a": "3",
-       "b": "3.1"
-      }
-     ]
+     "term": "decimal number",
+     "def": "A number written with a decimal point, so it can show parts smaller than one.",
+     "example": "A butterfly wingspan of 0.375 inches (p.12).",
+     "concept": "c.maths6.numsys.pv.times"
     }
    ],
    "watch_out": [
     {
-     "wrong": "6.95 is 7 when rounded to the nearest whole number and 6.9 when rounded to the nearest tenth.",
-     "right": "6.95 rounds to 7.0 to the nearest tenth, because the hundredths digit 5 rounds up (p.17).",
-     "concept": "c.maths6.numsys.rd.tenth"
-    }
-   ],
-   "worked": [
+     "wrong": "I can multiply by 100 by adding two zeros.",
+     "right": "That only works for whole numbers: 5.6 × 100 is 560, because every digit moves two places left (WB p.12).",
+     "concept": "c.maths6.numsys.pv.times"
+    },
     {
-     "concept": "c.maths6.numsys.rd.tenth",
-     "title": "Worked example 2 — round to the nearest tenth",
-     "page": "16",
-     "problem": "Round 8.80, 6.45 and 3.95 to the nearest tenth.",
-     "steps": [
-      "Look at the hundredths digit of each number: 0, 5 and 5.",
-      "0 is in 0–4, so 8.80 rounds down and the tenths digit stays 8.",
-      "5 is in 5–9, so 6.45 rounds up to 6.5 and 3.95 rounds up, carrying into the ones to give 4.0.",
-      "Keep one decimal place in every answer."
-     ],
-     "answer": "8.8, 6.5 and 4.0",
-     "why": "3.95 shows why the carry matters: rounding the tenths digit up from 9 changes the whole number too."
+     "wrong": "6.95 is 7 to the nearest whole number and 6.9 to the nearest tenth.",
+     "right": "To the nearest tenth 6.95 is 7.0, because the hundredths digit 5 rounds up (p.17).",
+     "concept": "c.maths6.numsys.rounding"
     }
    ],
+   "checklists": [],
+   "compares": [],
+   "worked": [],
    "terms": [
+    "digit",
+    "place value",
+    "decimal point",
+    "tenths",
+    "hundredths",
+    "thousandths",
+    "compose",
+    "decompose",
+    "regroup",
     "round",
     "nearest",
-    "decimal place"
+    "decimal number"
+   ]
+  },
+  {
+   "concept": "c.maths6.seq",
+   "diagram": null,
+   "big_en": "A sequence follows a rule. Knowing the rule lets you find any term without writing them all out.",
+   "topics": [
+    {
+     "concept": "c.maths6.seq.count",
+     "title": "Counting on and counting back",
+     "page": "22",
+     "rules": [
+      "Count forward and backward in steps of constant size.",
+      "The step can be a fraction or a decimal, not just a whole number."
+     ],
+     "example": {
+      "kind": "calc",
+      "lines": [
+       "2 → 5 → 8 → 11 → … (add 3 each time)",
+       "20 → 18 → 16 → 14 → … (subtract 2)",
+       "0.2 → 0.4 → 0.6 → 0.8 → … (add 0.2)"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.seq.rule",
+     "title": "Position to term rule",
+     "page": "22",
+     "rules": [
+      "A term-to-term rule tells you the next term; a position-to-term rule tells you any term.",
+      "Use the position-to-term rule to jump straight to a far-off term."
+     ],
+     "example": {
+      "kind": "grid",
+      "rows": [
+       [
+        "Position",
+        "1",
+        "2",
+        "3",
+        "4",
+        "25"
+       ],
+       [
+        "Term",
+        "4",
+        "8",
+        "12",
+        "16",
+        "100"
+       ],
+       [
+        "Rule",
+        "×4",
+        "×4",
+        "×4",
+        "×4",
+        "25×4"
+       ]
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.seq.square",
+     "title": "Square numbers",
+     "page": "27",
+     "rules": [
+      "Work out the square number in any position: the ninth square number is 9 × 9 = 81.",
+      "Use the small 2 notation to mean squared."
+     ],
+     "example": {
+      "kind": "calc",
+      "lines": [
+       "1² = 1 × 1 = 1",
+       "2² = 2 × 2 = 4",
+       "3² = 3 × 3 = 9",
+       "5² = 5 × 5 = 25",
+       "9² = 9 × 9 = 81",
+       "10² = 10 × 10 = 100"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.seq.cube",
+     "title": "Cube numbers",
+     "page": "27",
+     "rules": [
+      "Know the cube of numbers up to 5.",
+      "Cubing means multiplying a number by itself three times."
+     ],
+     "example": {
+      "kind": "calc",
+      "lines": [
+       "1³ = 1 × 1 × 1 = 1",
+       "2³ = 2 × 2 × 2 = 8",
+       "3³ = 3 × 3 × 3 = 27",
+       "4³ = 4 × 4 × 4 = 64",
+       "5³ = 5 × 5 × 5 = 125",
+       "5³ is also 5² × 5"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.seq.factors",
+     "title": "Common multiples and common factors",
+     "page": "30",
+     "rules": [
+      "A common multiple is in the times table of both numbers.",
+      "A common factor divides into both numbers exactly."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "With 18 and 24",
+      "lines": [
+       "Factors of 18: 1, 2, 3, 6, 9, 18",
+       "Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24",
+       "Common factors: 1, 2, 3, 6",
+       "Multiples of 3: 3, 6, 9, 12, 15, 18 …",
+       "Multiples of 5: 5, 10, 15, 20 …",
+       "Common multiple under 20: 15"
+      ]
+     }
+    }
+   ],
+   "glossary": [
+    {
+     "term": "term",
+     "def": "One of the numbers in a sequence.",
+     "example": "In 2, 4, 6, 8 the third term is 6 (p.22).",
+     "concept": "c.maths6.seq.count"
+    },
+    {
+     "term": "position",
+     "def": "Where a term sits in the sequence: first, second, third and so on.",
+     "example": "The 25th term is in position 25 (p.22).",
+     "concept": "c.maths6.seq.rule"
+    },
+    {
+     "term": "term-to-term rule",
+     "def": "A rule that takes you from one term to the next.",
+     "example": "First term 4, rule add 7 (p.20).",
+     "concept": "c.maths6.seq.count"
+    },
+    {
+     "term": "position-to-term rule",
+     "def": "A rule that gives the term from its position.",
+     "example": "Multiply the position by 2, so the 50th term is 100 (p.23).",
+     "concept": "c.maths6.seq.rule"
+    },
+    {
+     "term": "square number",
+     "def": "The result of multiplying a number by itself.",
+     "example": "The ninth square number is 9 × 9 = 81 (p.27).",
+     "concept": "c.maths6.seq.square"
+    },
+    {
+     "term": "cube number",
+     "def": "The result of multiplying a number by itself three times.",
+     "example": "5³ = 5 × 5 × 5 = 125 (p.27).",
+     "concept": "c.maths6.seq.cube"
+    },
+    {
+     "term": "multiple",
+     "def": "A number in another number's times table.",
+     "example": "24 is a multiple of 2, 3, 4, 6, 8, 12 and 24 (p.30).",
+     "concept": "c.maths6.seq.factors"
+    },
+    {
+     "term": "factor",
+     "def": "A number that divides into another number exactly.",
+     "example": "The factors of 18 are 1, 2, 3, 6, 9 and 18 (p.32).",
+     "concept": "c.maths6.seq.factors"
+    },
+    {
+     "term": "common multiple",
+     "def": "A multiple that two or more numbers share.",
+     "example": "24 is a common multiple of 3 and 8 (p.30).",
+     "concept": "c.maths6.seq.factors"
+    },
+    {
+     "term": "common factor",
+     "def": "A factor that two or more numbers share.",
+     "example": "The common factors of 18 and 24 are 1, 2, 3 and 6 (p.32).",
+     "concept": "c.maths6.seq.factors"
+    }
+   ],
+   "watch_out": [],
+   "checklists": [],
+   "compares": [],
+   "worked": [],
+   "terms": [
+    "term",
+    "position",
+    "term-to-term rule",
+    "position-to-term rule",
+    "square number",
+    "cube number",
+    "multiple",
+    "factor",
+    "common multiple",
+    "common factor"
    ]
   }
  ],
@@ -370,7 +549,7 @@
   },
   {
    "id": "f.166a0e34",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "front_en": "Rounding to the nearest tenth: which digit do you look at?",
    "back_en": "The hundredths digit. 0–4 rounds down, 5–9 rounds up.",
    "example_en": "p.16"
@@ -384,7 +563,7 @@
   },
   {
    "id": "f.9569466c",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "front_en": "How many decimal places has an answer rounded to the nearest tenth?",
    "back_en": "Always one, even if it is zero.",
    "example_en": "p.16"
@@ -395,6 +574,48 @@
    "front_en": "What does it mean to regroup a number?",
    "back_en": "Write the same number as a different set of parts, with the same total.",
    "example_en": "WB p.9"
+  },
+  {
+   "id": "f.b23345da",
+   "concept": "c.maths6.numsys.pv.word",
+   "front_en": "How do you read the digits after a decimal point?",
+   "back_en": "One by one: 2.139 is two point one three nine.",
+   "example_en": "p.14"
+  },
+  {
+   "id": "f.101887bc",
+   "concept": "c.maths6.seq.rule",
+   "front_en": "What does a position-to-term rule do?",
+   "back_en": "Gives any term straight from its position, without listing them all.",
+   "example_en": "p.22"
+  },
+  {
+   "id": "f.40136d57",
+   "concept": "c.maths6.seq.square",
+   "front_en": "What is the ninth square number?",
+   "back_en": "81, because 9 × 9 = 81.",
+   "example_en": "p.27"
+  },
+  {
+   "id": "f.682a886c",
+   "concept": "c.maths6.seq.cube",
+   "front_en": "Cubes of 1 to 5?",
+   "back_en": "1, 8, 27, 64, 125.",
+   "example_en": "p.27"
+  },
+  {
+   "id": "f.40ddfe76",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "What is a common factor?",
+   "back_en": "A number that divides exactly into both numbers.",
+   "example_en": "p.32"
+  },
+  {
+   "id": "f.75e5d05e",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "Common factors of 18 and 24?",
+   "back_en": "1, 2, 3 and 6.",
+   "example_en": "p.32"
   },
   {
    "id": "f.2f093cef",
@@ -409,39 +630,39 @@
    "concept": "c.maths6.numsys.place_value",
    "front_en": "Place value",
    "back_en": "The value a digit has because of its position in the number.",
-   "example_en": "In 6703.46 the digit 7 has a place value of 7 hundreds (p.13).",
+   "example_en": "In 6703.46 the 7 has a place value of 7 hundreds (p.13).",
    "kind": "term"
   },
   {
    "id": "f.429e5498",
-   "concept": "c.maths6.numsys.pv.times",
+   "concept": "c.maths6.numsys.pv.word",
    "front_en": "Decimal point",
    "back_en": "The dot that separates the whole-number part from the part smaller than one.",
-   "example_en": "In 13.136 the decimal point comes after the 13 (p.13).",
+   "example_en": "In 13.136 it comes after the 13 (p.13).",
    "kind": "term"
   },
   {
    "id": "f.94a39016",
    "concept": "c.maths6.numsys.place_value",
    "front_en": "Tenths",
-   "back_en": "The first place after the decimal point, worth one tenth each.",
-   "example_en": "In 13.136 the 1 stands for 1 tenth (p.13).",
+   "back_en": "The first place after the decimal point.",
+   "example_en": "In 13.136 the 1 after the point is 1 tenth (p.13).",
    "kind": "term"
   },
   {
    "id": "f.e10c7e78",
    "concept": "c.maths6.numsys.place_value",
    "front_en": "Hundredths",
-   "back_en": "The second place after the decimal point, worth one hundredth each.",
-   "example_en": "In 13.136 the 3 stands for 3 hundredths (p.13).",
+   "back_en": "The second place after the decimal point.",
+   "example_en": "In 13.136 the 3 is 3 hundredths (p.13).",
    "kind": "term"
   },
   {
    "id": "f.d09813df",
    "concept": "c.maths6.numsys.place_value",
    "front_en": "Thousandths",
-   "back_en": "The third place after the decimal point, worth one thousandth each.",
-   "example_en": "In 13.136 the 6 stands for 6 thousandths (p.13).",
+   "back_en": "The third place after the decimal point.",
+   "example_en": "In 13.136 the 6 is 6 thousandths (p.13).",
    "kind": "term"
   },
   {
@@ -449,7 +670,7 @@
    "concept": "c.maths6.numsys.pv.compose",
    "front_en": "Compose",
    "back_en": "Putting parts together to make a number.",
-   "example_en": "3 + 10 + one tenth + 3 hundredths + 6 thousandths composes 13.136 (p.13).",
+   "example_en": "3 + 10 + 1 tenth + 3 hundredths + 6 thousandths makes 13.136 (p.13).",
    "kind": "term"
   },
   {
@@ -457,7 +678,7 @@
    "concept": "c.maths6.numsys.pv.compose",
    "front_en": "Decompose",
    "back_en": "Splitting a number into the parts it is made of.",
-   "example_en": "87.655 decomposes into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
+   "example_en": "87.655 splits into 80 + 7 + 0.6 + 0.05 + 0.005 (p.19).",
    "kind": "term"
   },
   {
@@ -465,7 +686,7 @@
    "concept": "c.maths6.numsys.pv.compose",
    "front_en": "Regroup",
    "back_en": "Writing the same number as a different set of parts.",
-   "example_en": "56.079 regroups as 56 ones and 79 thousandths (WB p.9).",
+   "example_en": "56.079 is also 56 ones and 79 thousandths (WB p.9).",
    "kind": "term"
   },
   {
@@ -481,7 +702,7 @@
    "concept": "c.maths6.numsys.rounding",
    "front_en": "Nearest",
    "back_en": "The closest of the possible answers.",
-   "example_en": "$14.65 to the nearest dollar (p.16).",
+   "example_en": "$14.65 to the nearest dollar is $15 (p.16).",
    "kind": "term"
   },
   {
@@ -489,15 +710,87 @@
    "concept": "c.maths6.numsys.pv.times",
    "front_en": "Decimal number",
    "back_en": "A number written with a decimal point, so it can show parts smaller than one.",
-   "example_en": "0.375 inches is the wingspan of a Western Pygmy Blue Butterfly (p.12).",
+   "example_en": "A butterfly wingspan of 0.375 inches (p.12).",
    "kind": "term"
   },
   {
-   "id": "f.edfd4e92",
-   "concept": "c.maths6.numsys.rd.tenth",
-   "front_en": "Decimal place",
-   "back_en": "One of the positions after the decimal point.",
-   "example_en": "An answer rounded to the nearest tenth has one decimal place (p.16).",
+   "id": "f.770bce19",
+   "concept": "c.maths6.seq.count",
+   "front_en": "Term",
+   "back_en": "One of the numbers in a sequence.",
+   "example_en": "In 2, 4, 6, 8 the third term is 6 (p.22).",
+   "kind": "term"
+  },
+  {
+   "id": "f.cf1c85ad",
+   "concept": "c.maths6.seq.rule",
+   "front_en": "Position",
+   "back_en": "Where a term sits in the sequence: first, second, third and so on.",
+   "example_en": "The 25th term is in position 25 (p.22).",
+   "kind": "term"
+  },
+  {
+   "id": "f.b990a8eb",
+   "concept": "c.maths6.seq.count",
+   "front_en": "Term-to-term rule",
+   "back_en": "A rule that takes you from one term to the next.",
+   "example_en": "First term 4, rule add 7 (p.20).",
+   "kind": "term"
+  },
+  {
+   "id": "f.1ed42357",
+   "concept": "c.maths6.seq.rule",
+   "front_en": "Position-to-term rule",
+   "back_en": "A rule that gives the term from its position.",
+   "example_en": "Multiply the position by 2, so the 50th term is 100 (p.23).",
+   "kind": "term"
+  },
+  {
+   "id": "f.b0c98e2d",
+   "concept": "c.maths6.seq.square",
+   "front_en": "Square number",
+   "back_en": "The result of multiplying a number by itself.",
+   "example_en": "The ninth square number is 9 × 9 = 81 (p.27).",
+   "kind": "term"
+  },
+  {
+   "id": "f.05d7b455",
+   "concept": "c.maths6.seq.cube",
+   "front_en": "Cube number",
+   "back_en": "The result of multiplying a number by itself three times.",
+   "example_en": "5³ = 5 × 5 × 5 = 125 (p.27).",
+   "kind": "term"
+  },
+  {
+   "id": "f.740922ac",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "Multiple",
+   "back_en": "A number in another number's times table.",
+   "example_en": "24 is a multiple of 2, 3, 4, 6, 8, 12 and 24 (p.30).",
+   "kind": "term"
+  },
+  {
+   "id": "f.451edd79",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "Factor",
+   "back_en": "A number that divides into another number exactly.",
+   "example_en": "The factors of 18 are 1, 2, 3, 6, 9 and 18 (p.32).",
+   "kind": "term"
+  },
+  {
+   "id": "f.0b89d93a",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "Common multiple",
+   "back_en": "A multiple that two or more numbers share.",
+   "example_en": "24 is a common multiple of 3 and 8 (p.30).",
+   "kind": "term"
+  },
+  {
+   "id": "f.25e0104c",
+   "concept": "c.maths6.seq.factors",
+   "front_en": "Common factor",
+   "back_en": "A factor that two or more numbers share.",
+   "example_en": "The common factors of 18 and 24 are 1, 2, 3 and 6 (p.32).",
    "kind": "term"
   }
  ],
@@ -1125,7 +1418,7 @@
   },
   {
    "id": "q.4f5c6fd4",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 16,
    "difficulty": 1,
    "stem_en": "What is 8.80 rounded to the nearest tenth?",
@@ -1152,7 +1445,7 @@
   },
   {
    "id": "q.02bb77b6",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 16,
    "difficulty": 2,
    "stem_en": "What is 3.95 rounded to the nearest tenth?",
@@ -1179,7 +1472,7 @@
   },
   {
    "id": "q.db881301",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 19,
    "difficulty": 2,
    "stem_en": "What is 3.08 rounded to the nearest tenth?",
@@ -1206,7 +1499,7 @@
   },
   {
    "id": "q.a2ab1981",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 17,
    "difficulty": 2,
    "stem_en": "What is 9.07 rounded to the nearest tenth?",
@@ -1233,7 +1526,7 @@
   },
   {
    "id": "q.c991c2af",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 17,
    "difficulty": 3,
    "stem_en": "Which of these rounds to 7.5 to the nearest tenth?",
@@ -1260,7 +1553,7 @@
   },
   {
    "id": "q.4df04e49",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 16,
    "difficulty": 2,
    "stem_en": "Rounded to the nearest tenth, how many decimal places must the answer always have?",
@@ -1287,7 +1580,7 @@
   },
   {
    "id": "q.bec13cde",
-   "concept": "c.maths6.numsys.rd.tenth",
+   "concept": "c.maths6.numsys.rounding",
    "page": 17,
    "difficulty": 3,
    "stem_en": "Is this true: 3.04 is 3 to the nearest whole number and 3 to the nearest tenth?",
@@ -1311,8 +1604,656 @@
    ],
    "answer": "b",
    "why_en": "A number rounded to the nearest tenth keeps one decimal place (p.17)."
+  },
+  {
+   "id": "q.23ff9de7",
+   "concept": "c.maths6.numsys.pv.word",
+   "page": 14,
+   "difficulty": 1,
+   "stem_en": "How do you write 2.139 in words?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Two point one hundred and thirty-nine"
+    },
+    {
+     "key": "b",
+     "en": "Two and one hundred thirty-nine"
+    },
+    {
+     "key": "c",
+     "en": "Two point one three nine"
+    },
+    {
+     "key": "d",
+     "en": "Two point thirteen nine"
+    }
+   ],
+   "answer": "c",
+   "why_en": "After the decimal point the digits are said one by one (p.14)."
+  },
+  {
+   "id": "q.59d8887c",
+   "concept": "c.maths6.numsys.pv.word",
+   "page": 14,
+   "difficulty": 2,
+   "stem_en": "Which number is 'twenty point four three one'?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "24.31"
+    },
+    {
+     "key": "b",
+     "en": "2.431"
+    },
+    {
+     "key": "c",
+     "en": "20.43"
+    },
+    {
+     "key": "d",
+     "en": "20.431"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Twenty, then the digits 4, 3, 1 after the point (p.14)."
+  },
+  {
+   "id": "q.520ed1ac",
+   "concept": "c.maths6.numsys.pv.word",
+   "page": 14,
+   "difficulty": 2,
+   "stem_en": "How do you write 0.375 in words?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Zero point three seven five"
+    },
+    {
+     "key": "b",
+     "en": "Zero point three hundred seventy-five"
+    },
+    {
+     "key": "c",
+     "en": "Three hundred seventy-five"
+    },
+    {
+     "key": "d",
+     "en": "Zero point thirty-seven five"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The digits after the point are read separately (p.12, p.14)."
+  },
+  {
+   "id": "q.d10fe306",
+   "concept": "c.maths6.seq.count",
+   "page": 22,
+   "difficulty": 1,
+   "stem_en": "A sequence starts at 2 and the rule is add 3. What are the next three terms?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "3, 4, 5"
+    },
+    {
+     "key": "b",
+     "en": "5, 8, 11"
+    },
+    {
+     "key": "c",
+     "en": "5, 7, 9"
+    },
+    {
+     "key": "d",
+     "en": "6, 10, 14"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Add 3 each time: 2, 5, 8, 11 (p.22)."
+  },
+  {
+   "id": "q.15686658",
+   "concept": "c.maths6.seq.count",
+   "page": 20,
+   "difficulty": 2,
+   "stem_en": "The first term is 4 and the term-to-term rule is add 7. What is the fourth term?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "18"
+    },
+    {
+     "key": "b",
+     "en": "28"
+    },
+    {
+     "key": "c",
+     "en": "25"
+    },
+    {
+     "key": "d",
+     "en": "32"
+    }
+   ],
+   "answer": "c",
+   "why_en": "4, 11, 18, 25 (p.20)."
+  },
+  {
+   "id": "q.30ea30f8",
+   "concept": "c.maths6.seq.count",
+   "page": 22,
+   "difficulty": 2,
+   "stem_en": "A sequence counts back in steps of 0.2 from 1. What comes after 0.6?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "0.5"
+    },
+    {
+     "key": "b",
+     "en": "0.8"
+    },
+    {
+     "key": "c",
+     "en": "0.2"
+    },
+    {
+     "key": "d",
+     "en": "0.4"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Each step subtracts 0.2 (p.22)."
+  },
+  {
+   "id": "q.f704bfac",
+   "concept": "c.maths6.seq.rule",
+   "page": 23,
+   "difficulty": 1,
+   "stem_en": "A sequence has terms 2, 4, 6, 8. What is the position-to-term rule?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Multiply the position by 2"
+    },
+    {
+     "key": "b",
+     "en": "Add 2 to the position"
+    },
+    {
+     "key": "c",
+     "en": "Multiply the position by 4"
+    },
+    {
+     "key": "d",
+     "en": "Add 2 to the term before"
+    }
+   ],
+   "answer": "a",
+   "why_en": "Position 1 gives 2, position 2 gives 4, so multiply by 2 (p.23)."
+  },
+  {
+   "id": "q.6a644b77",
+   "concept": "c.maths6.seq.rule",
+   "page": 23,
+   "difficulty": 2,
+   "stem_en": "With the position-to-term rule 'multiply by 2', what is the 50th term?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "52"
+    },
+    {
+     "key": "b",
+     "en": "100"
+    },
+    {
+     "key": "c",
+     "en": "25"
+    },
+    {
+     "key": "d",
+     "en": "200"
+    }
+   ],
+   "answer": "b",
+   "why_en": "50 × 2 = 100 (p.23)."
+  },
+  {
+   "id": "q.5afc2df7",
+   "concept": "c.maths6.seq.rule",
+   "page": 22,
+   "difficulty": 2,
+   "stem_en": "With the position-to-term rule 'multiply by 4', what is the 25th term?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "29"
+    },
+    {
+     "key": "b",
+     "en": "50"
+    },
+    {
+     "key": "c",
+     "en": "100"
+    },
+    {
+     "key": "d",
+     "en": "104"
+    }
+   ],
+   "answer": "c",
+   "why_en": "25 × 4 = 100 (p.22)."
+  },
+  {
+   "id": "q.64c5a945",
+   "concept": "c.maths6.seq.rule",
+   "page": 22,
+   "difficulty": 3,
+   "stem_en": "What is the difference between a term-to-term rule and a position-to-term rule?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "They are two names for the same thing"
+    },
+    {
+     "key": "b",
+     "en": "Term-to-term only works for even numbers"
+    },
+    {
+     "key": "c",
+     "en": "Position-to-term only works for the first ten terms"
+    },
+    {
+     "key": "d",
+     "en": "Term-to-term gives the next term; position-to-term gives any term straight away"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The position-to-term rule lets you find any term without writing them all out (p.22)."
+  },
+  {
+   "id": "q.f23fe737",
+   "concept": "c.maths6.seq.square",
+   "page": 27,
+   "difficulty": 1,
+   "stem_en": "What is the ninth square number?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "81"
+    },
+    {
+     "key": "b",
+     "en": "18"
+    },
+    {
+     "key": "c",
+     "en": "72"
+    },
+    {
+     "key": "d",
+     "en": "99"
+    }
+   ],
+   "answer": "a",
+   "why_en": "9 × 9 = 81 (p.27)."
+  },
+  {
+   "id": "q.6301d878",
+   "concept": "c.maths6.seq.square",
+   "page": 28,
+   "difficulty": 1,
+   "stem_en": "What is 7²?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "14"
+    },
+    {
+     "key": "b",
+     "en": "49"
+    },
+    {
+     "key": "c",
+     "en": "21"
+    },
+    {
+     "key": "d",
+     "en": "77"
+    }
+   ],
+   "answer": "b",
+   "why_en": "7 × 7 = 49 (p.28)."
+  },
+  {
+   "id": "q.660fed58",
+   "concept": "c.maths6.seq.square",
+   "page": 28,
+   "difficulty": 2,
+   "stem_en": "What does the small 2 in 5² mean?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Add 2 to 5"
+    },
+    {
+     "key": "b",
+     "en": "Multiply 5 by 2"
+    },
+    {
+     "key": "c",
+     "en": "Multiply 5 by itself"
+    },
+    {
+     "key": "d",
+     "en": "Write 5 twice"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The notation 2 means squared (p.27)."
+  },
+  {
+   "id": "q.77b3206e",
+   "concept": "c.maths6.seq.square",
+   "page": 28,
+   "difficulty": 3,
+   "stem_en": "Which two square numbers add up to 45?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "25 and 20"
+    },
+    {
+     "key": "b",
+     "en": "16 and 29"
+    },
+    {
+     "key": "c",
+     "en": "40 and 5"
+    },
+    {
+     "key": "d",
+     "en": "36 and 9"
+    }
+   ],
+   "answer": "d",
+   "why_en": "36 = 6² and 9 = 3², and 36 + 9 = 45 (p.28)."
+  },
+  {
+   "id": "q.ebd6d1ad",
+   "concept": "c.maths6.seq.cube",
+   "page": 27,
+   "difficulty": 1,
+   "stem_en": "What is 5³?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "125"
+    },
+    {
+     "key": "b",
+     "en": "15"
+    },
+    {
+     "key": "c",
+     "en": "25"
+    },
+    {
+     "key": "d",
+     "en": "75"
+    }
+   ],
+   "answer": "a",
+   "why_en": "5 × 5 × 5 = 125 (p.27)."
+  },
+  {
+   "id": "q.9e4f4bb8",
+   "concept": "c.maths6.seq.cube",
+   "page": 28,
+   "difficulty": 2,
+   "stem_en": "What is 3³?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "9"
+    },
+    {
+     "key": "b",
+     "en": "27"
+    },
+    {
+     "key": "c",
+     "en": "6"
+    },
+    {
+     "key": "d",
+     "en": "33"
+    }
+   ],
+   "answer": "b",
+   "why_en": "3 × 3 × 3 = 27 (p.28)."
+  },
+  {
+   "id": "q.61d2984f",
+   "concept": "c.maths6.seq.cube",
+   "page": 25,
+   "difficulty": 3,
+   "stem_en": "Which is larger, 2³ or 3²?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "2³, because 8 is more than 9"
+    },
+    {
+     "key": "b",
+     "en": "They are equal"
+    },
+    {
+     "key": "c",
+     "en": "3², because 9 is more than 8"
+    },
+    {
+     "key": "d",
+     "en": "2³, because the 3 is bigger"
+    }
+   ],
+   "answer": "c",
+   "why_en": "2³ = 8 and 3² = 9 (p.25)."
+  },
+  {
+   "id": "q.1e948cbb",
+   "concept": "c.maths6.seq.cube",
+   "page": 28,
+   "difficulty": 3,
+   "stem_en": "Which two cube numbers add up to 152?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "100 and 52"
+    },
+    {
+     "key": "b",
+     "en": "64 and 88"
+    },
+    {
+     "key": "c",
+     "en": "144 and 8"
+    },
+    {
+     "key": "d",
+     "en": "125 and 27"
+    }
+   ],
+   "answer": "d",
+   "why_en": "125 = 5³ and 27 = 3³, and 125 + 27 = 152 (p.28)."
+  },
+  {
+   "id": "q.58443ff8",
+   "concept": "c.maths6.seq.factors",
+   "page": 30,
+   "difficulty": 1,
+   "stem_en": "Which number is a multiple of both 3 and 5 and less than 20?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "15"
+    },
+    {
+     "key": "b",
+     "en": "10"
+    },
+    {
+     "key": "c",
+     "en": "12"
+    },
+    {
+     "key": "d",
+     "en": "18"
+    }
+   ],
+   "answer": "a",
+   "why_en": "15 is in both the 3 and 5 times tables (p.30)."
+  },
+  {
+   "id": "q.2897796c",
+   "concept": "c.maths6.seq.factors",
+   "page": 32,
+   "difficulty": 1,
+   "stem_en": "What are the factors of 18?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1, 2, 3, 9, 18"
+    },
+    {
+     "key": "b",
+     "en": "1, 2, 3, 6, 9, 18"
+    },
+    {
+     "key": "c",
+     "en": "1, 3, 6, 18"
+    },
+    {
+     "key": "d",
+     "en": "2, 3, 6, 9"
+    }
+   ],
+   "answer": "b",
+   "why_en": "These are the numbers that divide 18 exactly (p.32)."
+  },
+  {
+   "id": "q.49deae45",
+   "concept": "c.maths6.seq.factors",
+   "page": 32,
+   "difficulty": 2,
+   "stem_en": "What are the common factors of 18 and 24?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1, 2, 4 and 6"
+    },
+    {
+     "key": "b",
+     "en": "2, 3 and 8"
+    },
+    {
+     "key": "c",
+     "en": "1, 2, 3 and 6"
+    },
+    {
+     "key": "d",
+     "en": "1, 3, 9 and 12"
+    }
+   ],
+   "answer": "c",
+   "why_en": "They are the factors that appear in both lists (p.32)."
+  },
+  {
+   "id": "q.444cb7e3",
+   "concept": "c.maths6.seq.factors",
+   "page": 32,
+   "difficulty": 2,
+   "stem_en": "Which numbers are factors of both 30 and 20?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1, 2, 3 and 5"
+    },
+    {
+     "key": "b",
+     "en": "2, 4, 5 and 10"
+    },
+    {
+     "key": "c",
+     "en": "1, 5, 6 and 15"
+    },
+    {
+     "key": "d",
+     "en": "1, 2, 5 and 10"
+    }
+   ],
+   "answer": "d",
+   "why_en": "These divide both 30 and 20 exactly (p.32)."
+  },
+  {
+   "id": "q.a977e9c2",
+   "concept": "c.maths6.seq.factors",
+   "page": 32,
+   "difficulty": 3,
+   "stem_en": "All the common multiples of 3 and 8 that are less than 50 are:",
+   "choices": [
+    {
+     "key": "a",
+     "en": "24 and 48"
+    },
+    {
+     "key": "b",
+     "en": "24 only"
+    },
+    {
+     "key": "c",
+     "en": "11, 22 and 33"
+    },
+    {
+     "key": "d",
+     "en": "8, 16, 24 and 32"
+    }
+   ],
+   "answer": "a",
+   "why_en": "24 and 48 are in both times tables and below 50 (p.32)."
+  },
+  {
+   "id": "q.33776745",
+   "concept": "c.maths6.seq.factors",
+   "page": 32,
+   "difficulty": 3,
+   "stem_en": "Two sequences go 3, 6, 9, 12 … and 5, 10, 15, 20 … Which number over 100 is in both?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "102"
+    },
+    {
+     "key": "b",
+     "en": "105"
+    },
+    {
+     "key": "c",
+     "en": "110"
+    },
+    {
+     "key": "d",
+     "en": "120"
+    }
+   ],
+   "answer": "b",
+   "why_en": "105 is a multiple of both 3 and 5 (p.32)."
   }
  ],
  "retired": [],
- "generated_at": "2026-09-04T11:30:59+00:00"
+ "generated_at": "2026-09-05T10:48:24+00:00"
 }

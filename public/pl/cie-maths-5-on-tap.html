@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Maths 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.3b9ce75c.css">
+  <link rel="stylesheet" href="../assets/tw.651f0263.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -204,6 +204,7 @@
           { k: 'watch',   t: '⚠ Dễ nhầm',      on: 'bg-amber-500 text-white border-amber-500',    off: 'bg-white text-amber-700 border-amber-300' },
           { k: 'exp',     t: '🔬 Thí nghiệm',  on: 'bg-violet-600 text-white border-violet-600',  off: 'bg-white text-violet-700 border-violet-300' },
           { k: 'worked',  t: '🧮 Bài mẫu',     on: 'bg-teal-600 text-white border-teal-600',      off: 'bg-white text-teal-700 border-teal-300' },
+          { k: 'topics',  t: '① Nội dung thi', on: 'bg-orange-600 text-white border-orange-600', off: 'bg-white text-orange-700 border-orange-300' },
           { k: 'compare', t: '⇄ So sánh',      on: 'bg-slate-700 text-white border-slate-700',    off: 'bg-white text-slate-700 border-slate-300' },
         ],
         // ⚠ ĐỪNG đặt tên state này là `pick`: đã có method pick(c) chọn đáp án
@@ -220,7 +221,7 @@
         // nên đổi phạm vi ở cây bên trái là chip tự hiện/ẩn theo.
         hasKind(k) {
           const F = { gloss: 'glossary', facts: null, list: 'checklists',
-                      watch: 'watch_out', exp: 'experiments', worked: 'worked', compare: 'compares' };
+                      watch: 'watch_out', exp: 'experiments', worked: 'worked', topics: 'topics', compare: 'compares' };
           return this.scopedSummary.some(sec =>
             (k === 'facts' ? this.points(sec) : (sec[F[k]] || [])).length);
         },
@@ -303,6 +304,7 @@
         lists(sec, leafId)  { return this.arr(sec, 'checklists', 'checklist').filter(x => x.concept === leafId); },
         exps(sec, leafId)   { return this.arr(sec, 'experiments', 'from_the_book').filter(x => x.concept === leafId); },
         works(sec, leafId)  { return this.arr(sec, 'worked', null).filter(x => x.concept === leafId); },
+        tops(sec)           { return (sec.topics || []); },
         comps(sec, leafId)  { return this.arr(sec, 'compares', 'compare').filter(x => x.concept === leafId); },
         // Khối cấp MỤC = không gắn lá nào
         secLists(sec) { return this.arr(sec, 'checklists', 'checklist').filter(x => !x.concept); },
@@ -1129,6 +1131,68 @@
                từ vựng → ý → checklist → ngộ nhận → thí nghiệm của riêng lá đó.
                Trải phẳng thì người đọc không thấy cấu trúc sách; xếp theo lá thì
                infographic và cây điều hướng nói cùng một ngôn ngữ.                -->
+          <!-- ── Nội dung thi (môn Toán) ────────────────────────────────────
+               Mỗi kiến thức MỘT THẺ ĐÁNH SỐ: quy tắc bên trái, ví dụ ngay bên
+               phải. Trước đây quy tắc nằm ở "Điều cần nhớ" còn ví dụ ở tận khối
+               "Bài mẫu" phía dưới — đọc phải nhảy qua lại, học sinh không nối
+               được hai thứ với nhau. Ví dụ có 3 dạng, xem study/SPEC.md.       -->
+          <template x-if="show.topics && tops(sec).length"><div class="px-5 pb-4 space-y-3">
+          <template x-for="(tp, ti) in tops(sec)" :key="'t' + ti">
+            <div class="rounded-xl border border-orange-200 overflow-hidden">
+              <div class="flex items-center gap-2 px-3 py-2 bg-orange-50 border-b border-orange-200">
+                <span class="shrink-0 w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold grid place-items-center"
+                      x-text="ti + 1"></span>
+                <h4 class="text-base font-bold text-orange-800 uppercase tracking-wide" x-text="tp.title"></h4>
+                <span x-show="tp.subtitle" class="text-xs text-orange-500 normal-case" x-text="'(' + tp.subtitle + ')'"></span>
+                <span class="ml-auto text-xs text-slate-400" x-text="tp.page ? 'p.' + tp.page : ''"></span>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-x-4 gap-y-2 px-3 py-2.5">
+                <ul class="space-y-1 text-sm text-slate-700 self-start">
+                  <template x-for="(r, ri) in (tp.rules || [])" :key="ri">
+                    <li class="flex gap-2"><span class="text-orange-400 shrink-0">•</span><span x-text="r"></span></li>
+                  </template>
+                </ul>
+                <!-- ví dụ: 3 dạng, class viết literal để Tailwind quét thấy -->
+                <template x-if="tp.example && tp.example.kind === 'calc'">
+                  <div class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
+                    <p x-show="tp.example.title" class="text-xs font-semibold text-slate-500 mb-1" x-text="tp.example.title"></p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 text-sm tabular-nums text-slate-800">
+                      <template x-for="(ln, li) in tp.example.lines" :key="li"><p x-text="ln"></p></template>
+                    </div>
+                  </div>
+                </template>
+                <template x-if="tp.example && tp.example.kind === 'grid'">
+                  <div class="overflow-x-auto rounded-lg border border-slate-200">
+                    <table class="w-full text-center text-xs tabular-nums">
+                      <tbody>
+                        <template x-for="(row, ri) in tp.example.rows" :key="ri">
+                          <tr :class="ri === 0 ? 'bg-slate-100 font-semibold text-slate-600'
+                                     : (ri === tp.example.rows.length - 1 ? 'bg-orange-50 font-bold text-orange-700' : 'text-slate-700')">
+                            <template x-for="(cell, ci) in row" :key="ci">
+                              <td class="px-1 py-1 border border-slate-200 whitespace-nowrap" x-text="cell"></td>
+                            </template>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+                <template x-if="tp.example && tp.example.kind === 'ifthen'">
+                  <div class="space-y-1.5">
+                    <template x-for="(br, bi) in tp.example.branches" :key="bi">
+                      <div class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 text-sm">
+                        <p class="text-slate-800"><span x-text="br.when"></span>
+                          <span class="text-orange-500 font-bold"> → </span><span x-text="br.then"></span></p>
+                        <p x-show="br.eg" class="text-xs text-slate-500 tabular-nums" x-text="br.eg"></p>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+          </div></template>
+
           <template x-for="leaf in leavesOf(sec)" :key="leaf.id">
             <div class="mx-5 mb-4 rounded-xl border border-slate-200 overflow-hidden">
               <div class="flex items-center gap-2 px-4 py-2 bg-slate-50 border-b border-slate-200">
