@@ -263,6 +263,11 @@
         // Dùng ?. ở mọi getter: Alpine ĐÁNH GIÁ biểu thức trong x-show dù đang
         // ẩn, nên cây bên trái chạy trước khi fetch xong và data vẫn là null.
         children(pid) { return (this.data?.concepts || []).filter(c => c.parent === pid); },
+        // Con hiện trên menu chỉ khi bản thân nó có mục tóm tắt riêng.
+        navKids(pid) {
+          const has = new Set((this.data?.summary || []).map(x => x.concept));
+          return this.children(pid).filter(c => has.has(c.id));
+        },
         get roots() { return this.children(null); },
         // "Unit" = tầng ngay dưới gốc. Nếu cây chỉ có một gốc (một unit duy
         // nhất) thì lấy chính các con của nó, để menu không hiện đúng một dòng.
@@ -778,7 +783,7 @@
         <template x-for="u in units" :key="u.id">
           <li>
             <div class="flex items-center gap-0.5">
-              <button @click="openMap[u.id] = !openMap[u.id]"
+              <button x-show="navKids(u.id).length" @click="openMap[u.id] = !openMap[u.id]"
                       class="shrink-0 p-1 text-indigo-500 hover:text-indigo-700"
                       :aria-label="'Mở ' + u.en">
                 <svg class="w-3.5 h-3.5 transition-transform duration-200"
@@ -794,7 +799,7 @@
               </button>
             </div>
             <ul x-show="openMap[u.id]" x-cloak class="ml-5 border-l border-slate-200 pl-1.5 space-y-0.5">
-              <template x-for="sec in children(u.id)" :key="sec.id">
+              <template x-for="sec in navKids(u.id)" :key="sec.id">
                 <li>
                   <button @click="setScope(sec.id)"
                           :class="scope === sec.id ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-100'"
@@ -806,7 +811,7 @@
                   </button>
                 </li>
               </template>
-              <li x-show="!children(u.id).length" x-cloak class="px-2 py-1.5 text-xs text-slate-400 italic">
+              <li x-show="!navKids(u.id).length" x-cloak class="px-2 py-1.5 text-xs text-slate-400 italic">
                 chưa chia mục
               </li>
             </ul>

@@ -79,6 +79,70 @@
    "id": "c.maths6.seq.factors",
    "parent": "c.maths6.seq",
    "en": "Common multiples and common factors"
+  },
+  {
+   "id": "c.maths6.avg",
+   "parent": "c.maths6",
+   "en": "Averages",
+   "no": "3",
+   "pages": "38-45"
+  },
+  {
+   "id": "c.maths6.avg.mode",
+   "parent": "c.maths6.avg",
+   "en": "Mode"
+  },
+  {
+   "id": "c.maths6.avg.median",
+   "parent": "c.maths6.avg",
+   "en": "Median"
+  },
+  {
+   "id": "c.maths6.avg.mean",
+   "parent": "c.maths6.avg",
+   "en": "Mean"
+  },
+  {
+   "id": "c.maths6.avg.range",
+   "parent": "c.maths6.avg",
+   "en": "Range"
+  },
+  {
+   "id": "c.maths6.avg.describe",
+   "parent": "c.maths6.avg",
+   "en": "Using averages to describe data"
+  },
+  {
+   "id": "c.maths6.addsub1",
+   "parent": "c.maths6",
+   "en": "Addition and subtraction (1)",
+   "no": "4",
+   "pages": "49-59"
+  },
+  {
+   "id": "c.maths6.addsub1.integers",
+   "parent": "c.maths6.addsub1",
+   "en": "Positive and negative integers"
+  },
+  {
+   "id": "c.maths6.addsub1.estimate",
+   "parent": "c.maths6.addsub1",
+   "en": "Estimate, add and subtract large integers"
+  },
+  {
+   "id": "c.maths6.addsub1.difference",
+   "parent": "c.maths6.addsub1",
+   "en": "Difference between two integers"
+  },
+  {
+   "id": "c.maths6.addsub1.letters",
+   "parent": "c.maths6.addsub1",
+   "en": "Using letters to represent numbers"
+  },
+  {
+   "id": "c.maths6.addsub1.variable",
+   "parent": "c.maths6.addsub1",
+   "en": "Constants and variables"
   }
  ],
  "summary": [
@@ -552,6 +616,358 @@
     "common multiple",
     "common factor"
    ]
+  },
+  {
+   "concept": "c.maths6.avg",
+   "diagram": null,
+   "big_en": "An average is one number that stands for a whole set of data. The range says how spread out the data is.",
+   "topics": [
+    {
+     "concept": "c.maths6.avg.mode",
+     "title": "Mode",
+     "page": "40",
+     "def": "The mode is the value that appears most often in a set of data.",
+     "figure": "parts",
+     "rules": [
+      "Find the value that comes up most often.",
+      "A set with two modes is bimodal; a set where nothing repeats has no mode."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "4, 4, 5, 5, 6, 7",
+      "lines": [
+       "4 appears twice",
+       "5 appears twice",
+       "6 and 7 appear once",
+       "Modes: 4 and 5 (bimodal)"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.avg.median",
+     "title": "Median",
+     "page": "40",
+     "def": "The median is the middle value once the data is put in order.",
+     "figure": "chain",
+     "rules": [
+      "Put every value in order from smallest to largest.",
+      "With an even number of values, take the two in the middle and find the number halfway between them."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "4, 7, 5, 4, 10",
+      "lines": [
+       "In order: 4, 4, 5, 7, 10",
+       "Middle value: 5",
+       "Median = 5"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.avg.mean",
+     "title": "Mean",
+     "page": "40",
+     "def": "The mean is the total of all the values shared equally between them.",
+     "figure": "equal",
+     "rules": [
+      "Add up every value in the set.",
+      "Divide the total by how many values there are."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "138, 140, 136, 141, 142, 137 cm",
+      "lines": [
+       "138 + 140 + 136 + 141 + 142 + 137 = 834",
+       "There are 6 heights",
+       "834 ÷ 6 = 139",
+       "Mean = 139 cm"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.avg.range",
+     "title": "Range",
+     "page": "42",
+     "def": "The range is the difference between the largest and the smallest value.",
+     "figure": "shift",
+     "rules": [
+      "Subtract the smallest value from the largest.",
+      "A big range means the data is spread out; a small range means it is close together."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "127, 152, 135, 137, 129, 136 cm",
+      "lines": [
+       "Largest: 152 cm",
+       "Smallest: 127 cm",
+       "152 − 127 = 25",
+       "Range = 25 cm"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.avg.describe",
+     "title": "Using averages to describe data",
+     "page": "39",
+     "def": "An average represents what is typical for a set of data, so it helps you compare two sets and make decisions.",
+     "figure": "table",
+     "rules": [
+      "Use the average and the range together to describe a set of data.",
+      "One very large or very small value can pull the mean away from what is typical."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "$34, $0, $263, $37, $0, $42, $51",
+      "lines": [
+       "In order: 0, 0, 34, 37, 42, 51, 263",
+       "Mode = $0",
+       "Median = $37",
+       "Mean = 427 ÷ 7 = $61",
+       "The one $263 bucket pulls the mean up"
+      ]
+     }
+    }
+   ],
+   "glossary": [
+    {
+     "term": "average",
+     "def": "One number that represents a whole set of data.",
+     "example": "A book scored an average of 6 out of 10 by its reviewers (p.39).",
+     "concept": "c.maths6.avg.describe",
+     "icon": "equal"
+    },
+    {
+     "term": "mode",
+     "def": "The value that appears most often.",
+     "example": "In 4, 4, 5, 5, 6, 7 the modes are 4 and 5 (p.40).",
+     "concept": "c.maths6.avg.mode",
+     "icon": "parts"
+    },
+    {
+     "term": "bimodal",
+     "def": "Having two modes.",
+     "example": "4, 4, 5, 5, 6, 7 is bimodal (p.40).",
+     "concept": "c.maths6.avg.mode",
+     "icon": "parts"
+    },
+    {
+     "term": "median",
+     "def": "The middle value when the data is put in order.",
+     "example": "In 4, 4, 5, 7, 10 the median is 5 (p.40).",
+     "concept": "c.maths6.avg.median",
+     "icon": "chain"
+    },
+    {
+     "term": "mean",
+     "def": "The total of the values divided by how many there are.",
+     "example": "834 ÷ 6 = 139 cm (p.40).",
+     "concept": "c.maths6.avg.mean",
+     "icon": "equal"
+    },
+    {
+     "term": "range",
+     "def": "The difference between the largest and smallest value.",
+     "example": "152 − 127 = 25 cm (p.42).",
+     "concept": "c.maths6.avg.range",
+     "icon": "shift"
+    }
+   ],
+   "watch_out": [],
+   "checklists": [],
+   "compares": [],
+   "worked": [],
+   "points": [],
+   "terms": [
+    "average",
+    "mode",
+    "bimodal",
+    "median",
+    "mean",
+    "range"
+   ]
+  },
+  {
+   "concept": "c.maths6.addsub1",
+   "diagram": null,
+   "big_en": "Integers go below zero as well as above. A letter can stand for a number you do not know yet.",
+   "topics": [
+    {
+     "concept": "c.maths6.addsub1.integers",
+     "title": "Positive and negative integers",
+     "page": "49",
+     "def": "An integer is a whole number, and it can be positive, negative or zero.",
+     "figure": "round",
+     "rules": [
+      "Numbers below zero are negative and are written with a minus sign.",
+      "On a number line, moving right adds and moving left subtracts."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "Starting at −30 °C",
+      "lines": [
+       "A rise of 5°: −30 + 5 = −25 °C",
+       "A fall of 5°: −30 − 5 = −35 °C"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.addsub1.estimate",
+     "title": "Estimate, add and subtract large integers",
+     "page": "49",
+     "def": "Estimating means rounding the numbers first so you can check whether an answer is sensible.",
+     "figure": "round",
+     "rules": [
+      "Round each number, then add or subtract the rounded numbers.",
+      "Compare the estimate with the exact answer to spot mistakes."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "4,825 + 3,190",
+      "lines": [
+       "Estimate: 5,000 + 3,000 = 8,000",
+       "Exact: 4,825 + 3,190 = 8,015",
+       "8,015 is close to 8,000, so it is sensible"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.addsub1.difference",
+     "title": "Difference between two integers",
+     "page": "51",
+     "def": "The difference between two integers is how far apart they are on the number line.",
+     "figure": "shift",
+     "rules": [
+      "Count the steps from one number to the other.",
+      "When one number is negative and the other positive, count up to zero and then on."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "Temperatures",
+      "lines": [
+       "From −6 to 4: 6 steps to zero, then 4 more",
+       "Difference = 10",
+       "From −6 to −2: difference = 4"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.addsub1.letters",
+     "title": "Using letters to represent numbers",
+     "page": "54",
+     "def": "A letter can stand for a number, so you can write a rule without knowing the number yet.",
+     "figure": "digit",
+     "rules": [
+      "Replace the letter with its value to work the expression out.",
+      "Addition can be written either way round, but subtraction cannot."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "When the dice score d = 5",
+      "lines": [
+       "d + 4 = 9",
+       "d − 3 = 2",
+       "6 − d = 1",
+       "4 + d = 9"
+      ]
+     }
+    },
+    {
+     "concept": "c.maths6.addsub1.variable",
+     "title": "Constants and variables",
+     "page": "54",
+     "def": "A constant always has the same value, while a variable can take different values.",
+     "figure": "split",
+     "rules": [
+      "An unknown is not always one fixed number: it can be a variable.",
+      "List the possible pairs of values when two letters must add to a fixed total."
+     ],
+     "example": {
+      "kind": "calc",
+      "title": "Rectangle with perimeter 20 cm",
+      "lines": [
+       "s + t is half of 20, so s + t = 10",
+       "s = 1, t = 9",
+       "s = 2, t = 8",
+       "s = 3, t = 7",
+       "s = 4, t = 6",
+       "s = 5, t = 5"
+      ]
+     }
+    }
+   ],
+   "glossary": [
+    {
+     "term": "integer",
+     "def": "A whole number, which can be positive, negative or zero.",
+     "example": "−30 and 550 are both integers (p.49).",
+     "concept": "c.maths6.addsub1.integers",
+     "icon": "digit"
+    },
+    {
+     "term": "positive number",
+     "def": "A number greater than zero.",
+     "example": "A depth of 550 m below the surface (p.49).",
+     "concept": "c.maths6.addsub1.integers",
+     "icon": "shift"
+    },
+    {
+     "term": "negative number",
+     "def": "A number less than zero, written with a minus sign.",
+     "example": "A temperature of −30 °C (p.50).",
+     "concept": "c.maths6.addsub1.integers",
+     "icon": "shift"
+    },
+    {
+     "term": "difference",
+     "def": "How far apart two numbers are.",
+     "example": "The difference in temperature between two cities (p.51).",
+     "concept": "c.maths6.addsub1.difference",
+     "icon": "shift"
+    },
+    {
+     "term": "constant",
+     "def": "A value that always stays the same.",
+     "example": "The perimeter stays 20 cm (p.55).",
+     "concept": "c.maths6.addsub1.variable",
+     "icon": "equal"
+    },
+    {
+     "term": "variable",
+     "def": "A letter standing for a value that can change.",
+     "example": "d is the dice score, so it changes each throw (p.55).",
+     "concept": "c.maths6.addsub1.variable",
+     "icon": "digit"
+    },
+    {
+     "term": "estimate",
+     "def": "A rough answer worked out by rounding the numbers first.",
+     "example": "5,000 + 3,000 = 8,000 is an estimate of 4,825 + 3,190 (p.49).",
+     "concept": "c.maths6.addsub1.estimate",
+     "icon": "round"
+    },
+    {
+     "term": "expression",
+     "def": "A rule written with numbers and letters, such as d + 4.",
+     "example": "When the dice score d is 5, d + 4 is 9 (p.55).",
+     "concept": "c.maths6.addsub1.letters",
+     "icon": "digit"
+    }
+   ],
+   "watch_out": [],
+   "checklists": [],
+   "compares": [],
+   "worked": [],
+   "points": [],
+   "terms": [
+    "integer",
+    "positive number",
+    "negative number",
+    "difference",
+    "constant",
+    "variable",
+    "estimate",
+    "expression"
+   ]
   }
  ],
  "glossary": [],
@@ -822,6 +1238,174 @@
    "front_en": "Common factor",
    "back_en": "A factor that two or more numbers share.",
    "example_en": "The common factors of 18 and 24 are 1, 2, 3 and 6 (p.32).",
+   "kind": "term"
+  },
+  {
+   "id": "f.4fca9691",
+   "concept": "c.maths6.avg.mean",
+   "front_en": "How do you find the mean?",
+   "back_en": "Add all the values, then divide by how many there are.",
+   "example_en": "p.40"
+  },
+  {
+   "id": "f.58f83f56",
+   "concept": "c.maths6.avg.median",
+   "front_en": "How do you find the median?",
+   "back_en": "Put the values in order and take the middle one.",
+   "example_en": "p.40"
+  },
+  {
+   "id": "f.0fadb777",
+   "concept": "c.maths6.avg.mode",
+   "front_en": "What is the mode?",
+   "back_en": "The value that appears most often. Two modes means bimodal.",
+   "example_en": "p.40"
+  },
+  {
+   "id": "f.b60ff67f",
+   "concept": "c.maths6.avg.range",
+   "front_en": "How do you find the range?",
+   "back_en": "Largest value minus smallest value.",
+   "example_en": "p.42"
+  },
+  {
+   "id": "f.eb72f1a7",
+   "concept": "c.maths6.addsub1.integers",
+   "front_en": "What is an integer?",
+   "back_en": "A whole number, positive, negative or zero.",
+   "example_en": "p.49"
+  },
+  {
+   "id": "f.fdd3f89d",
+   "concept": "c.maths6.addsub1.difference",
+   "front_en": "What is the difference between −6 and 4?",
+   "back_en": "10 — six steps up to zero, then four more.",
+   "example_en": "p.51"
+  },
+  {
+   "id": "f.81023020",
+   "concept": "c.maths6.addsub1.letters",
+   "front_en": "Is x − 3 the same as 3 − x?",
+   "back_en": "No. Addition can be swapped round, subtraction cannot.",
+   "example_en": "p.56"
+  },
+  {
+   "id": "f.0f1700cb",
+   "concept": "c.maths6.addsub1.variable",
+   "front_en": "Constant or variable?",
+   "back_en": "A constant always stays the same; a variable can change.",
+   "example_en": "p.54"
+  },
+  {
+   "id": "f.15f86c05",
+   "concept": "c.maths6.avg.describe",
+   "front_en": "Average",
+   "back_en": "One number that represents a whole set of data.",
+   "example_en": "A book scored an average of 6 out of 10 by its reviewers (p.39).",
+   "kind": "term"
+  },
+  {
+   "id": "f.a7b93d21",
+   "concept": "c.maths6.avg.mode",
+   "front_en": "Mode",
+   "back_en": "The value that appears most often.",
+   "example_en": "In 4, 4, 5, 5, 6, 7 the modes are 4 and 5 (p.40).",
+   "kind": "term"
+  },
+  {
+   "id": "f.a6852ab9",
+   "concept": "c.maths6.avg.mode",
+   "front_en": "Bimodal",
+   "back_en": "Having two modes.",
+   "example_en": "4, 4, 5, 5, 6, 7 is bimodal (p.40).",
+   "kind": "term"
+  },
+  {
+   "id": "f.b887ba2a",
+   "concept": "c.maths6.avg.median",
+   "front_en": "Median",
+   "back_en": "The middle value when the data is put in order.",
+   "example_en": "In 4, 4, 5, 7, 10 the median is 5 (p.40).",
+   "kind": "term"
+  },
+  {
+   "id": "f.51cda54a",
+   "concept": "c.maths6.avg.mean",
+   "front_en": "Mean",
+   "back_en": "The total of the values divided by how many there are.",
+   "example_en": "834 ÷ 6 = 139 cm (p.40).",
+   "kind": "term"
+  },
+  {
+   "id": "f.a16c5bbe",
+   "concept": "c.maths6.avg.range",
+   "front_en": "Range",
+   "back_en": "The difference between the largest and smallest value.",
+   "example_en": "152 − 127 = 25 cm (p.42).",
+   "kind": "term"
+  },
+  {
+   "id": "f.9edcffff",
+   "concept": "c.maths6.addsub1.integers",
+   "front_en": "Integer",
+   "back_en": "A whole number, which can be positive, negative or zero.",
+   "example_en": "−30 and 550 are both integers (p.49).",
+   "kind": "term"
+  },
+  {
+   "id": "f.9698feec",
+   "concept": "c.maths6.addsub1.integers",
+   "front_en": "Positive number",
+   "back_en": "A number greater than zero.",
+   "example_en": "A depth of 550 m below the surface (p.49).",
+   "kind": "term"
+  },
+  {
+   "id": "f.5371656e",
+   "concept": "c.maths6.addsub1.integers",
+   "front_en": "Negative number",
+   "back_en": "A number less than zero, written with a minus sign.",
+   "example_en": "A temperature of −30 °C (p.50).",
+   "kind": "term"
+  },
+  {
+   "id": "f.b16f1f66",
+   "concept": "c.maths6.addsub1.difference",
+   "front_en": "Difference",
+   "back_en": "How far apart two numbers are.",
+   "example_en": "The difference in temperature between two cities (p.51).",
+   "kind": "term"
+  },
+  {
+   "id": "f.733fd2b4",
+   "concept": "c.maths6.addsub1.variable",
+   "front_en": "Constant",
+   "back_en": "A value that always stays the same.",
+   "example_en": "The perimeter stays 20 cm (p.55).",
+   "kind": "term"
+  },
+  {
+   "id": "f.19de69cb",
+   "concept": "c.maths6.addsub1.variable",
+   "front_en": "Variable",
+   "back_en": "A letter standing for a value that can change.",
+   "example_en": "d is the dice score, so it changes each throw (p.55).",
+   "kind": "term"
+  },
+  {
+   "id": "f.2352230a",
+   "concept": "c.maths6.addsub1.estimate",
+   "front_en": "Estimate",
+   "back_en": "A rough answer worked out by rounding the numbers first.",
+   "example_en": "5,000 + 3,000 = 8,000 is an estimate of 4,825 + 3,190 (p.49).",
+   "kind": "term"
+  },
+  {
+   "id": "f.97b695b9",
+   "concept": "c.maths6.addsub1.letters",
+   "front_en": "Expression",
+   "back_en": "A rule written with numbers and letters, such as d + 4.",
+   "example_en": "When the dice score d is 5, d + 4 is 9 (p.55).",
    "kind": "term"
   }
  ],
@@ -2283,8 +2867,764 @@
    ],
    "answer": "b",
    "why_en": "105 is a multiple of both 3 and 5 (p.32)."
+  },
+  {
+   "id": "q.c032c152",
+   "concept": "c.maths6.avg.mode",
+   "page": 40,
+   "difficulty": 1,
+   "stem_en": "What is the mode of 4 cm, 4 cm, 5 cm, 5 cm, 6 cm, 7 cm?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4 cm only"
+    },
+    {
+     "key": "b",
+     "en": "5 cm only"
+    },
+    {
+     "key": "c",
+     "en": "4 cm and 5 cm"
+    },
+    {
+     "key": "d",
+     "en": "There is no mode"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Both 4 and 5 appear twice, so the set is bimodal (p.40)."
+  },
+  {
+   "id": "q.2a9a7dcd",
+   "concept": "c.maths6.avg.mode",
+   "page": 40,
+   "difficulty": 1,
+   "stem_en": "What is the mode of 4, 7, 5, 4, 10?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5"
+    },
+    {
+     "key": "b",
+     "en": "7"
+    },
+    {
+     "key": "c",
+     "en": "10"
+    },
+    {
+     "key": "d",
+     "en": "4"
+    }
+   ],
+   "answer": "d",
+   "why_en": "4 is the only value that appears more than once (p.45)."
+  },
+  {
+   "id": "q.f76a7a54",
+   "concept": "c.maths6.avg.mode",
+   "page": 40,
+   "difficulty": 2,
+   "stem_en": "A set of data has two values that both appear most often. What is it called?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Bimodal"
+    },
+    {
+     "key": "b",
+     "en": "Median"
+    },
+    {
+     "key": "c",
+     "en": "No mode"
+    },
+    {
+     "key": "d",
+     "en": "Double mean"
+    }
+   ],
+   "answer": "a",
+   "why_en": "A set with two modes is bimodal (p.40)."
+  },
+  {
+   "id": "q.48c13806",
+   "concept": "c.maths6.avg.median",
+   "page": 45,
+   "difficulty": 1,
+   "stem_en": "What is the median of 4, 7, 5, 4, 10?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4"
+    },
+    {
+     "key": "b",
+     "en": "5"
+    },
+    {
+     "key": "c",
+     "en": "6"
+    },
+    {
+     "key": "d",
+     "en": "7"
+    }
+   ],
+   "answer": "b",
+   "why_en": "In order they are 4, 4, 5, 7, 10 and the middle value is 5 (p.45)."
+  },
+  {
+   "id": "q.e41b0b8d",
+   "concept": "c.maths6.avg.median",
+   "page": 45,
+   "difficulty": 2,
+   "stem_en": "What is the median of 7, 3, 13, 1, 7, 5?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5"
+    },
+    {
+     "key": "b",
+     "en": "7"
+    },
+    {
+     "key": "c",
+     "en": "6"
+    },
+    {
+     "key": "d",
+     "en": "4"
+    }
+   ],
+   "answer": "c",
+   "why_en": "In order: 1, 3, 5, 7, 7, 13. The two middle values are 5 and 7, and halfway is 6 (p.45)."
+  },
+  {
+   "id": "q.cb64de30",
+   "concept": "c.maths6.avg.median",
+   "page": 40,
+   "difficulty": 2,
+   "stem_en": "What must you do before you can find the median?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Add them all up"
+    },
+    {
+     "key": "b",
+     "en": "Find the largest value"
+    },
+    {
+     "key": "c",
+     "en": "Count how many there are"
+    },
+    {
+     "key": "d",
+     "en": "Put the values in order of size"
+    }
+   ],
+   "answer": "d",
+   "why_en": "The median is the middle value once the data is in order (p.40)."
+  },
+  {
+   "id": "q.cbdd97d2",
+   "concept": "c.maths6.avg.mean",
+   "page": 40,
+   "difficulty": 1,
+   "stem_en": "Six heights add up to 834 cm. What is the mean height?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "139 cm"
+    },
+    {
+     "key": "b",
+     "en": "834 cm"
+    },
+    {
+     "key": "c",
+     "en": "140 cm"
+    },
+    {
+     "key": "d",
+     "en": "83.4 cm"
+    }
+   ],
+   "answer": "a",
+   "why_en": "834 ÷ 6 = 139 cm (p.40)."
+  },
+  {
+   "id": "q.b494d049",
+   "concept": "c.maths6.avg.mean",
+   "page": 40,
+   "difficulty": 2,
+   "stem_en": "How do you work out the mean of a set of values?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Take the middle value"
+    },
+    {
+     "key": "b",
+     "en": "Add them all up, then divide by how many there are"
+    },
+    {
+     "key": "c",
+     "en": "Take the value that appears most"
+    },
+    {
+     "key": "d",
+     "en": "Subtract the smallest from the largest"
+    }
+   ],
+   "answer": "b",
+   "why_en": "That is the method in the worked example (p.40)."
+  },
+  {
+   "id": "q.f472638d",
+   "concept": "c.maths6.avg.mean",
+   "page": 45,
+   "difficulty": 2,
+   "stem_en": "What is the mean of 4, 7, 5, 4, 10?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5"
+    },
+    {
+     "key": "b",
+     "en": "4"
+    },
+    {
+     "key": "c",
+     "en": "6"
+    },
+    {
+     "key": "d",
+     "en": "7"
+    }
+   ],
+   "answer": "c",
+   "why_en": "4 + 7 + 5 + 4 + 10 = 30, and 30 ÷ 5 = 6 (p.45)."
+  },
+  {
+   "id": "q.1b758807",
+   "concept": "c.maths6.avg.range",
+   "page": 42,
+   "difficulty": 1,
+   "stem_en": "A group of heights runs from 127 cm to 152 cm. What is the range?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "127 cm"
+    },
+    {
+     "key": "b",
+     "en": "152 cm"
+    },
+    {
+     "key": "c",
+     "en": "279 cm"
+    },
+    {
+     "key": "d",
+     "en": "25 cm"
+    }
+   ],
+   "answer": "d",
+   "why_en": "152 − 127 = 25 cm (p.42)."
+  },
+  {
+   "id": "q.b154a34c",
+   "concept": "c.maths6.avg.range",
+   "page": 42,
+   "difficulty": 2,
+   "stem_en": "Two groups have the same mean but one has a much larger range. What does that tell you?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "That group's values are more spread out"
+    },
+    {
+     "key": "b",
+     "en": "That group has more children"
+    },
+    {
+     "key": "c",
+     "en": "That group has a higher mean"
+    },
+    {
+     "key": "d",
+     "en": "The two groups are identical"
+    }
+   ],
+   "answer": "a",
+   "why_en": "The range describes how spread out a set of data is (p.42)."
+  },
+  {
+   "id": "q.e78fcacf",
+   "concept": "c.maths6.avg.describe",
+   "page": 45,
+   "difficulty": 3,
+   "stem_en": "Seven buckets collected $34, $0, $263, $37, $0, $42 and $51. Why is the mean a poor description of a typical bucket?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Because two buckets had $0"
+    },
+    {
+     "key": "b",
+     "en": "One very large amount, $263, pulls the mean up"
+    },
+    {
+     "key": "c",
+     "en": "Because there are seven buckets"
+    },
+    {
+     "key": "d",
+     "en": "Because the mode is $0"
+    }
+   ],
+   "answer": "b",
+   "why_en": "A single very large value pulls the mean away from what is typical (p.45)."
+  },
+  {
+   "id": "q.025d9899",
+   "concept": "c.maths6.avg.describe",
+   "page": 39,
+   "difficulty": 2,
+   "stem_en": "What does an average tell you about a set of data?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "The largest value in the set"
+    },
+    {
+     "key": "b",
+     "en": "How many values there are"
+    },
+    {
+     "key": "c",
+     "en": "What a typical value in the set is like"
+    },
+    {
+     "key": "d",
+     "en": "The difference between the biggest and smallest"
+    }
+   ],
+   "answer": "c",
+   "why_en": "The average represents what is typical (p.39)."
+  },
+  {
+   "id": "q.64429475",
+   "concept": "c.maths6.addsub1.integers",
+   "page": 50,
+   "difficulty": 1,
+   "stem_en": "The temperature is −30 °C and rises by 5 °C. What is the new temperature?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "−35 °C"
+    },
+    {
+     "key": "b",
+     "en": "25 °C"
+    },
+    {
+     "key": "c",
+     "en": "−305 °C"
+    },
+    {
+     "key": "d",
+     "en": "−25 °C"
+    }
+   ],
+   "answer": "d",
+   "why_en": "−30 + 5 = −25 (p.50)."
+  },
+  {
+   "id": "q.15e81b40",
+   "concept": "c.maths6.addsub1.integers",
+   "page": 50,
+   "difficulty": 1,
+   "stem_en": "The temperature is −30 °C and falls by 5 °C. What is the new temperature?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "−35 °C"
+    },
+    {
+     "key": "b",
+     "en": "−25 °C"
+    },
+    {
+     "key": "c",
+     "en": "35 °C"
+    },
+    {
+     "key": "d",
+     "en": "−305 °C"
+    }
+   ],
+   "answer": "a",
+   "why_en": "−30 − 5 = −35 (p.50)."
+  },
+  {
+   "id": "q.748a9438",
+   "concept": "c.maths6.addsub1.integers",
+   "page": 49,
+   "difficulty": 1,
+   "stem_en": "Which of these is an integer?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7.5"
+    },
+    {
+     "key": "b",
+     "en": "−7"
+    },
+    {
+     "key": "c",
+     "en": "0.7"
+    },
+    {
+     "key": "d",
+     "en": "seven and a half"
+    }
+   ],
+   "answer": "b",
+   "why_en": "An integer is a whole number, and it can be negative (p.49)."
+  },
+  {
+   "id": "q.e6887eeb",
+   "concept": "c.maths6.addsub1.integers",
+   "page": 50,
+   "difficulty": 2,
+   "stem_en": "On a number line, what happens when you subtract?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "You move to the right"
+    },
+    {
+     "key": "b",
+     "en": "You move up"
+    },
+    {
+     "key": "c",
+     "en": "You move to the left"
+    },
+    {
+     "key": "d",
+     "en": "Nothing moves"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Subtracting moves you down the number line (p.50)."
+  },
+  {
+   "id": "q.ca28cc14",
+   "concept": "c.maths6.addsub1.difference",
+   "page": 51,
+   "difficulty": 2,
+   "stem_en": "What is the difference between −6 and 4?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "2"
+    },
+    {
+     "key": "b",
+     "en": "−10"
+    },
+    {
+     "key": "c",
+     "en": "−2"
+    },
+    {
+     "key": "d",
+     "en": "10"
+    }
+   ],
+   "answer": "d",
+   "why_en": "From −6 up to 0 is 6, then 4 more, so 10 (p.51)."
+  },
+  {
+   "id": "q.1f85d90e",
+   "concept": "c.maths6.addsub1.difference",
+   "page": 51,
+   "difficulty": 2,
+   "stem_en": "What is the difference between −6 and −2?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "4"
+    },
+    {
+     "key": "b",
+     "en": "8"
+    },
+    {
+     "key": "c",
+     "en": "−4"
+    },
+    {
+     "key": "d",
+     "en": "2"
+    }
+   ],
+   "answer": "a",
+   "why_en": "They are 4 apart on the number line (p.51)."
+  },
+  {
+   "id": "q.ce1f0c37",
+   "concept": "c.maths6.addsub1.estimate",
+   "page": 49,
+   "difficulty": 2,
+   "stem_en": "Estimate 4,825 + 3,190 by rounding each number to the nearest thousand.",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7,000"
+    },
+    {
+     "key": "b",
+     "en": "8,000"
+    },
+    {
+     "key": "c",
+     "en": "9,000"
+    },
+    {
+     "key": "d",
+     "en": "8,015"
+    }
+   ],
+   "answer": "b",
+   "why_en": "5,000 + 3,000 = 8,000, close to the exact answer 8,015 (p.49)."
+  },
+  {
+   "id": "q.c6de1265",
+   "concept": "c.maths6.addsub1.estimate",
+   "page": 49,
+   "difficulty": 2,
+   "stem_en": "Why is it useful to estimate before calculating?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "It gives the exact answer faster"
+    },
+    {
+     "key": "b",
+     "en": "It removes the need to calculate"
+    },
+    {
+     "key": "c",
+     "en": "It shows whether the exact answer is sensible"
+    },
+    {
+     "key": "d",
+     "en": "It makes the numbers bigger"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Comparing the estimate with the exact answer helps you spot mistakes (p.49)."
+  },
+  {
+   "id": "q.a5f109c6",
+   "concept": "c.maths6.addsub1.letters",
+   "page": 55,
+   "difficulty": 1,
+   "stem_en": "The dice score d is 5. What is d + 4?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1"
+    },
+    {
+     "key": "b",
+     "en": "45"
+    },
+    {
+     "key": "c",
+     "en": "54"
+    },
+    {
+     "key": "d",
+     "en": "9"
+    }
+   ],
+   "answer": "d",
+   "why_en": "Replace d with 5: 5 + 4 = 9 (p.55)."
+  },
+  {
+   "id": "q.38eba8f1",
+   "concept": "c.maths6.addsub1.letters",
+   "page": 56,
+   "difficulty": 2,
+   "stem_en": "The dice score d is 5. What is 6 − d?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "1"
+    },
+    {
+     "key": "b",
+     "en": "11"
+    },
+    {
+     "key": "c",
+     "en": "−1"
+    },
+    {
+     "key": "d",
+     "en": "65"
+    }
+   ],
+   "answer": "a",
+   "why_en": "6 − 5 = 1 (p.56)."
+  },
+  {
+   "id": "q.520bd3a4",
+   "concept": "c.maths6.addsub1.letters",
+   "page": 56,
+   "difficulty": 3,
+   "stem_en": "Is x − 3 the same as 3 − x?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "Yes, just like x + 3 and 3 + x"
+    },
+    {
+     "key": "b",
+     "en": "No, because subtraction cannot be swapped round"
+    },
+    {
+     "key": "c",
+     "en": "Yes, always"
+    },
+    {
+     "key": "d",
+     "en": "Only when x is 3"
+    }
+   ],
+   "answer": "b",
+   "why_en": "Addition can be written either way round, but subtraction cannot (p.56)."
+  },
+  {
+   "id": "q.b8393ab2",
+   "concept": "c.maths6.addsub1.letters",
+   "page": 56,
+   "difficulty": 2,
+   "stem_en": "Which pair of expressions is equal?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "5 − d and d − 5"
+    },
+    {
+     "key": "b",
+     "en": "d − 3 and 3 − d"
+    },
+    {
+     "key": "c",
+     "en": "d + 4 and 4 + d"
+    },
+    {
+     "key": "d",
+     "en": "6 − d and d − 6"
+    }
+   ],
+   "answer": "c",
+   "why_en": "Only the additions can be swapped round (p.56)."
+  },
+  {
+   "id": "q.15b8f4f1",
+   "concept": "c.maths6.addsub1.variable",
+   "page": 55,
+   "difficulty": 3,
+   "stem_en": "A rectangle has sides s and t and a perimeter of 20 cm. What must s + t be?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "20 cm"
+    },
+    {
+     "key": "b",
+     "en": "5 cm"
+    },
+    {
+     "key": "c",
+     "en": "40 cm"
+    },
+    {
+     "key": "d",
+     "en": "10 cm"
+    }
+   ],
+   "answer": "d",
+   "why_en": "s + t is half the distance round the rectangle (p.55)."
+  },
+  {
+   "id": "q.bcf9be67",
+   "concept": "c.maths6.addsub1.variable",
+   "page": 55,
+   "difficulty": 2,
+   "stem_en": "A rectangle has perimeter 20 cm and whole-centimetre sides. If s = 3 cm, what is t?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "7 cm"
+    },
+    {
+     "key": "b",
+     "en": "17 cm"
+    },
+    {
+     "key": "c",
+     "en": "10 cm"
+    },
+    {
+     "key": "d",
+     "en": "6 cm"
+    }
+   ],
+   "answer": "a",
+   "why_en": "s + t = 10, so t = 10 − 3 = 7 (p.55)."
+  },
+  {
+   "id": "q.5710d2ce",
+   "concept": "c.maths6.addsub1.variable",
+   "page": 54,
+   "difficulty": 2,
+   "stem_en": "What is a variable?",
+   "choices": [
+    {
+     "key": "a",
+     "en": "A number that never changes"
+    },
+    {
+     "key": "b",
+     "en": "A letter standing for a value that can change"
+    },
+    {
+     "key": "c",
+     "en": "The largest number in a set"
+    },
+    {
+     "key": "d",
+     "en": "Another word for an answer"
+    }
+   ],
+   "answer": "b",
+   "why_en": "An unknown is not necessarily one fixed number but a variable (p.54)."
   }
  ],
  "retired": [],
- "generated_at": "2026-09-05T11:12:47+00:00"
+ "generated_at": "2026-09-05T14:14:05+00:00"
 }
