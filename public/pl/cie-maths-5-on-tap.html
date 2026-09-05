@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Maths 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.651f0263.css">
+  <link rel="stylesheet" href="../assets/tw.aa2ddbb1.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -1193,7 +1193,25 @@
           </template>
           </div></template>
 
-          <template x-for="leaf in leavesOf(sec)" :key="leaf.id">
+          <!-- Từ vựng GỘP CHUNG cho mục có thẻ "nội dung thi": chia theo lá thì
+               tiêu đề lá lặp lại y hệt tiêu đề thẻ ở trên, đọc rất rối. -->
+          <template x-if="show.gloss && tops(sec).length && (sec.glossary || []).length">
+          <div class="px-5 pb-4">
+            <p class="text-[13px] font-bold uppercase tracking-wider text-indigo-600 mb-1.5">📖 Từ vựng</p>
+            <dl class="grid sm:grid-cols-2 gap-2">
+              <template x-for="g in (sec.glossary || [])" :key="g.term">
+                <div class="rounded-lg border border-indigo-200 bg-indigo-50/40 px-3 py-2">
+                  <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
+                      class="ml-1 align-middle text-indigo-400 hover:text-indigo-700">🔊</button></dt>
+                  <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
+                  <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
+                </div>
+              </template>
+            </dl>
+          </div>
+          </template>
+
+          <template x-for="leaf in (tops(sec).length ? [] : leavesOf(sec))" :key="leaf.id">
             <div class="mx-5 mb-4 rounded-xl border border-slate-200 overflow-hidden">
               <div class="flex items-center gap-2 px-4 py-2 bg-slate-50 border-b border-slate-200">
                 <span class="w-2 h-2 rounded-full shrink-0"
@@ -1212,7 +1230,7 @@
                     <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
                         class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full text-indigo-500 hover:bg-indigo-100 align-middle">🔊</button></dt>
                     <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
-                    <dd x-show="detail && g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
+                    <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
                   </div>
                 </template>
               </dl>

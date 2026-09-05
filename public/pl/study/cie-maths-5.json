@@ -291,18 +291,7 @@
      "concept": "c.maths6.numsys.pv.times"
     }
    ],
-   "watch_out": [
-    {
-     "wrong": "I can multiply by 100 by adding two zeros.",
-     "right": "That only works for whole numbers: 5.6 × 100 is 560, because every digit moves two places left (WB p.12).",
-     "concept": "c.maths6.numsys.pv.times"
-    },
-    {
-     "wrong": "6.95 is 7 to the nearest whole number and 6.9 to the nearest tenth.",
-     "right": "To the nearest tenth 6.95 is 7.0, because the hundredths digit 5 rounds up (p.17).",
-     "concept": "c.maths6.numsys.rounding"
-    }
-   ],
+   "watch_out": [],
    "checklists": [],
    "compares": [],
    "worked": [],
@@ -2255,5 +2244,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-05T10:48:24+00:00"
+ "generated_at": "2026-09-05T11:02:48+00:00"
 }
