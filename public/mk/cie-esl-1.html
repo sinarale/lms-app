@@ -267,7 +267,7 @@
         
         <div class="min-w-0 flex-1">
           <h1 class="text-lg font-bold text-slate-900 truncate">CIE ESL 1</h1>
-          <p class="text-xs text-slate-500">MK · 2 tuần/bài · cập nhật 2026-08-31 16:09</p>
+          <p class="text-xs text-slate-500">MK · 3 tuần/bài · cập nhật 2026-09-05 16:05</p>
         </div>
       </div>
       <div class="mt-2 flex items-center gap-2">
@@ -333,10 +333,10 @@
       <div x-show="p.ready && p.online" x-cloak class="mt-2 flex items-center gap-2 text-xs">
         <div class="flex-1 h-1.5 rounded-full bg-slate-200 overflow-hidden">
           <div class="h-full bg-emerald-500 transition-all duration-300"
-               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80352/')).length / 8 * 100)) + '%'"></div>
+               :style="'width: ' + (recent7 ? recentPct(p.done) : Math.round(Object.keys(p.done).filter(k => k.startsWith('mk/80352/')).length / 14 * 100)) + '%'"></div>
         </div>
         <span class="text-slate-500 whitespace-nowrap"
-              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('mk/80352/')).length + '/8 đã học')"></span>
+              x-text="recent7 ? (recentStats(p.done).done + '/' + recentStats(p.done).total + ' trong 7 ngày') : (Object.keys(p.done).filter(k => k.startsWith('mk/80352/')).length + '/14 đã học')"></span>
         <span x-show="p.saving" x-cloak class="text-indigo-500">đang lưu…</span>
         <span x-show="p.err" x-cloak class="text-rose-600" x-text="p.err"></span>
       </div>
@@ -347,6 +347,417 @@
     
     <!-- Một Tuần học / Bài học -->
     <section x-data="{ open: true }"
+             @expand-all.window="open = true"
+             @collapse-all.window="open = false"
+             x-effect="if (q || filtering) open = true"
+             data-module data-title="Week 3: Unit 1 A day at school (3.9.2026 - 4.9.2026)"
+             x-show="moduleMatches($el, f)"
+             class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <button @click="open = !open"
+              class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50">
+        <svg class="w-5 h-5 text-indigo-500 transition-transform duration-200 shrink-0"
+             :class="open ? 'rotate-90' : ''"
+             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="text-slate-900 flex-1" :class="moduleIsRecent($el.closest('[data-module]')) ? 'font-bold' : 'font-semibold'">Week 3: Unit 1 A day at school (3.9.2026 - 4.9.2026)</span>
+        <template x-if="p.online">
+          <span class="text-xs shrink-0 px-1.5 py-0.5 rounded"
+                :class="moduleDone($el.closest('[data-module]'), p.done) === 6
+                        ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+                x-text="moduleDone($el.closest('[data-module]'), p.done) + '/6'"></span>
+        </template>
+        <span class="text-xs text-slate-400 shrink-0">6 mục</span>
+      </button>
+
+      <div x-show="open" x-cloak class="border-t border-slate-100 divide-y divide-slate-100">
+        
+        
+        <div data-sechead data-title="📝Homework 📝" data-sec="1"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>📝Homework 📝</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="ESL Homework - Reading - Week 3.pdf" data-type="file" data-sec="1"
+             data-pkey="mk/80352/8710444" data-hash="bd411dd971975c5d6e8a72aeedcb30008b968ce8" data-ts="1788569977000"
+             
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710444'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710444']"
+                     @change="await p.toggle('mk/80352/8710444', 'bd411dd971975c5d6e8a72aeedcb30008b968ce8'); $el.checked = !!p.done['mk/80352/8710444']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/ESL Homework - Reading - Week 3.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                ESL Homework - Reading - Week 3.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710444', 'bd411dd971975c5d6e8a72aeedcb30008b968ce8')">
+                  <button @click.stop="p.seen('mk/80352/8710444', 'bd411dd971975c5d6e8a72aeedcb30008b968ce8')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>182.9 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Week 3 - ESL Homework.pdf" data-type="file" data-sec="1"
+             data-pkey="mk/80352/8710445" data-hash="a873fee36844b9dde0aea6b9e4a3722d67f48da9" data-ts="1788569963000"
+             
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710445'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710445']"
+                     @change="await p.toggle('mk/80352/8710445', 'a873fee36844b9dde0aea6b9e4a3722d67f48da9'); $el.checked = !!p.done['mk/80352/8710445']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/Week 3 - ESL Homework.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Week 3 - ESL Homework.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710445', 'a873fee36844b9dde0aea6b9e4a3722d67f48da9')">
+                  <button @click.stop="p.seen('mk/80352/8710445', 'a873fee36844b9dde0aea6b9e4a3722d67f48da9')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>217.3 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Week 3 - Spelling Quiz.pdf" data-type="file" data-sec="1"
+             data-pkey="mk/80352/8710446" data-hash="12b280c859cbaaddfbed0f7715d0b2b53b948c61" data-ts="1788569939000"
+             
+             data-hw="1"
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710446'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710446']"
+                     @change="await p.toggle('mk/80352/8710446', '12b280c859cbaaddfbed0f7715d0b2b53b948c61'); $el.checked = !!p.done['mk/80352/8710446']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/Week 4 - Spelling Quiz.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Week 3 - Spelling Quiz.pdf
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710446', '12b280c859cbaaddfbed0f7715d0b2b53b948c61')">
+                  <button @click.stop="p.seen('mk/80352/8710446', '12b280c859cbaaddfbed0f7715d0b2b53b948c61')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>2.2 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-sechead data-title="📝Additional Content 📝" data-sec="2"
+             x-show="headingMatches($el, f)"
+             class="flex items-center gap-2 px-4 py-2 bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"
+             style="padding-left: 1.0rem">
+          <!-- Tick cả nhóm; tự phản ánh trạng thái các mục con -->
+          <template x-if="p.online">
+            <input type="checkbox" title="Đánh dấu cả nhóm này"
+                   x-effect="syncSecBox($el, p.done)"
+                   @change="p.setMany(secEntries($el.closest('[data-sechead]')), $el.checked)"
+                   class="shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+          </template>
+          <span>📝Additional Content 📝</span>
+        </div>
+        
+        
+        
+        <div data-item data-title="At, in, on - Prepositions of time" data-type="file" data-sec="2"
+             data-pkey="mk/80352/8710448" data-hash="a46d5c451583da0c51cb36efdc025b5ff86bd563" data-ts="1788569989000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710448'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710448']"
+                     @change="await p.toggle('mk/80352/8710448', 'a46d5c451583da0c51cb36efdc025b5ff86bd563'); $el.checked = !!p.done['mk/80352/8710448']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/t-s-804-time-prepositions-matching-cards-_ver_1.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                At, in, on - Prepositions of time
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710448', 'a46d5c451583da0c51cb36efdc025b5ff86bd563')">
+                  <button @click.stop="p.seen('mk/80352/8710448', 'a46d5c451583da0c51cb36efdc025b5ff86bd563')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>1.2 MB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Writing Practise" data-type="file" data-sec="2"
+             data-pkey="mk/80352/8710449" data-hash="805e65650225b3d3c7ad41ad61d9e949af786e01" data-ts="1788569990000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710449'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710449']"
+                     @change="await p.toggle('mk/80352/8710449', '805e65650225b3d3c7ad41ad61d9e949af786e01'); $el.checked = !!p.done['mk/80352/8710449']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/t-l-4010-correct-the-sentence-punctuation-activity-sheets-phase-23_ver_8 (2).pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Writing Practise
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710449', '805e65650225b3d3c7ad41ad61d9e949af786e01')">
+                  <button @click.stop="p.seen('mk/80352/8710449', '805e65650225b3d3c7ad41ad61d9e949af786e01')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>91.0 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+        <div data-item data-title="Reading practise" data-type="file" data-sec="2"
+             data-pkey="mk/80352/8710450" data-hash="594c70f1365890e9bafd5470a2f3388e6ac408ef" data-ts="1788569992000"
+             
+             
+             x-show="itemMatches($el, f)"
+             x-data="{ o: false }"
+             @expand-all.window="o = true" @collapse-all.window="o = false"
+             class="group" :class="p.done['mk/80352/8710450'] ? 'bg-emerald-50/60' : ''">
+          <div class="flex items-start gap-3 px-4 py-2.5" style="padding-left: 1.0rem">
+            <!-- Đánh dấu đã học -->
+            <template x-if="p.online">
+              
+              <!-- Sau mỗi lần bấm, ép DOM khớp lại trạng thái thật: nếu ghi
+                   thất bại (sai mã, mất mạng) thì ô tick tự bật về như cũ -->
+              <input type="checkbox" title="Đánh dấu đã học"
+                     x-effect="$el.checked = !!p.done['mk/80352/8710450']"
+                     @change="await p.toggle('mk/80352/8710450', '594c70f1365890e9bafd5470a2f3388e6ac408ef'); $el.checked = !!p.done['mk/80352/8710450']"
+                     class="mt-1 shrink-0 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+              
+            </template>
+            <span class="mt-0.5 shrink-0 text-base leading-none" title="tài liệu">📎</span>
+            <div class="min-w-0 flex-1">
+              
+              <!-- Tài liệu đã tải về local -->
+              <a href="https://sinarale.github.io/lms/mk/materials/cie-esl-1/week-3-unit-1-a-day-at-school-3-9-2026-4-9-2026/za-hl-1704354103-grade-1-sight-word-reading-strips-the_ver_1.pdf" target="_blank" rel="noopener"
+                 class="text-sm text-slate-800 hover:text-indigo-700 hover:underline"
+                 :class="isRecentEl($el.closest('[data-item]')) ? 'font-bold' : 'font-medium'">
+                Reading practise
+              </a>
+              
+
+              <div class="mt-0.5 flex items-center gap-2 flex-wrap text-xs text-slate-400">
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">tài liệu</span>
+                <!-- Bài đã đánh dấu học nhưng nội dung đổi từ sau đó.
+                     KHÔNG tự bỏ tick — để người dùng tự quyết sau khi xem lại. -->
+                <template x-if="p.stale('mk/80352/8710450', '594c70f1365890e9bafd5470a2f3388e6ac408ef')">
+                  <button @click.stop="p.seen('mk/80352/8710450', '594c70f1365890e9bafd5470a2f3388e6ac408ef')"
+                          title="Bài này đã được cập nhật sau khi bạn đánh dấu đã học. Bấm để xác nhận đã xem lại."
+                          class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-medium">
+                    ⟳ có cập nhật mới
+                  </button>
+                </template>
+                <span>205.8 KB</span>
+                
+                
+                
+                <span title="Cập nhật lần cuối tại nguồn">🕓 05/09</span>
+                
+                
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        
+        
+        
+      </div>
+    </section>
+    
+    <!-- Một Tuần học / Bài học -->
+    <section x-data="{ open: false }"
              @expand-all.window="open = true"
              @collapse-all.window="open = false"
              x-effect="if (q || filtering) open = true"
