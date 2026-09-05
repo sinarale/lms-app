@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.ca25555e.css">
+  <link rel="stylesheet" href="../assets/tw.0551f783.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -310,6 +310,13 @@
         exps(sec, leafId)   { return this.arr(sec, 'experiments', 'from_the_book').filter(x => x.concept === leafId); },
         works(sec, leafId)  { return this.arr(sec, 'worked', null).filter(x => x.concept === leafId); },
         tops(sec)           { return (sec.topics || []); },
+        // Một dòng ví dụ "calc" tách thành nhãn | giá trị để CĂN THẲNG CỘT.
+        // Trước đây đổ vào lưới 2 cột theo thứ tự, dòng dài xuống dòng là hai
+        // cột lệch nhau và không có kẻ nào để bám — đọc thành vô nghĩa.
+        calcRow(line) {
+          const i = String(line || '').indexOf(': ');
+          return i > 0 && i < 32 ? [line.slice(0, i), line.slice(i + 2)] : [null, line];
+        },
         comps(sec, leafId)  { return this.arr(sec, 'compares', 'compare').filter(x => x.concept === leafId); },
         // Khối cấp MỤC = không gắn lá nào
         secLists(sec) { return this.arr(sec, 'checklists', 'checklist').filter(x => !x.concept); },
@@ -1207,11 +1214,20 @@
                 </div>
                 <!-- ví dụ: 3 dạng, class viết literal để Tailwind quét thấy -->
                 <template x-if="tp.example && tp.example.kind === 'calc'">
-                  <div class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
-                    <p x-show="tp.example.title" class="text-xs font-semibold text-slate-500 mb-1" x-text="tp.example.title"></p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 text-sm tabular-nums text-slate-800">
-                      <template x-for="(ln, li) in tp.example.lines" :key="li"><p x-text="ln"></p></template>
-                    </div>
+                  <div class="rounded-lg border border-slate-200 overflow-hidden">
+                    <p x-show="tp.example.title" class="px-3 py-1.5 bg-slate-100 text-xs font-semibold text-slate-600" x-text="tp.example.title"></p>
+                    <table class="w-full text-sm tabular-nums text-slate-800">
+                      <tbody class="divide-y divide-slate-200">
+                        <template x-for="(ln, li) in tp.example.lines" :key="li">
+                          <tr class="align-top">
+                            <template x-if="calcRow(ln)[0]">
+                              <td class="w-2/5 px-3 py-1.5 bg-slate-50 text-slate-600" x-text="calcRow(ln)[0]"></td>
+                            </template>
+                            <td class="px-3 py-1.5" :colspan="calcRow(ln)[0] ? 1 : 2" x-text="calcRow(ln)[1]"></td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
                   </div>
                 </template>
                 <template x-if="tp.example && tp.example.kind === 'grid'">

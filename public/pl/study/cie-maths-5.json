@@ -636,9 +636,9 @@
       "kind": "calc",
       "title": "4, 4, 5, 5, 6, 7",
       "lines": [
-       "4 appears twice",
-       "5 appears twice",
-       "6 and 7 appear once",
+       "4: appears twice",
+       "5: appears twice",
+       "6 and 7: appear once",
        "Modes: 4 and 5 (bimodal)"
       ]
      }
@@ -659,7 +659,7 @@
       "lines": [
        "In order: 4, 4, 5, 7, 10",
        "Middle value: 5",
-       "Median = 5"
+       "Median: 5"
       ]
      }
     },
@@ -677,10 +677,10 @@
       "kind": "calc",
       "title": "138, 140, 136, 141, 142, 137 cm",
       "lines": [
-       "138 + 140 + 136 + 141 + 142 + 137 = 834",
-       "There are 6 heights",
-       "834 ÷ 6 = 139",
-       "Mean = 139 cm"
+       "Add them all: 138 + 140 + 136 + 141 + 142 + 137 = 834",
+       "How many: 6 heights",
+       "Divide: 834 ÷ 6 = 139",
+       "Mean: 139 cm"
       ]
      }
     },
@@ -700,8 +700,8 @@
       "lines": [
        "Largest: 152 cm",
        "Smallest: 127 cm",
-       "152 − 127 = 25",
-       "Range = 25 cm"
+       "Subtract: 152 − 127 = 25",
+       "Range: 25 cm"
       ]
      }
     },
@@ -720,10 +720,10 @@
       "title": "$34, $0, $263, $37, $0, $42, $51",
       "lines": [
        "In order: 0, 0, 34, 37, 42, 51, 263",
-       "Mode = $0",
-       "Median = $37",
-       "Mean = 427 ÷ 7 = $61",
-       "The one $263 bucket pulls the mean up"
+       "Mode: $0",
+       "Median: $37",
+       "Mean: 427 ÷ 7 = $61",
+       "Watch out: the one $263 bucket pulls the mean up"
       ]
      }
     }
@@ -826,7 +826,7 @@
       "lines": [
        "Estimate: 5,000 + 3,000 = 8,000",
        "Exact: 4,825 + 3,190 = 8,015",
-       "8,015 is close to 8,000, so it is sensible"
+       "Check: 8,015 is close to 8,000, so it is sensible"
       ]
      }
     },
@@ -845,8 +845,8 @@
       "title": "Temperatures",
       "lines": [
        "From −6 to 4: 6 steps to zero, then 4 more",
-       "Difference = 10",
-       "From −6 to −2: difference = 4"
+       "Difference: 10",
+       "From −6 to −2: difference is 4"
       ]
      }
     },
@@ -885,7 +885,7 @@
       "kind": "calc",
       "title": "Rectangle with perimeter 20 cm",
       "lines": [
-       "s + t is half of 20, so s + t = 10",
+       "Rule: s + t is half of 20, so s + t = 10",
        "s = 1, t = 9",
        "s = 2, t = 8",
        "s = 3, t = 7",
@@ -3626,5 +3626,5 @@
   }
  ],
  "retired": [],
- "generated_at": "2026-09-05T14:14:05+00:00"
+ "generated_at": "2026-09-05T15:14:21+00:00"
 }
