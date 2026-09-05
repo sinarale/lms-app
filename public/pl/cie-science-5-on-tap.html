@@ -7,7 +7,7 @@
   <title>Ôn tập · CIE Science 5</title>
   <!-- CSS dựng sẵn lúc build (tên file có hash). Thiếu Node thì builder tự
        thay dòng này bằng Tailwind CDN. -->
-  <link rel="stylesheet" href="../assets/tw.aa2ddbb1.css">
+  <link rel="stylesheet" href="../assets/tw.ca25555e.css">
   <script defer src="../assets/alpine.63d2636a.js"></script>
   <script>
     // ── Vỏ tĩnh, nội dung nạp bằng fetch ────────────────────────────────────
@@ -671,6 +671,46 @@
       <rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></g>
     <g id="i-bubbles" fill="none" stroke="currentColor" stroke-width="1.8">
       <circle cx="9" cy="14" r="3.5"/><circle cx="16" cy="9" r="2.5"/><circle cx="16.5" cy="16.5" r="1.5"/></g>
+
+    <!-- ── Hình minh hoạ cho môn Toán ────────────────────────────────────────
+         Vẽ tay, không phải icon trang trí: mỗi hình nói đúng một ý (9 chấm xếp
+         vuông = số chính phương, khối lập phương = số lập phương, hai vòng giao
+         nhau = ước chung). Đây là lý do KHÔNG dùng lại bộ icon của Science.
+         viewBox 0 0 24 24 cho mọi hình để đổi cỡ chỉ bằng class.            -->
+    <g id="m-dots9" fill="currentColor">
+      <circle cx="7" cy="7" r="1.7"/><circle cx="12" cy="7" r="1.7"/><circle cx="17" cy="7" r="1.7"/>
+      <circle cx="7" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="17" cy="12" r="1.7"/>
+      <circle cx="7" cy="17" r="1.7"/><circle cx="12" cy="17" r="1.7"/><circle cx="17" cy="17" r="1.7"/></g>
+    <g id="m-cube" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></g>
+    <g id="m-grid" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <rect x="3" y="7" width="18" height="10" rx="1"/><path d="M9 7v10M15 7v10M3 11h18"/></g>
+    <g id="m-shift" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 8L4 12l5 4M15 8l5 4-5 4"/><path d="M12 5v14" stroke-dasharray="2 2"/></g>
+    <g id="m-split" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="4" rx="1"/><path d="M12 8v3M6 11h12M6 11v3M12 11v3M18 11v3"/>
+      <rect x="3.5" y="14" width="5" height="5" rx="1"/><rect x="9.5" y="14" width="5" height="5" rx="1"/><rect x="15.5" y="14" width="5" height="5" rx="1"/></g>
+    <g id="m-word" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21l3-4M7 9h10M7 13h6"/></g>
+    <g id="m-round" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 17h18M6 17v-3M12 17v-3M18 17v-3"/><circle cx="9" cy="9" r="2" fill="currentColor" stroke="none"/>
+      <path d="M10.5 8.2L16.5 6m0 0l-2.2.2M16.5 6l.6 2.1"/></g>
+    <g id="m-chain" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+      <path d="M7 12h3M14 12h3"/></g>
+    <g id="m-table" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <rect x="3" y="6" width="18" height="12" rx="1"/><path d="M3 12h18M9 6v12M15 6v12"/></g>
+    <g id="m-venn" fill="none" stroke="currentColor" stroke-width="1.6">
+      <circle cx="9.5" cy="12" r="6"/><circle cx="14.5" cy="12" r="6"/></g>
+    <g id="m-digit" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <rect x="6" y="4" width="12" height="16" rx="2"/><path d="M10 9l2-1.5V17M9.5 17h5"/></g>
+    <g id="m-point" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <path d="M4 17h4M16 17h4"/><circle cx="12" cy="16.5" r="1.8" fill="currentColor" stroke="none"/></g>
+    <g id="m-parts" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+      <rect x="3" y="9" width="18" height="6" rx="1"/><path d="M6.6 9v6M10.2 9v6M13.8 9v6M17.4 9v6"/>
+      <rect x="3" y="9" width="3.6" height="6" fill="currentColor" stroke="none" opacity="0.35"/></g>
+    <g id="m-equal" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M5 10h14M5 14h14"/></g>
   </defs></svg>
 
 
@@ -1146,12 +1186,20 @@
                 <span x-show="tp.subtitle" class="text-xs text-orange-500 normal-case" x-text="'(' + tp.subtitle + ')'"></span>
                 <span class="ml-auto text-xs text-slate-400" x-text="tp.page ? 'p.' + tp.page : ''"></span>
               </div>
+              <!-- Định nghĩa: infographic này để TỔNG HỢP kiến thức, không chỉ liệt kê
+                   nội dung sẽ thi — nên mỗi thẻ mở đầu bằng một câu "cái này là gì". -->
+              <p x-show="tp.def" class="px-3 pt-2.5 text-sm font-medium text-slate-900" x-text="tp.def"></p>
               <div class="grid sm:grid-cols-2 gap-x-4 gap-y-2 px-3 py-2.5">
+                <div class="flex gap-3 self-start">
+                <template x-if="tp.figure">
+                  <svg viewBox="0 0 24 24" class="w-14 h-14 shrink-0 text-orange-400"><use :href="'#m-' + tp.figure"/></svg>
+                </template>
                 <ul class="space-y-1 text-sm text-slate-700 self-start">
                   <template x-for="(r, ri) in (tp.rules || [])" :key="ri">
                     <li class="flex gap-2"><span class="text-orange-400 shrink-0">•</span><span x-text="r"></span></li>
                   </template>
                 </ul>
+                </div>
                 <!-- ví dụ: 3 dạng, class viết literal để Tailwind quét thấy -->
                 <template x-if="tp.example && tp.example.kind === 'calc'">
                   <div class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2">
@@ -1200,11 +1248,16 @@
             <p class="text-[13px] font-bold uppercase tracking-wider text-indigo-600 mb-1.5">📖 Từ vựng</p>
             <dl class="grid sm:grid-cols-2 gap-2">
               <template x-for="g in (sec.glossary || [])" :key="g.term">
-                <div class="rounded-lg border border-indigo-200 bg-indigo-50/40 px-3 py-2">
+                <div class="rounded-lg border border-indigo-200 bg-indigo-50/40 px-3 py-2 flex gap-2.5">
+                  <template x-if="g.icon">
+                    <svg viewBox="0 0 24 24" class="w-7 h-7 shrink-0 mt-0.5 text-indigo-400"><use :href="'#m-' + g.icon"/></svg>
+                  </template>
+                  <div class="min-w-0">
                   <dt class="text-sm font-semibold text-indigo-900"><span x-text="g.term"></span><button x-show="canSpeak" @click.stop="speak(g.term)" type="button" title="Đọc to"
                       class="ml-1 align-middle text-indigo-400 hover:text-indigo-700">🔊</button></dt>
                   <dd class="text-sm text-slate-700 leading-snug" x-text="g.def"></dd>
                   <dd x-show="g.example" class="mt-0.5 text-xs text-slate-500 italic" x-text="g.example"></dd>
+                  </div>
                 </div>
               </template>
             </dl>
